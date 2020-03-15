@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quiz App</string>
+    <string name="font">fonts/montserrat.ttf</string>
+
+    <string name="quiz_swipe_direction">Quiz swipe direction</string>
+    <string name="quiz_navigation_direction">Quiz navigation direction</string>
+    <string name="background">Background</string>
+
+    <string name="correct">صحيح</string>
+    <string name="create_new_question">سؤال جديد</string>
+    <string name="question">السؤال</string>
+    <string name="first_answer">الاجابة الاولى</string>
+    <string name="second_answer">الاجابة الثانية</string>
+    <string name="third_answer">الاجابة الثالثة</string>
+    <string name="fourth_answer">الاجابة الرابعة</string>
+    <string name="fifth_answer">الاجابة الخامسة</string>
+    <string name="add">اضافة</string>
+    <string name="update">تحديث</string>
+    <string name="create_new_quiz">امتحان جديد</string>
+    <string name="quiz_name">اسم الامتحان</string>
+    <string name="quiz_description">وصف الامتحان</string>
+    <string name="question_count_wanted">عدد الاسئلة المطلوب</string>
+    <string name="quiz_result_1_to_100">درجة نتيجة الامتحان (1:100)</string>
+    <string name="show_check_answer_during_quiz">عرض فحص الاجابة اثناء الامتحان</string>
+    <string name="update_quiz">تحديث الامتحان</string>
+    <string name="loading">جاري التحميل</string>
+    <string name="welcome_to">مرحبا بكم فى </string>
+    <string name="access">دخول</string>
+    <string name="access_quiz">الدخول الى الامتحان</string>
+    <string name="quiz_id">الرقم التعريفي للامتحان</string>
+    <string name="previous">السابق</string>
+    <string name="check_answer">فحص الاجابة</string>
+    <string name="next">التالى</string>
+    <string name="finish">انهاء</string>
+    <string name="your_score_is">نتيجتك هي : </string>
+    <string name="great_app_for_your_dynamic_quiz">التطبيق الرائع لامتحاناتك</string>
+    <string name="questions">الاسئلة</string>
+    <string name="start_quiz">بدء الامتحان</string>
+    <string name="edit_quiz">تعديل الامتحان</string>
+    <string name="correct_answer___">الاجابة الصحيحة :</string>
+</resources>

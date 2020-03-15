@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "908669566328",
+    "firebase_url": "https://quiz-app-18826.firebaseio.com",
+    "project_id": "quiz-app-18826",
+    "storage_bucket": "quiz-app-18826.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908669566328:android:3d905e2f744e78f0621c8d",
+        "android_client_info": {
+          "package_name": "mohalim.app.quizapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908669566328-9e8jfb68d9h8um9r8lilnnnrlqbu7qq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs5IgrkEDOunlGAKYG6k90KyeaOzFsO5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908669566328-9e8jfb68d9h8um9r8lilnnnrlqbu7qq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
