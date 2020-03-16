@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -18,8 +19,9 @@ import java.util.List;
 
 import mohalim.app.quizapp.core.models.QuizItem;
 
-public class QuizDataSource extends PageKeyedDataSource<String, QuizItem> {
+public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizItem> {
 
+    private String quizSearch = "";
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -30,17 +32,19 @@ public class QuizDataSource extends PageKeyedDataSource<String, QuizItem> {
     }
 
     @Override
-    public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, QuizItem> callback) {
+    public void loadInitial(@NonNull LoadInitialParams<DocumentSnapshot> params, @NonNull final LoadInitialCallback<DocumentSnapshot, QuizItem> callback) {
 
         db.collection("quiz")
                 .whereEqualTo("owner", mAuth.getUid())
-                .orderBy("id")
-                .startAt(0)
+                .orderBy("quizName")
+                .startAt(quizSearch.trim())
+                .endAt(quizSearch.trim()+ "\uf8ff")
                 .limit(params.requestedLoadSize)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
                         if (queryDocumentSnapshots.isEmpty()) return;
                         List<QuizItem> quizItems = new ArrayList<>();
 
@@ -49,26 +53,28 @@ public class QuizDataSource extends PageKeyedDataSource<String, QuizItem> {
                             quizItems.add(quizItem);
                         }
 
-                        Log.d("TAG", "first time : "+ quizItems.get(quizItems.size()-1).getId());
+                        Log.d("TAG", "first time : "+ quizSearch);
 
 
-                        callback.onResult(quizItems, null, quizItems.get(quizItems.size()-1).getId());
+                        callback.onResult(quizItems, null, queryDocumentSnapshots.getDocuments().get(quizItems.size()-1));
 
                     }
                 });
     }
 
     @Override
-    public void loadBefore(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, QuizItem> callback) {
+    public void loadBefore(@NonNull LoadParams<DocumentSnapshot> params, @NonNull LoadCallback<DocumentSnapshot, QuizItem> callback) {
 
     }
 
     @Override
-    public void loadAfter(@NonNull final LoadParams<String> params, @NonNull final LoadCallback<String, QuizItem> callback) {
+    public void loadAfter(@NonNull final LoadParams<DocumentSnapshot> params, @NonNull final LoadCallback<DocumentSnapshot, QuizItem> callback) {
 
         db.collection("quiz")
                 .whereEqualTo("owner", mAuth.getUid())
-               .orderBy("id")
+                .orderBy("quizName")
+                .startAt(quizSearch.trim())
+                .endAt(quizSearch.trim()+ "\uf8ff")
                 .startAfter(params.key)
                 .limit(params.requestedLoadSize)
                 .get()
@@ -83,16 +89,21 @@ public class QuizDataSource extends PageKeyedDataSource<String, QuizItem> {
                             quizItems.add(quizItem);
                         }
 
-                        Log.d("TAG", "privous id: "+ params.key);
+//                        Log.d("TAG", "privous id: "+ params.key);
 
 
-                        Log.d("TAG", "second time: "+ quizItems.get(quizItems.size()-1).getId());
+//                        Log.d("TAG", "second time: "+ quizItems.get(quizItems.size()-1).getId());
 
 
 
-                        callback.onResult(quizItems, quizItems.get(quizItems.size()-1).getId());
+                        callback.onResult(quizItems, queryDocumentSnapshots.getDocuments().get(quizItems.size()-1));
 
                     }
                 });
+
+    }
+
+    public void uodateQuizName(String quizSearch) {
+        this.quizSearch = quizSearch;
     }
 }

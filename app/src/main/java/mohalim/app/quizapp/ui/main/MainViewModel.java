@@ -2,6 +2,10 @@ package mohalim.app.quizapp.ui.main;
 
 import android.app.Application;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +14,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
+import com.google.android.gms.common.util.ArrayUtils;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -28,6 +35,8 @@ import mohalim.app.quizapp.ui.quiz.QuizActivity;
 
 @Reusable
 public class MainViewModel extends ViewModel {
+    private static final String TAG = "MainViewModel";
+
     private Executor executor;
     private LiveData<PagedList<QuizItem>> quizLiveData;
     public QuizItem initedQuiz;
@@ -44,12 +53,12 @@ public class MainViewModel extends ViewModel {
 
     @Inject
     public MainViewModel() {
-        init();
+
     }
 
 
 
-    void init(){
+    void init(EditText searchET){
         executor = Executors.newFixedThreadPool(5);
 
         quizDataSourceFactory = new QuizDataSourceFactory(quizRepository);
@@ -60,6 +69,29 @@ public class MainViewModel extends ViewModel {
                 .build();
 
         quizLiveData= new LivePagedListBuilder(quizDataSourceFactory, config).build();
+
+        searchET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int [] counts = {0,2,5,8,11,15};
+                if (ArrayUtils.contains(counts, count)){
+                    quizDataSourceFactory.upDateQuizSearch(s.toString());
+                }
+            }
+
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
     }
 
 

@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
+
         Log.d(TAG, "onCreateView: " + mViewModel);
 
         if (savedInstanceState == null) {

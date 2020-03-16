@@ -55,7 +55,7 @@ public class QuestionsFragment extends BaseFragment {
 
         binding = FragmentQuestionsBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(QuestionsViewModel.class);
-        mViewModel.init(quizItem.getId());
+        mViewModel.init(quizItem.getId(), binding.searchEt );
 
         binding.refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -68,7 +68,7 @@ public class QuestionsFragment extends BaseFragment {
 
         addQuestionBottomSheet = new AddQuestionBottomSheert();
 
-        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        binding.addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (addQuestionBottomSheet.isAdded()) return;

@@ -12,8 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.Slide;
+import androidx.transition.TransitionManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +56,9 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
-        Log.d(TAG, "onCreateView: " + mViewModel);
-
         binding = FragmentMainBinding.inflate(inflater, container, false);
+        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
+        mViewModel.init(binding.searchEt);
 
         addQuizBottomSheet = new AddQuizBottomSheet();
         updateQuizBottomSheet = new UpdateQuizBottomSheet();
@@ -101,10 +105,16 @@ public class MainFragment extends BaseFragment {
         binding.bottomIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Slide slide = new Slide();
 
                 if (binding.bottomBar.getVisibility() == View.VISIBLE){
-                    binding.bottomBar.setVisibility(View.GONE);
-                }else if (binding.bottomBar.getVisibility() == View.GONE){
+                    slide.setSlideEdge(Gravity.BOTTOM);
+                    TransitionManager.beginDelayedTransition(binding.bottomBar, slide);
+                    binding.bottomBar.setVisibility(View.INVISIBLE);
+
+                }else if (binding.bottomBar.getVisibility() == View.INVISIBLE){
+                    slide.setSlideEdge(Gravity.BOTTOM);
+                    TransitionManager.beginDelayedTransition(binding.bottomBar, slide);
                     binding.bottomBar.setVisibility(View.VISIBLE);
                 }
 
@@ -117,6 +127,23 @@ public class MainFragment extends BaseFragment {
                 validateAccessForm();
                 if (accessErrors > 0)return;
                 mViewModel.startAccessQuiz(binding.accessQuizEt.getText().toString());
+            }
+        });
+
+        binding.searchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 

@@ -37,6 +37,8 @@ public class DialogLoading extends DialogFragment implements HasAndroidInjector 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         DialogLoadingBinding binding = DialogLoadingBinding.inflate(inflater, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         return binding.getRoot();
     }
 

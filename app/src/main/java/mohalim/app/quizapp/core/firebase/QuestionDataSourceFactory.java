@@ -11,6 +11,7 @@ public class QuestionDataSourceFactory extends DataSource.Factory {
     private final String quizId;
     private MutableLiveData<QuestionDataSource> questionDataSourceMutableLiveData;
     private QuestionDataSource questionDataSource;
+    private String questionSearch = "";
 
     public QuestionDataSourceFactory(QuizRepository quizRepository, String quizId) {
         this.quizRepository = quizRepository;
@@ -22,6 +23,7 @@ public class QuestionDataSourceFactory extends DataSource.Factory {
     @Override
     public DataSource create() {
         questionDataSource = new QuestionDataSource(quizId);
+        questionDataSource.setQuestionSearch(questionSearch);
         questionDataSourceMutableLiveData.postValue(questionDataSource);
         return questionDataSource;
     }
@@ -34,4 +36,8 @@ public class QuestionDataSourceFactory extends DataSource.Factory {
         questionDataSource.invalidate();
     }
 
+    public void upDateQuestionSearch(String questionSearch) {
+        this.questionSearch = questionSearch;
+        invalidate();
+    }
 }

@@ -12,6 +12,7 @@ public class QuizDataSourceFactory extends DataSource.Factory {
     private final QuizRepository quizRepository;
     private MutableLiveData<QuizDataSource> quizDataSourceMutableLiveData;
     QuizDataSource quizDataSource;
+    private String quizSearch = "";
 
     public QuizDataSourceFactory(QuizRepository quizRepository) {
         this.quizDataSourceMutableLiveData = new MutableLiveData<>();
@@ -22,6 +23,7 @@ public class QuizDataSourceFactory extends DataSource.Factory {
     @Override
     public DataSource create() {
         quizDataSource = new QuizDataSource();
+        quizDataSource.uodateQuizName(quizSearch);
         quizDataSourceMutableLiveData.postValue(quizDataSource);
         return quizDataSource;
     }
@@ -29,6 +31,13 @@ public class QuizDataSourceFactory extends DataSource.Factory {
 
     public MutableLiveData<QuizDataSource> getQuizDataSourceMutableLiveData() {
         return quizDataSourceMutableLiveData;
+    }
+
+
+
+    public void upDateQuizSearch(String quizSearch){
+        this.quizSearch = quizSearch;
+        invalidate();
     }
 
     public void invalidate(){

@@ -76,6 +76,7 @@ public class DialogWrongAnswers extends DialogFragment implements HasAndroidInje
 
 
         for (final QuestionItem questionItem : questionItems){
+            if(questionItem.isChosenAnswerCorrect()) continue;
             final View view = inflater.inflate(R.layout.row_question, binding.container, false);
             TextView questionTv = view.findViewById(R.id.questionTextTv);
             final TextView answersTv = view.findViewById(R.id.answersTv);

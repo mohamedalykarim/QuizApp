@@ -1,6 +1,7 @@
 package mohalim.app.quizapp.ui.questions;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -208,6 +209,19 @@ public class AddQuestionBottomSheert extends BottomSheetDialogFragment implement
                 mViewModel.startInsertQuestion(quizItem, questionItem);
                 dismiss();
 
+                binding.questionEt.setText("");
+                binding.answerEt1.setText("");
+                binding.answerEt2.setText("");
+                binding.answerEt3.setText("");
+                binding.answerEt4.setText("");
+                binding.answerEt5.setText("");
+                binding.switchAnswer1.setChecked(false);
+                binding.switchAnswer2.setChecked(false);
+                binding.switchAnswer3.setChecked(false);
+                binding.switchAnswer4.setChecked(false);
+                binding.switchAnswer5.setChecked(false);
+
+
 
 
             }
@@ -231,6 +245,12 @@ public class AddQuestionBottomSheert extends BottomSheetDialogFragment implement
             Toast.makeText(getContext(), "Please choose correct answer", Toast.LENGTH_SHORT).show();
             formError++;
         }
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
     }
 
     @Override

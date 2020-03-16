@@ -14,9 +14,10 @@ import java.util.List;
 
 import mohalim.app.quizapp.core.models.QuestionItem;
 
-public class QuestionDataSource extends PageKeyedDataSource<String, QuestionItem> {
+public class QuestionDataSource extends PageKeyedDataSource<DocumentSnapshot, QuestionItem> {
     private final String quizId;
     private FirebaseFirestore db;
+    private String questionSearch = "";
 
     public QuestionDataSource(String quizId) {
         db = FirebaseFirestore.getInstance();
@@ -25,10 +26,11 @@ public class QuestionDataSource extends PageKeyedDataSource<String, QuestionItem
 
 
     @Override
-    public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, QuestionItem> callback) {
+    public void loadInitial(@NonNull LoadInitialParams<DocumentSnapshot> params, @NonNull final LoadInitialCallback<DocumentSnapshot, QuestionItem> callback) {
         db.collection("quiz").document(quizId).collection("question")
-                .orderBy("id")
-                .startAt(0)
+                .orderBy("questionText")
+                .startAt(questionSearch.trim())
+                .endAt(questionSearch.trim()+ "\uf8ff")
                 .limit(params.requestedLoadSize)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -41,20 +43,22 @@ public class QuestionDataSource extends PageKeyedDataSource<String, QuestionItem
                             questionItems.add(questionItem);
                         }
 
-                        callback.onResult(questionItems,null, questionItems.get(questionItems.size()-1).getId());
+                        callback.onResult(questionItems,null, queryDocumentSnapshots.getDocuments().get(questionItems.size()-1));
                     }
                 });
     }
 
     @Override
-    public void loadBefore(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, QuestionItem> callback) {
+    public void loadBefore(@NonNull LoadParams<DocumentSnapshot> params, @NonNull LoadCallback<DocumentSnapshot, QuestionItem> callback) {
 
     }
 
     @Override
-    public void loadAfter(@NonNull final LoadParams<String> params, @NonNull final LoadCallback<String, QuestionItem> callback) {
+    public void loadAfter(@NonNull final LoadParams<DocumentSnapshot> params, @NonNull final LoadCallback<DocumentSnapshot, QuestionItem> callback) {
         db.collection("quiz").document(quizId).collection("question")
-                .orderBy("id")
+                .orderBy("questionText")
+                .startAt(questionSearch.trim())
+                .endAt(questionSearch.trim()+ "\uf8ff")
                 .startAfter(params.key)
                 .limit(params.requestedLoadSize)
                 .get()
@@ -68,8 +72,12 @@ public class QuestionDataSource extends PageKeyedDataSource<String, QuestionItem
                             questionItems.add(questionItem);
                         }
 
-                        callback.onResult(questionItems, questionItems.get(questionItems.size()-1).getId());
+                        callback.onResult(questionItems, queryDocumentSnapshots.getDocuments().get(questionItems.size()-1));
                     }
                 });
+    }
+
+    public void setQuestionSearch(String questionSearch) {
+        this.questionSearch = questionSearch;
     }
 }

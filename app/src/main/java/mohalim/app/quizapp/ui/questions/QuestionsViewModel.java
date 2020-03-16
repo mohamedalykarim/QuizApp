@@ -1,9 +1,15 @@
 package mohalim.app.quizapp.ui.questions;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
+
+import com.google.android.gms.common.util.ArrayUtils;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,7 +33,7 @@ public class QuestionsViewModel extends ViewModel {
     public QuestionsViewModel() {
     }
 
-    public void init(String quizId){
+    public void init(String quizId, EditText searchEt){
         executor = Executors.newFixedThreadPool(5);
         questionDataSourceFactory = new QuestionDataSourceFactory(quizRepository, quizId);
         PagedList.Config config = new PagedList.Config.Builder()
@@ -37,6 +43,26 @@ public class QuestionsViewModel extends ViewModel {
                 .build();
 
         questionsLiveData = new LivePagedListBuilder(questionDataSourceFactory, config).build();
+
+        searchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int [] counts = {0,2,5,8,11,15};
+                if (ArrayUtils.contains(counts, count)){
+                    questionDataSourceFactory.upDateQuestionSearch(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
