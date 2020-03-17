@@ -53,7 +53,6 @@ public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizIt
                             quizItems.add(quizItem);
                         }
 
-                        Log.d("TAG", "first time : "+ quizSearch);
 
 
                         callback.onResult(quizItems, null, queryDocumentSnapshots.getDocuments().get(quizItems.size()-1));
@@ -88,13 +87,6 @@ public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizIt
                             QuizItem quizItem = child.toObject(QuizItem.class);
                             quizItems.add(quizItem);
                         }
-
-//                        Log.d("TAG", "privous id: "+ params.key);
-
-
-//                        Log.d("TAG", "second time: "+ quizItems.get(quizItems.size()-1).getId());
-
-
 
                         callback.onResult(quizItems, queryDocumentSnapshots.getDocuments().get(quizItems.size()-1));
 
