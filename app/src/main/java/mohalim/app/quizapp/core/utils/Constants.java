@@ -8,7 +8,7 @@ public class Constants {
     public static final String START = "start";
     public static final String EDIT = "edit";
 
-
+    public static final String TYPE_START_SAVE_USER_DATA = "start_save_user_data";
     public static final String TYPE_ADD_QUIZ = "type_add_quiz";
     public static final String TYPE_UPDATE_QUIZ = "type_update_quiz";
     public static final String TYPE_ADD_QUESTION = "type_add_question";

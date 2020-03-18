@@ -10,7 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,6 +31,7 @@ import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
+import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.services.AppService;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
@@ -42,15 +45,17 @@ public class QuizFirebaseHandler {
     QuestionDao questionDao;
     AnswerDao answerDao;
 
+    FirebaseAuth mAuth;
 
     MutableLiveData<List<QuizItem>> quizItemList;
     MutableLiveData<Boolean> quizInitiatingNow;
     MutableLiveData<QuizItem> accessedQuiz;
 
     @Inject
-    public QuizFirebaseHandler(Application application, AppExecutor appExecutor) {
+    public QuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth mAuth) {
         this.application = application;
         this.appExecutor = appExecutor;
+        this.mAuth = mAuth;
          db = FirebaseFirestore.getInstance();
         AppDatabase appDatabase = AppDatabase.getDatabase(application);
         questionDao = appDatabase.questionDao();
@@ -192,16 +197,17 @@ public class QuizFirebaseHandler {
     }
 
     public void accessQuiz(String quizId) {
+        Log.d(TAG, "accessQuiz: "+mAuth.getUid());
         db.collection("quiz")
-                .whereEqualTo("id", quizId)
+                .document(quizId)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()){
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()){
 
                         }else {
-                            QuizItem quizItem = queryDocumentSnapshots.getDocuments().get(0).toObject(QuizItem.class);
+                            QuizItem quizItem = documentSnapshot.toObject(QuizItem.class);
                             accessedQuiz.postValue(quizItem);
                         }
                     }
@@ -214,6 +220,37 @@ public class QuizFirebaseHandler {
 
     public void setAccessedQuiz(QuizItem quiz) {
         this.accessedQuiz.postValue(quiz);
+    }
+
+
+     /***************************************************************************/
+     /**                            User Data                                  **/
+     /***************************************************************************/
+
+    public void startSaveUserData() {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_SAVE_USER_DATA);
+        application.startService(intent);
+    }
+
+    public void saveUserData() {
+        if (mAuth.getUid() == null)return;
+        db.collection("user").document(mAuth.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists())return;
+                        UserItem userItem = new UserItem();
+                        userItem.setId(mAuth.getCurrentUser().getUid());
+                        userItem.setEmail(mAuth.getCurrentUser().getEmail());
+                        userItem.setDisplayedName(mAuth.getCurrentUser().getDisplayName());
+                        userItem.setPhoneNumber(mAuth.getCurrentUser().getPhoneNumber());
+
+                        db.collection("user").document(mAuth.getUid()).set(userItem);
+
+                    }
+                });
     }
 }
 

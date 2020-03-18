@@ -28,8 +28,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    static QuizFirebaseHandler provideQuizFirebaseHandler(Application application, AppExecutor appExecutor){
-        return new QuizFirebaseHandler(application, appExecutor);
+    static QuizFirebaseHandler provideQuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth auth){
+        return new QuizFirebaseHandler(application, appExecutor, auth);
     }
 
     @Singleton

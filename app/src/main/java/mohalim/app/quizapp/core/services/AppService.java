@@ -58,6 +58,14 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.accessQuiz(quizId);
         }
 
+        /***************************************************************************/
+        /**                            User Data                                  **/
+        /***************************************************************************/
+
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_SAVE_USER_DATA)){
+            quizFirebaseHandler.saveUserData();
+        }
+
 
 
     }

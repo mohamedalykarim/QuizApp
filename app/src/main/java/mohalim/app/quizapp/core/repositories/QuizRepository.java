@@ -122,4 +122,11 @@ public class QuizRepository {
     }
 
 
+    /***************************************************************************/
+    /**                            User Data                                  **/
+    /***************************************************************************/
+
+    public void startSaveUserData() {
+        quizFirebaseHandler.startSaveUserData();
+    }
 }

@@ -140,6 +140,7 @@ public class LoginFragment extends BaseFragment {
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             getActivity().startActivity(intent);
                             Toast.makeText(getContext(), "Welcome back " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            mViewModel.startSaveUserData();
                             getActivity().finish();
 
                         } else {
