@@ -82,4 +82,11 @@ public class QuizViewModel extends ViewModel {
     }
 
 
+    public SessionItem getSessionFromInternal(String quizId) {
+        return  quizRepository.getCurrentSession(quizId);
+    }
+
+    public void removeSessionForQuiz(String quizId) {
+        quizRepository.removeSessionForQuiz(quizId);
+    }
 }

@@ -1,23 +1,19 @@
 package mohalim.app.quizapp.ui.main;
 
 import android.app.Application;
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.google.android.gms.common.util.ArrayUtils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -25,13 +21,12 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import dagger.Reusable;
-import mohalim.app.quizapp.core.firebase.QuizDataSourceFactory;
+import mohalim.app.quizapp.core.datasource.QuizDataSourceFactory;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
+import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 import mohalim.app.quizapp.core.utils.AppExecutor;
-import mohalim.app.quizapp.core.utils.Constants;
-import mohalim.app.quizapp.ui.quiz.QuizActivity;
 
 @Reusable
 public class MainViewModel extends ViewModel {
@@ -158,5 +153,33 @@ public class MainViewModel extends ViewModel {
 
     public void setAccessedQuiz(QuizItem quiz) {
         this.quizRepository.setAccessedQuiz(quiz);
+    }
+
+    public void startGetPersonByUsername(String username) {
+        quizRepository.startGetPersonByUsername(username);
+    }
+
+    public MutableLiveData<List<UserItem>> getUsersSearchObservation() {
+        return quizRepository.getUsersSearchObservation();
+    }
+
+    public void setUsersSearchObservation(List<UserItem> userItems) {
+        this.quizRepository.setUsersSearchObservation(userItems);
+    }
+
+    public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
+        this.quizRepository.startAddUserAccessToQuiz(quizItem, userName);
+    }
+
+    public void startGetQuiz(String quizId) {
+        this.quizRepository.startGetQuiz(quizId);
+    }
+
+    public MutableLiveData<QuizItem> getQuizitemObservation() {
+        return this.quizRepository.getQuizitemObservation();
+    }
+
+    public void setQuizitemObservation(QuizItem quizItem) {
+        this.quizRepository.setQuizitemObservation(quizItem);
     }
 }

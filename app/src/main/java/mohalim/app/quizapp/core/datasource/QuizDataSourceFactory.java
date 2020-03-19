@@ -1,10 +1,8 @@
-package mohalim.app.quizapp.core.firebase;
+package mohalim.app.quizapp.core.datasource;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
-
-import javax.inject.Inject;
 
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 

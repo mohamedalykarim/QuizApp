@@ -3,6 +3,7 @@ package mohalim.app.quizapp.core.di.activities.main;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import mohalim.app.quizapp.ui.dialog.DialogLoading;
+import mohalim.app.quizapp.ui.dialog.DialogPeopleCanAccessQuiz;
 import mohalim.app.quizapp.ui.main.AddQuizBottomSheet;
 import mohalim.app.quizapp.ui.main.MainFragment;
 import mohalim.app.quizapp.ui.main.UpdateQuizBottomSheet;
@@ -20,4 +21,7 @@ public abstract class MainFragmentsModule {
 
     @ContributesAndroidInjector
     abstract DialogLoading contributeLoadingDialog();
+
+    @ContributesAndroidInjector
+    abstract DialogPeopleCanAccessQuiz contributeDialogPeopleCanAccessQuiz();
 }

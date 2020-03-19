@@ -1,11 +1,41 @@
 package mohalim.app.quizapp.core.models;
 
-public class UserItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+
+import com.google.gson.annotations.SerializedName;
+
+public class UserItem implements Parcelable {
+    @SerializedName("id")
     private String id;
-    private String email;
+    @SerializedName("displayedName")
     private String displayedName;
+    @SerializedName("userName")
     private String userName;
-    private String phoneNumber;
+
+    public UserItem() {
+    }
+
+    protected UserItem(Parcel in) {
+        id = in.readString();
+        displayedName = in.readString();
+        userName = in.readString();
+    }
+
+    public static final Creator<UserItem> CREATOR = new Creator<UserItem>() {
+        @Override
+        public UserItem createFromParcel(Parcel in) {
+            return new UserItem(in);
+        }
+
+        @Override
+        public UserItem[] newArray(int size) {
+            return new UserItem[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -13,14 +43,6 @@ public class UserItem {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getDisplayedName() {
@@ -39,11 +61,17 @@ public class UserItem {
         this.userName = userName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(displayedName);
+        dest.writeString(userName);
     }
+
+
 }

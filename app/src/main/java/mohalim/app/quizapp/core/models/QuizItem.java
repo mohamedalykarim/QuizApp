@@ -8,6 +8,9 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mohalim.app.quizapp.BR;
 
 
@@ -22,7 +25,7 @@ public class QuizItem extends BaseObservable implements Parcelable {
     private boolean isCheckAnswerWorking;
     private String quizSwipeDirection;
     private String quizNavigationDirection;
-
+    private List<UserItem> peopleCanAccess;
 
 
     public QuizItem() {
@@ -38,6 +41,8 @@ public class QuizItem extends BaseObservable implements Parcelable {
         isCheckAnswerWorking = in.readByte() != 0;
         quizSwipeDirection = in.readString();
         quizNavigationDirection = in.readString();
+        peopleCanAccess = new ArrayList<>();
+        in.readList(peopleCanAccess, AnswerItem.class.getClassLoader());
     }
 
     @Override
@@ -51,6 +56,8 @@ public class QuizItem extends BaseObservable implements Parcelable {
         dest.writeByte((byte) (isCheckAnswerWorking ? 1 : 0));
         dest.writeString(quizSwipeDirection);
         dest.writeString(quizNavigationDirection);
+        dest.writeList(peopleCanAccess);
+
     }
 
     @Override
@@ -146,6 +153,14 @@ public class QuizItem extends BaseObservable implements Parcelable {
         this.quizNavigationDirection = quizNavigationDirection;
     }
 
+    public List<UserItem> getPeopleCanAccess() {
+        return peopleCanAccess;
+    }
+
+    public void setPeopleCanAccess(List<UserItem> peopleCanAccessQuiz) {
+        this.peopleCanAccess = peopleCanAccessQuiz;
+    }
+
     public static DiffUtil.ItemCallback<QuizItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<QuizItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull QuizItem oldItem, @NonNull QuizItem newItem) {
@@ -157,4 +172,7 @@ public class QuizItem extends BaseObservable implements Parcelable {
             return oldItem.getId().equals(newItem.getId());
         }
     };
+
+
+
 }

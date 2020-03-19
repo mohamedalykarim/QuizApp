@@ -13,7 +13,16 @@ import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 
-@Database(entities = {SessionItem.class, QuestionItem.class, AnswerItem.class}, version = 1, exportSchema = false)
+@Database(
+        entities = {
+                SessionItem.class,
+                QuestionItem.class,
+                AnswerItem.class,
+        },
+        version = 1,
+        exportSchema = false
+)
+
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SessionDao sessionDao();
     public abstract AnswerDao answerDao();

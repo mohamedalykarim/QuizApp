@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-import mohalim.app.quizapp.core.firebase.QuestionDataSourceFactory;
+import mohalim.app.quizapp.core.datasource.QuestionDataSourceFactory;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.repositories.QuizRepository;

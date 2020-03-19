@@ -76,6 +76,7 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
                 quizItem.setOwner(mAuth.getUid());
                 quizItem.setQuizResult(Integer.parseInt(binding.quizResultGradeEt.getText().toString()));
                 quizItem.setCheckAnswerWorking(binding.checkAnswerWorkingSwitch.isChecked());
+                quizItem.setPeopleCanAccess(null);
 
                 if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals("Right")){
                     quizItem.setQuizSwipeDirection(Constants.RIGHT);

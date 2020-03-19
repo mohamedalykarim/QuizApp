@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,12 +14,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +39,7 @@ import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.services.AppService;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
+import mohalim.app.quizapp.core.utils.Utils;
 
 
 public class QuizFirebaseHandler {
@@ -50,6 +55,8 @@ public class QuizFirebaseHandler {
     MutableLiveData<List<QuizItem>> quizItemList;
     MutableLiveData<Boolean> quizInitiatingNow;
     MutableLiveData<QuizItem> accessedQuiz;
+    MutableLiveData<QuizItem> quizitemObservation;
+    MutableLiveData<List<UserItem>> usersSearchObservation;
 
     @Inject
     public QuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth mAuth) {
@@ -64,6 +71,8 @@ public class QuizFirebaseHandler {
         quizItemList = new MutableLiveData<>();
         quizInitiatingNow = new MutableLiveData<>(true);
         accessedQuiz = new MutableLiveData<>();
+        usersSearchObservation = new MutableLiveData<>();
+        quizitemObservation = new MutableLiveData<>();
     }
 
 
@@ -82,6 +91,35 @@ public class QuizFirebaseHandler {
 
     }
 
+    public void startGetQuiz(String quizId) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_GET_QUIZ);
+        intent.putExtra(Constants.QUIZ_ID, quizId);
+        application.startService(intent);
+    }
+
+    public void getQuiz(String quizId){
+        if (quizId == null)return;
+
+        db.collection("quiz")
+                .document(quizId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (!documentSnapshot.exists())return;
+
+                        quizitemObservation.setValue(documentSnapshot.toObject(QuizItem.class));
+                    }
+                });
+    }
+
+    public MutableLiveData<QuizItem> getQuizitemObservation() {
+        return quizitemObservation;
+    }
+
+    public void setQuizitemObservation(QuizItem quizitemObservation) {
+        this.quizitemObservation.setValue(quizitemObservation);
+    }
 
     public void startInsertQuestion(QuizItem quizItem, QuestionItem questionItem) {
         Intent intent = new Intent(application, AppService.class);
@@ -184,7 +222,16 @@ public class QuizFirebaseHandler {
     }
 
     public void updateQuiz(QuizItem quizItem) {
-        db.collection("quiz").document(quizItem.getId()).set(quizItem);
+        if (quizItem == null)return;
+
+        if (null == quizItem.getPeopleCanAccess()){
+            db.collection("quiz").document(quizItem.getId()).set(quizItem);
+        }else {
+            if (quizItem.getPeopleCanAccess().size() == 0){
+                quizItem.setPeopleCanAccess(null);
+            }
+            db.collection("quiz").document(quizItem.getId()).set(quizItem);
+        }
     }
 
     public void startAccessQuiz(String quizId) {
@@ -243,15 +290,132 @@ public class QuizFirebaseHandler {
                         if (documentSnapshot.exists())return;
                         UserItem userItem = new UserItem();
                         userItem.setId(mAuth.getCurrentUser().getUid());
-                        userItem.setEmail(mAuth.getCurrentUser().getEmail());
                         userItem.setDisplayedName(mAuth.getCurrentUser().getDisplayName());
-                        userItem.setPhoneNumber(mAuth.getCurrentUser().getPhoneNumber());
+                        userItem.setUserName(mAuth.getCurrentUser().getEmail().replace("@gmail.com", ""));
 
                         db.collection("user").document(mAuth.getUid()).set(userItem);
 
                     }
                 });
     }
+
+    public void startGetPersonByUsername(String username) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_GET_USER_BY_USERNAME);
+        intent.putExtra(Constants.USERNAME, username);
+        application.startService(intent);
+    }
+
+    public void getPersonByUsername(String username) {
+        if (username.length() < 1)return;
+        db.collection("user")
+                .orderBy("userName")
+                .startAt(username.trim())
+                .endAt(username.trim()+"\uf8ff")
+                .limit(3)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty())return;
+                        List<UserItem> users = new ArrayList<>();
+
+
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            UserItem user = documentSnapshot.toObject(UserItem.class);
+                            users.add(user);
+                        }
+
+                        usersSearchObservation.setValue(users);
+                    }
+                });
+    }
+
+    public MutableLiveData<List<UserItem>> getUsersSearchObservation() {
+        return usersSearchObservation;
+    }
+
+    public void setUsersSearchObservation(List<UserItem> userItems) {
+        this.usersSearchObservation.postValue(userItems);
+    }
+
+    public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_ADD_USER_TO_QUIZ);
+        intent.putExtra(Constants.USERNAME, userName);
+        intent.putExtra(Constants.QUIZ_ITEM, quizItem);
+        application.startService(intent);
+
+    }
+
+    public void addUserAccessToQuiz(final QuizItem quizItem, final String username) {
+        if (quizItem == null)return;
+        if (username == null)return;
+
+        db.collection("user")
+                .whereEqualTo("userName", username)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty())return;
+                        final UserItem userItem = queryDocumentSnapshots.getDocuments().get(0).toObject(UserItem.class);
+
+
+                        db.collection("quiz")
+                                .document(quizItem.getId())
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (!documentSnapshot.exists()) return;
+
+                                        QuizItem newQuiz = documentSnapshot.toObject(QuizItem.class);
+
+                                        if (newQuiz.getPeopleCanAccess() == null){
+                                            Log.d(TAG, "onSuccess: null");
+                                            Log.d(TAG, "onSuccess: Add first user to quiz");
+                                            addUserAccessToQuizFinishing(newQuiz, userItem);
+                                        }else{
+                                            if (Utils.isQuizListPeopleCanAccessContainsId(newQuiz.getPeopleCanAccess(), userItem.getId())){
+                                                Log.d(TAG, "onSuccess: user exists");
+                                            }else {
+                                                Log.d(TAG, "onSuccess: add new user to quiz");
+                                                addUserAccessToQuizFinishing(newQuiz, userItem);
+                                            }
+                                        }
+
+//
+
+
+                                    }
+                                });
+
+
+                    }
+                });
+    }
+
+    private void addUserAccessToQuizFinishing(QuizItem quizItem, UserItem userItem) {
+        if (userItem == null)return;
+
+        if (quizItem.getPeopleCanAccess() == null){
+            quizItem.setPeopleCanAccess(new ArrayList<UserItem>());
+            quizItem.getPeopleCanAccess().add(userItem);
+
+        }else {
+            quizItem.getPeopleCanAccess().add(userItem);
+        }
+
+        Log.d(TAG, "addUserAccessToQuizFinishing: "+quizItem.getPeopleCanAccess().size());
+
+        db.collection("quiz")
+                .document(quizItem.getId())
+                .set(quizItem);
+
+    }
+
+
 }
 
 

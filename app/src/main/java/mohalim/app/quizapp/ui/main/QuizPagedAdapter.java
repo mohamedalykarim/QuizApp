@@ -63,6 +63,13 @@ public class QuizPagedAdapter extends PagedListAdapter<QuizItem, QuizPagedAdapte
             }
         });
 
+        holder.binding.peopleCanAccessIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quizPagedAdapterClick.onQuizPagedAdapterClick(Constants.QUIZ_PEOPLE_ACCESS, getItem(position));
+            }
+        });
+
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder{

@@ -18,6 +18,7 @@ import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
+import mohalim.app.quizapp.core.models.UserItem;
 
 public class QuizRepository {
     private final QuizFirebaseHandler quizFirebaseHandler;
@@ -38,6 +39,17 @@ public class QuizRepository {
         quizFirebaseHandler.startAddQuiz(quizItem);
     }
 
+    public void startGetQuiz(String quizId) {
+        this.quizFirebaseHandler.startGetQuiz(quizId);
+    }
+
+    public MutableLiveData<QuizItem> getQuizitemObservation() {
+        return this.quizFirebaseHandler.getQuizitemObservation();
+    }
+
+    public void setQuizitemObservation(QuizItem quizItem) {
+        this.quizFirebaseHandler.setQuizitemObservation(quizItem);
+    }
 
     public void startInsertQuestion(QuizItem quizItem, QuestionItem questionItem) {
         this.quizFirebaseHandler.startInsertQuestion(quizItem, questionItem);
@@ -101,6 +113,10 @@ public class QuizRepository {
         sessionDao.deleteSessionFromInternal(quizId);
     }
 
+    public void removeSessionForQuiz(String quizId) {
+        sessionDao.deleteSessionFromInternal(quizId);
+    }
+
     public MutableLiveData<Boolean> getQuizInitiatingNow() {
         return quizFirebaseHandler.getQuizInitiatingNow();
     }
@@ -129,4 +145,24 @@ public class QuizRepository {
     public void startSaveUserData() {
         quizFirebaseHandler.startSaveUserData();
     }
+
+    public void startGetPersonByUsername(String username) {
+        quizFirebaseHandler.startGetPersonByUsername(username);
+    }
+
+    public MutableLiveData<List<UserItem>> getUsersSearchObservation() {
+        return quizFirebaseHandler.getUsersSearchObservation();
+    }
+
+    public void setUsersSearchObservation(List<UserItem> userItems) {
+        this.quizFirebaseHandler.setUsersSearchObservation(userItems);
+    }
+
+    public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
+        this.quizFirebaseHandler.startAddUserAccessToQuiz(quizItem, userName);
+    }
+
+
+
+
 }

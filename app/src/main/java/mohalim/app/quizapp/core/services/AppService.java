@@ -36,6 +36,11 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.addQuiz(quizItem);
         }
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_GET_QUIZ)){
+            String quizId = intent.getStringExtra(Constants.QUIZ_ID);
+            quizFirebaseHandler.getQuiz(quizId);
+        }
+
         if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_UPDATE_QUIZ)){
             QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
             quizFirebaseHandler.updateQuiz(quizItem);
@@ -58,6 +63,15 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.accessQuiz(quizId);
         }
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_ADD_USER_TO_QUIZ)){
+            String username = intent.getStringExtra(Constants.USERNAME);
+            QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
+
+            quizFirebaseHandler.addUserAccessToQuiz(quizItem, username);
+        }
+
+
+
         /***************************************************************************/
         /**                            User Data                                  **/
         /***************************************************************************/
@@ -65,6 +79,14 @@ public class AppService extends DaggerIntentService {
         if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_SAVE_USER_DATA)){
             quizFirebaseHandler.saveUserData();
         }
+
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_GET_USER_BY_USERNAME)){
+            String username = intent.getStringExtra(Constants.USERNAME);
+            quizFirebaseHandler.getPersonByUsername(username);
+        }
+
+
+
 
 
 

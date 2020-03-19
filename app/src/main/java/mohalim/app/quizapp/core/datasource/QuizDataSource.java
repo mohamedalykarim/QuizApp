@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.core.firebase;
+package mohalim.app.quizapp.core.datasource;
 
 import android.util.Log;
 

@@ -29,6 +29,7 @@ import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.di.base.BaseActivity;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
+import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.ActivityQuizBinding;
@@ -37,6 +38,9 @@ import mohalim.app.quizapp.databinding.ActivityQuizBinding;
 public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQuizPosition, QuizFragment.ChangeNavItemColor {
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
+    @Inject
+    AppExecutor appExecutor;
+
     private QuizViewModel mViewModel;
     ActivityQuizBinding binding;
 
@@ -92,10 +96,15 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
         }
 
 
+        /**
+         * getQuestionFromInternal
+         */
+
         mViewModel.getQuestionsFromInternalObserved(quizItem.getId()).observe(this, new Observer<List<QuestionItem>>() {
             @Override
             public void onChanged(List<QuestionItem> questionItems) {
                 if (questionItems == null)return;
+
                 getSupportFragmentManager().getFragments().clear();
 
                 binding.navViewContainer.removeAllViews();
