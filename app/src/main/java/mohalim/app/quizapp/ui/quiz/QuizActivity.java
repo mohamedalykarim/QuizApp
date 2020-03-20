@@ -113,7 +113,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                 for (QuestionItem question: questionItems){
                     View view = LayoutInflater.from(QuizActivity.this).inflate(R.layout.row_quiz_navigation, binding.navViewContainer, false);
 
-                    ((TextView) view.findViewById(R.id.title)).setText("Question Number "+ (i+1));
+                    ((TextView) view.findViewById(R.id.title)).setText("Question"+ " "+ (i+1));
 
                     final int finalI = i;
                     view.setOnClickListener(new View.OnClickListener() {

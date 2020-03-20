@@ -107,15 +107,15 @@ public class MainFragment extends BaseFragment {
             public void onClick(View v) {
                 Slide slide = new Slide();
 
-                if (binding.bottomBar.getVisibility() == View.VISIBLE){
+                if (binding.accessQuizContainer.getVisibility() == View.VISIBLE){
                     slide.setSlideEdge(Gravity.BOTTOM);
-                    TransitionManager.beginDelayedTransition(binding.bottomBar, slide);
-                    binding.bottomBar.setVisibility(View.INVISIBLE);
+                    TransitionManager.beginDelayedTransition(binding.accessQuizContainer, slide);
+                    binding.accessQuizContainer.setVisibility(View.INVISIBLE);
 
-                }else if (binding.bottomBar.getVisibility() == View.INVISIBLE){
+                }else if (binding.accessQuizContainer.getVisibility() == View.INVISIBLE){
                     slide.setSlideEdge(Gravity.BOTTOM);
-                    TransitionManager.beginDelayedTransition(binding.bottomBar, slide);
-                    binding.bottomBar.setVisibility(View.VISIBLE);
+                    TransitionManager.beginDelayedTransition(binding.accessQuizContainer, slide);
+                    binding.accessQuizContainer.setVisibility(View.VISIBLE);
                 }
 
             }

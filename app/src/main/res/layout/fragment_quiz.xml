@@ -105,12 +105,12 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorAccent"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:baselineAligned="false">
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -122,6 +122,7 @@
                     android:id="@+id/previousBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="@string/previous"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -136,6 +137,7 @@
                     android:id="@+id/checkBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="@string/check_answer"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -150,6 +152,7 @@
                     android:id="@+id/nextBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="@string/next"
                     android:textSize="12sp" />
 
@@ -157,6 +160,7 @@
                     android:id="@+id/finishBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="@string/finish"
                     android:textSize="12sp" />
             </LinearLayout>

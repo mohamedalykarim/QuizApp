@@ -44,6 +44,8 @@ public class AddQuestionBottomSheert extends BottomSheetDialogFragment implement
     private int formError;
     QuizItem quizItem;
 
+    OnAddNewQuestion onAddNewQuestion;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -207,6 +209,8 @@ public class AddQuestionBottomSheert extends BottomSheetDialogFragment implement
                 questionItem.setQuestionAnswers(answers);
 
                 mViewModel.startInsertQuestion(quizItem, questionItem);
+                onAddNewQuestion.onAddNewQuestion();
+
                 dismiss();
 
                 binding.questionEt.setText("");
@@ -257,10 +261,22 @@ public class AddQuestionBottomSheert extends BottomSheetDialogFragment implement
     public void onAttach(@NonNull Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+
+        try {
+            onAddNewQuestion = (OnAddNewQuestion) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement OnAddNewQuestion class \n"+e.getMessage());
+        }
+
     }
 
     @Override
     public AndroidInjector<Object> androidInjector() {
         return androidInjector;
+    }
+
+
+    public interface OnAddNewQuestion{
+        void onAddNewQuestion();
     }
 }

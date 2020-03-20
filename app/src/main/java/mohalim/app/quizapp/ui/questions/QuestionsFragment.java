@@ -96,5 +96,7 @@ public class QuestionsFragment extends BaseFragment {
     }
 
 
-
+    public void onAddNewQuestion() {
+        mViewModel.refresh();
+    }
 }
