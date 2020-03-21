@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import mohalim.app.quizapp.R;
+import mohalim.app.quizapp.ui.feedback.FeedBackActivity;
 import mohalim.app.quizapp.ui.login.LoginActivity;
 
 public class BaseActivity extends DaggerAppCompatActivity {
@@ -37,34 +39,73 @@ public class BaseActivity extends DaggerAppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null){
             return;
         }else{
-            textView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-            View logoutView = getLayoutInflater().inflate(R.layout.navigation_main_item, menuContainer, false);
-            TextView logoutTitle = logoutView.findViewById(R.id.itemTitleTv);
-            ImageView logoutImg = logoutView.findViewById(R.id.itemImg);
-            logoutTitle.setText("Logout");
-            logoutImg.setImageDrawable(getDrawable(R.drawable.logout_icon));
-
-            logoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.setFlags(
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    |
-                                    Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                    |
-                                    Intent.FLAG_ACTIVITY_NEW_TASK
-                    );
-
-                    startActivity(intent);
-                }
-            });
 
             menuContainer.removeAllViews();
-            menuContainer.addView(logoutView);
+
+            textView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+            for (int i =0; i <2; i++){
+
+                if (i == 0){
+                    View view = addNavItem(menuContainer, "Feedback", R.drawable.feedback_icon);
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), FeedBackActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    drawerLayout.closeDrawer(drawerLayout.getChildAt(drawerLayout.getChildCount()-1));
+
+                    menuContainer.addView(view);
+
+                }else{
+
+                    View view = addNavItem(menuContainer, "Logout", R.drawable.logout_icon);
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            intent.setFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            |
+                                            Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            |
+                                            Intent.FLAG_ACTIVITY_NEW_TASK
+                            );
+
+                            startActivity(intent);
+                        }
+                    });
+
+                    menuContainer.addView(view);
+                }
+
+
+
+            }
+
+
+
+
+
+
         }
 
 
+    }
+
+
+    public View addNavItem(ViewGroup container, String titleString, int imgIcon){
+        View view = getLayoutInflater().inflate(R.layout.navigation_main_item, container, false);
+        TextView title = view.findViewById(R.id.itemTitleTv);
+        ImageView img = view.findViewById(R.id.itemImg);
+
+        title.setText(titleString);
+        img.setImageDrawable(getDrawable(imgIcon));
+
+        return view;
     }
 }

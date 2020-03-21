@@ -38,8 +38,11 @@ public class PeopleCanAccessAdapter extends RecyclerView.Adapter<PeopleCanAccess
 
     @Override
     public void onBindViewHolder(@NonNull PeopleCanAccessAdapterViewHolder holder, final int position) {
-        holder.binding.userNameTv.setText(userItems.get(position).getUserName());
-        holder.binding.personNameTv.setText(userItems.get(position).getDisplayedName());
+        holder.binding.userNameTv.setText(
+                userItems.get(position).getDisplayedName()
+                + "   " +
+                userItems.get(position).getUserName()
+        );
 
         holder.binding.imageView15.setOnClickListener(new View.OnClickListener() {
             @Override

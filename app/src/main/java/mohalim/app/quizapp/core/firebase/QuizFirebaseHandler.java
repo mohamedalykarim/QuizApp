@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import mohalim.app.quizapp.core.database.AnswerDao;
 import mohalim.app.quizapp.core.database.AppDatabase;
 import mohalim.app.quizapp.core.database.QuestionDao;
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
@@ -57,6 +59,8 @@ public class QuizFirebaseHandler {
     MutableLiveData<QuizItem> accessedQuiz;
     MutableLiveData<QuizItem> quizitemObservation;
     MutableLiveData<List<UserItem>> usersSearchObservation;
+    MutableLiveData<FeedBackItem> myFeedBackObservation;
+    MutableLiveData<List<FeedBackItem>> randomFeedBack;
 
     @Inject
     public QuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth mAuth) {
@@ -73,6 +77,8 @@ public class QuizFirebaseHandler {
         accessedQuiz = new MutableLiveData<>();
         usersSearchObservation = new MutableLiveData<>();
         quizitemObservation = new MutableLiveData<>();
+        myFeedBackObservation = new MutableLiveData<>();
+        randomFeedBack = new MutableLiveData<>();
     }
 
 
@@ -416,6 +422,111 @@ public class QuizFirebaseHandler {
     }
 
 
+    /***************************************************************************/
+    /**                             Feedback                                  **/
+    /***************************************************************************/
+
+    public void startAddFeedBack(FeedBackItem feedBackItem) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_ADD_FEEDBACK);
+        intent.putExtra(Constants.FEEDBACK_ITEM, feedBackItem);
+        application.startService(intent);
+    }
+
+    public void addFeedBack(final FeedBackItem feedBackItem) {
+        if (feedBackItem == null)return;
+        if (mAuth.getCurrentUser() == null)return;
+
+        db.collection("feedback")
+                .whereEqualTo("userId", mAuth.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty())return;
+
+                        DocumentReference document = db.collection("feedback").document();
+                        feedBackItem.setId(document.getId());
+                        feedBackItem.setRandom(String.valueOf(Utils.randInt(10000, 2147483647)));
+
+                        document.set(feedBackItem);
+
+                    }
+                });
+    }
+
+    public void startGetMyFeedBack() {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_GET_MY_FEEDBACK);
+        application.startService(intent);
+
+    }
+
+    public void getMyFeedBack() {
+        if (mAuth.getCurrentUser() == null)return;
+        db.collection("feedback")
+                .whereEqualTo("userId", mAuth.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty())return;
+                        FeedBackItem feedBackItem = queryDocumentSnapshots.getDocuments().get(0).toObject(FeedBackItem.class);
+                        myFeedBackObservation.setValue(feedBackItem);
+                    }
+                });
+    }
+
+    public MutableLiveData<FeedBackItem> getMyFeedBackObservation() {
+        return myFeedBackObservation;
+    }
+
+    public void setMyFeedBackObservation(FeedBackItem feedBack) {
+        this.myFeedBackObservation.setValue(feedBack);
+    }
+
+    public void startGetRandomFeedback(int count) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_GET_RANDOM_FEEDBACK);
+        intent.putExtra(Constants.COUNT, count);
+        application.startService(intent);
+
+    }
+
+    public void getRandomFeedBack(int count) {
+        if (count == 0) return;
+
+        int randomNumber = Utils.randInt(1,9);
+        Log.d(TAG, "getRandomFeedBack: "+ randomNumber);
+
+        db.collection("feedback")
+                .orderBy("random")
+                .startAt(randomNumber)
+                .endAt(randomNumber+ "\uf8ff")
+                .limit(count)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty())return;
+                        List<FeedBackItem> feedBackItems = new ArrayList<>();
+
+                        for (DocumentSnapshot feedbackSnapshot : queryDocumentSnapshots){
+                            feedBackItems.add(feedbackSnapshot.toObject(FeedBackItem.class));
+                        }
+
+                        randomFeedBack.setValue(feedBackItems);
+                    }
+                });
+    }
+
+    public MutableLiveData<List<FeedBackItem>> getRandomFeedBack() {
+        return randomFeedBack;
+    }
+
+    public void setRandomFeedBack(List<FeedBackItem> randomFeedBack) {
+        this.randomFeedBack.setValue(randomFeedBack);
+    }
 }
 
 

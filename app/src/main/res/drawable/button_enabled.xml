@@ -11,7 +11,7 @@
         android:bottom="2dp" />
 
     <stroke
-        android:width="2dip"
-        android:color="#FFFFFF" />
+        android:width="1dip"
+        android:color="@color/colorPrimaryDark" />
 
 </shape>

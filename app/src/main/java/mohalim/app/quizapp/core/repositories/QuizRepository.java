@@ -15,6 +15,7 @@ import mohalim.app.quizapp.core.database.QuestionDao;
 import mohalim.app.quizapp.core.database.SessionDao;
 import mohalim.app.quizapp.core.firebase.QuizFirebaseHandler;
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
@@ -46,6 +47,12 @@ public class QuizRepository {
     public MutableLiveData<QuizItem> getQuizitemObservation() {
         return this.quizFirebaseHandler.getQuizitemObservation();
     }
+
+    public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
+        this.quizFirebaseHandler.startAddUserAccessToQuiz(quizItem, userName);
+    }
+
+
 
     public void setQuizitemObservation(QuizItem quizItem) {
         this.quizFirebaseHandler.setQuizitemObservation(quizItem);
@@ -158,11 +165,40 @@ public class QuizRepository {
         this.quizFirebaseHandler.setUsersSearchObservation(userItems);
     }
 
-    public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
-        this.quizFirebaseHandler.startAddUserAccessToQuiz(quizItem, userName);
+
+
+
+
+    /***************************************************************************/
+    /**                             Feedback                                  **/
+    /***************************************************************************/
+
+    public void startAddFeedBack(FeedBackItem feedBackItem) {
+        this.quizFirebaseHandler.startAddFeedBack(feedBackItem);
     }
 
+    public void startGetMyFeedBack() {
+        this.quizFirebaseHandler.startGetMyFeedBack();
 
+    }
 
+    public MutableLiveData<FeedBackItem> getMyFeedBackObservation() {
+        return quizFirebaseHandler.getMyFeedBackObservation();
+    }
 
+    public void setMyFeedBackObservation(FeedBackItem feedBackItem) {
+        this.quizFirebaseHandler.setMyFeedBackObservation(feedBackItem);
+    }
+
+    public void startGetRandomFeedback(int count) {
+        this.quizFirebaseHandler.startGetRandomFeedback(count);
+    }
+
+    public MutableLiveData<List<FeedBackItem>> getRandomFeedBack() {
+        return quizFirebaseHandler.getRandomFeedBack();
+    }
+
+    public void setRandomFeedBack(List<FeedBackItem> randomFeedBack) {
+        this.quizFirebaseHandler.setRandomFeedBack(randomFeedBack);
+    }
 }

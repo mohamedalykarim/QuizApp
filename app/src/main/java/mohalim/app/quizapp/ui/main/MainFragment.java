@@ -127,6 +127,8 @@ public class MainFragment extends BaseFragment {
                 validateAccessForm();
                 if (accessErrors > 0)return;
                 mViewModel.startAccessQuiz(binding.accessQuizEt.getText().toString());
+                binding.mainRV.invalidate();
+
             }
         });
 

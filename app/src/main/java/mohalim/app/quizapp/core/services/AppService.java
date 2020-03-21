@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerIntentService;
 import mohalim.app.quizapp.core.firebase.QuizFirebaseHandler;
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
@@ -86,8 +87,23 @@ public class AppService extends DaggerIntentService {
         }
 
 
+        /***************************************************************************/
+        /**                             Feedback                                  **/
+        /***************************************************************************/
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_ADD_FEEDBACK)){
+            FeedBackItem feedBackItem = intent.getParcelableExtra(Constants.FEEDBACK_ITEM);
+            quizFirebaseHandler.addFeedBack(feedBackItem);
+        }
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_GET_MY_FEEDBACK)){
+            quizFirebaseHandler.getMyFeedBack();
+        }
+
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_GET_RANDOM_FEEDBACK)){
+            int count = intent.getIntExtra(Constants.COUNT, 5);
+            quizFirebaseHandler.getRandomFeedBack(count);
+        }
 
 
     }

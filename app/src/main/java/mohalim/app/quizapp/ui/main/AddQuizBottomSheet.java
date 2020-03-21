@@ -56,6 +56,7 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
         binding.quizResultGradeEt.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
 
+
         String[] spinnerItems = new String[]{"Left", "Right"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems);
         binding.swipeDirectionSpinner.setAdapter(spinnerAdapter);

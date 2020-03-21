@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import java.util.List;
+import java.util.Random;
 
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.UserItem;
@@ -25,6 +26,12 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static int randInt(int low, int high) {
+        Random random = new Random();
+
+        return random.nextInt(high-low) + low;
     }
 
 
