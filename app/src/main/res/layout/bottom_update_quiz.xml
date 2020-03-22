@@ -125,6 +125,47 @@
                 app:layout_constraintTop_toBottomOf="@+id/questionsCountEt"
                 android:autofillHints="@string/quiz_result_1_to_100" />
 
+            <EditText
+                android:id="@+id/timeInMinutesEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:autofillHints="@string/quiz_result_1_to_100"
+                android:ems="10"
+                android:text='@{oldQuizItem.timeInMinutes + ""}'
+                android:fontType="@{@string/font}"
+                android:hint="Quiz time (reach to 300 minutes)"
+                android:inputType="number"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quizResultGradeEt" />
+
+            <Switch
+                android:id="@+id/saveResultSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:checked='@{oldQuizItem.saveResults}'
+                android:text="Save results"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timeInMinutesEt" />
+
+            <Switch
+                android:id="@+id/showResultsSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:checked='@{oldQuizItem.showResults}'
+                android:text="Show results"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/saveResultSwitch" />
+
             <Switch
                 android:id="@+id/checkAnswerWorkingSwitch"
                 android:layout_width="wrap_content"
@@ -134,7 +175,7 @@
                 android:checked='@{oldQuizItem.checkAnswerWorking}'
                 android:text="@string/show_check_answer_during_quiz"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/quizResultGradeEt" />
+                app:layout_constraintTop_toBottomOf="@+id/showResultsSwitch" />
 
             <TextView
                 android:id="@+id/swipeDirectionSpinnerTv"

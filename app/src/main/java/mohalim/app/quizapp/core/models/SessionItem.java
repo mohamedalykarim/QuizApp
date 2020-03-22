@@ -12,6 +12,7 @@ public class SessionItem implements Parcelable {
     int id;
     int currentQuestion;
     String quizId;
+    long startTime;
 
     public SessionItem() {
     }
@@ -20,6 +21,7 @@ public class SessionItem implements Parcelable {
         id = in.readInt();
         currentQuestion = in.readInt();
         quizId = in.readString();
+        startTime = in.readLong();
     }
 
     @Override
@@ -27,6 +29,7 @@ public class SessionItem implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(currentQuestion);
         dest.writeString(quizId);
+        dest.writeLong(startTime);
     }
 
     @Override
@@ -68,5 +71,13 @@ public class SessionItem implements Parcelable {
 
     public void setQuizId(String quizId) {
         this.quizId = quizId;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 }

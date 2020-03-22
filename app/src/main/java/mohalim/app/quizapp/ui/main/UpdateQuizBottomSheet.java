@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import dagger.android.support.AndroidSupportInjection;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 import mohalim.app.quizapp.core.utils.Constants;
+import mohalim.app.quizapp.core.utils.InputFilterMinMax;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.BottomAddQuizBinding;
 import mohalim.app.quizapp.databinding.BottomUpdateQuizBinding;
@@ -53,6 +55,9 @@ public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomUpdateQuizBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
+        binding.quizResultGradeEt.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
+        binding.timeInMinutesEt.setFilters(new InputFilter[]{new InputFilterMinMax("0", "300")});
+
 
         binding.setOldQuizItem(oldQuizItem);
 
@@ -88,6 +93,10 @@ public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements 
                 quizItem.setOwner(oldQuizItem.getOwner());
                 quizItem.setQuizResult(Integer.parseInt(binding.quizResultGradeEt.getText().toString()));
                 quizItem.setCheckAnswerWorking(binding.checkAnswerWorkingSwitch.isChecked());
+                quizItem.setTimeInMinutes(Integer.parseInt(binding.timeInMinutesEt.getText().toString()));
+                quizItem.setShowResults(binding.showResultsSwitch.isChecked());
+                quizItem.setSaveResults(binding.saveResultSwitch.isChecked());
+
 
                 if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals("Right")){
                     quizItem.setQuizSwipeDirection(Constants.RIGHT);
@@ -161,6 +170,11 @@ public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements 
         if (binding.quizResultGradeEt.getText().toString().equals("")){
             formErrors = formErrors+1;
             binding.quizResultGradeEt.setError("Enter quiz result wanted");
+        }
+
+        if (binding.timeInMinutesEt.getText().toString().equals("")){
+            formErrors = formErrors+1;
+            binding.quizResultGradeEt.setError("Enter quiz time");
         }
 
     }

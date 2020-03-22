@@ -46,23 +46,7 @@ public class QuizViewModel extends ViewModel {
             @Override
             public void run() {
                 SessionItem session = quizRepository.getCurrentSession(quizItem.getId());
-                if (session == null){
-                    // create session
-                    SessionItem sessionItem = new SessionItem();
-                    sessionItem.setCurrentQuestion(1);
-                    sessionItem.setQuizId(quizItem.getId());
-                    quizRepository.insertSession(sessionItem);
-                    session = quizRepository.getCurrentSession(quizItem.getId());
-
-                    currentSession = session;
-                    quizRepository.startChooseQuestionToSession(quizItem, currentSession);
-
-                }else {
-                    currentSession = session;
-                }
-
-
-
+                currentSession = session;
             }
         });
 
@@ -88,5 +72,23 @@ public class QuizViewModel extends ViewModel {
 
     public void removeSessionForQuiz(String quizId) {
         quizRepository.removeSessionForQuiz(quizId);
+    }
+
+    public void resetQuiz(final QuizItem quizItem) {
+
+        appExecutor.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<QuestionItem> questionItems = quizRepository.getQuestionsFromInternal(quizItem.getId());
+                for (QuestionItem questionItem: questionItems){
+                    quizRepository.deleteAnswerFromInternal(questionItem.getId(), quizItem.getId());
+                    quizRepository.deleteQuestionFromInternal(questionItem.getId(), quizItem.getId());
+                }
+                quizRepository.deleteSessionFromInternal(quizItem.getId());
+
+            }
+        });
+
+
     }
 }

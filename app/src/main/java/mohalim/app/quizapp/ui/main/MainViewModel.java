@@ -14,6 +14,7 @@ import androidx.paging.PagedList;
 
 import com.google.android.gms.common.util.ArrayUtils;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -103,6 +104,8 @@ public class MainViewModel extends ViewModel {
                     SessionItem sessionItem = new SessionItem();
                     sessionItem.setCurrentQuestion(1);
                     sessionItem.setQuizId(quizItem.getId());
+                    Calendar calendar = Calendar.getInstance();
+                    sessionItem.setStartTime(calendar.getTimeInMillis());
                     quizRepository.insertSession(sessionItem);
                     session = quizRepository.getCurrentSession(quizItem.getId());
 

@@ -1,6 +1,7 @@
 package mohalim.app.quizapp.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
         binding = BottomAddQuizBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
         binding.quizResultGradeEt.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
+        binding.timeInMinutesEt.setFilters(new InputFilter[]{new InputFilterMinMax("0", "300")});
 
 
         String[] spinnerItems = new String[]{"Left", "Right"};
@@ -78,6 +80,9 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
                 quizItem.setQuizResult(Integer.parseInt(binding.quizResultGradeEt.getText().toString()));
                 quizItem.setCheckAnswerWorking(binding.checkAnswerWorkingSwitch.isChecked());
                 quizItem.setPeopleCanAccess(null);
+                quizItem.setTimeInMinutes(Integer.parseInt(binding.timeInMinutesEt.getText().toString()));
+                quizItem.setShowResults(binding.showResultsSwitch.isChecked());
+                quizItem.setSaveResults(binding.saveResultSwitch.isChecked());
 
                 if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals("Right")){
                     quizItem.setQuizSwipeDirection(Constants.RIGHT);
@@ -126,6 +131,11 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
         if (binding.quizResultGradeEt.getText().toString().equals("")){
             formErrors = formErrors+1;
             binding.quizResultGradeEt.setError("Enter quiz result wanted");
+        }
+
+        if (binding.timeInMinutesEt.getText().toString().equals("")){
+            formErrors = formErrors+1;
+            binding.quizResultGradeEt.setError("Enter quiz time");
         }
 
     }

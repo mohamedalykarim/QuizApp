@@ -8,6 +8,8 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +25,15 @@ public class QuizItem extends BaseObservable implements Parcelable {
     private String owner;
     private int quizResult;
     private boolean isCheckAnswerWorking;
+    private boolean showResults;
+    private boolean saveResults;
     private String quizSwipeDirection;
     private String quizNavigationDirection;
     private List<UserItem> peopleCanAccess;
+    int timeInMinutes;
+    long startTimeInMilliscond;
+
+
 
 
     public QuizItem() {
@@ -39,10 +47,15 @@ public class QuizItem extends BaseObservable implements Parcelable {
         owner = in.readString();
         quizResult = in.readInt();
         isCheckAnswerWorking = in.readByte() != 0;
+        showResults = in.readByte() != 0;
+        saveResults = in.readByte() != 0;
         quizSwipeDirection = in.readString();
         quizNavigationDirection = in.readString();
         peopleCanAccess = new ArrayList<>();
         in.readList(peopleCanAccess, AnswerItem.class.getClassLoader());
+        timeInMinutes = in.readInt();
+        startTimeInMilliscond = in.readLong();
+
     }
 
     @Override
@@ -54,10 +67,13 @@ public class QuizItem extends BaseObservable implements Parcelable {
         dest.writeString(owner);
         dest.writeInt(quizResult);
         dest.writeByte((byte) (isCheckAnswerWorking ? 1 : 0));
+        dest.writeByte((byte) (showResults ? 1 : 0));
+        dest.writeByte((byte) (saveResults ? 1 : 0));
         dest.writeString(quizSwipeDirection);
         dest.writeString(quizNavigationDirection);
         dest.writeList(peopleCanAccess);
-
+        dest.writeInt(timeInMinutes);
+        dest.writeLong(startTimeInMilliscond);
     }
 
     @Override
@@ -159,6 +175,40 @@ public class QuizItem extends BaseObservable implements Parcelable {
 
     public void setPeopleCanAccess(List<UserItem> peopleCanAccessQuiz) {
         this.peopleCanAccess = peopleCanAccessQuiz;
+    }
+
+    public int getTimeInMinutes() {
+        return timeInMinutes;
+    }
+
+    public void setTimeInMinutes(int timeInMinutes) {
+        this.timeInMinutes = timeInMinutes;
+    }
+
+    public boolean isShowResults() {
+        return showResults;
+    }
+
+    public void setShowResults(boolean showResults) {
+        this.showResults = showResults;
+    }
+
+    public boolean isSaveResults() {
+        return saveResults;
+    }
+
+    public void setSaveResults(boolean saveResults) {
+        this.saveResults = saveResults;
+    }
+
+    @Exclude
+    public long getStartTimeInMilliscond() {
+        return startTimeInMilliscond;
+    }
+
+    @Exclude
+    public void setStartTimeInMilliscond(long startTimeInMilliscond) {
+        this.startTimeInMilliscond = startTimeInMilliscond;
     }
 
     public static DiffUtil.ItemCallback<QuizItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<QuizItem>() {

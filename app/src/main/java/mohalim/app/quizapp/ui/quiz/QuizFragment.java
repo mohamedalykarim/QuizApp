@@ -22,8 +22,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -72,6 +78,43 @@ public class QuizFragment extends BaseFragment {
         mViewModel = new ViewModelProvider(getActivity(), viewModelProviderFactory).get(QuizViewModel.class);
         mViewModel.quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
 
+        /**
+         * Quiz time
+         */
+        Calendar calendar = Calendar.getInstance();
+
+        long currentTimeMillisecond = calendar.getTimeInMillis();
+        long timePassedMillisecond = currentTimeMillisecond - mViewModel.currentSession.getStartTime();
+        long examTimeMillisecond = mViewModel.quizItem.getTimeInMinutes() * 60 * 1000;
+
+        if (timePassedMillisecond > examTimeMillisecond){
+            Toast.makeText(getContext(), "Exam time finished", Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        }
+
+        long timeRemainsMillisecond = examTimeMillisecond - timePassedMillisecond;
+
+
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+
+        new CountDownTimer(timeRemainsMillisecond, 1000) {
+            @Override
+            public void onTick(long l) {
+                long h = TimeUnit.MILLISECONDS.toHours(l);
+                long m = TimeUnit.MILLISECONDS.toMinutes(l) - h*60;
+                long s = TimeUnit.MILLISECONDS.toSeconds(l) - h*60*60 - m*60;
+                binding.timeCounter.setText(h+":"+m+":"+s);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+
+
         if (mViewModel.quizItem.getQuizSwipeDirection().equals(Constants.RIGHT)){
             binding.getRoot().setRotation(180.0f);
         }
@@ -113,42 +156,73 @@ public class QuizFragment extends BaseFragment {
         binding.finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Results!")
-                        .setMessage("Do you want finish the session and go to results page ?")
-                        .setPositiveButton("Finish and reset Session", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent intent = new Intent(getActivity(), ResultActivity.class);
-                                ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
-                                intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
-                                intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
-                                intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
-                                getActivity().startActivity(intent);
 
-                                startResetQuiz = true;
+                if (!mViewModel.quizItem.isShowResults()){
 
-                                getActivity().finish();
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Finish")
+                            .setMessage("Are you sure! you want finish the exam?")
+                            .setPositiveButton("Finish exam", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        })
+                                    mViewModel.resetQuiz(mViewModel.quizItem);
+                                    startResetQuiz = true;
 
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton("Finish", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                                    getActivity().finish();
 
-                                Intent intent = new Intent(getActivity(), ResultActivity.class);
-                                ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
-                                intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
-                                intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
+                                }
+                            })
 
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                }else {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Results!")
+                            .setMessage("Do you want finish the session and go to results page ?")
+                            .setPositiveButton("Finish and reset Session", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    Intent intent = new Intent(getActivity(), ResultActivity.class);
+                                    ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
+                                    intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
+                                    intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
+                                    getActivity().startActivity(intent);
+
+                                    mViewModel.resetQuiz(mViewModel.quizItem);
+
+                                    startResetQuiz = true;
+
+                                    getActivity().finish();
+
+                                }
+                            })
+
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton("Finish", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    Intent intent = new Intent(getActivity(), ResultActivity.class);
+                                    ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
+                                    intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
+                                    intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
+                                    getActivity().startActivity(intent);
+                                    getActivity().finish();
+
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
 
 
 
