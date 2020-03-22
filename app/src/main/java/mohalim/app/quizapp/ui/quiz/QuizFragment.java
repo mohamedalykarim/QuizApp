@@ -68,8 +68,6 @@ public class QuizFragment extends BaseFragment {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
 
 
-
-
         Intent intent = getActivity().getIntent();
         if (intent == null || !intent.hasExtra(Constants.QUIZ_ITEM)){
             getActivity().finish();
@@ -89,14 +87,11 @@ public class QuizFragment extends BaseFragment {
 
         if (timePassedMillisecond > examTimeMillisecond){
             Toast.makeText(getContext(), "Exam time finished", Toast.LENGTH_SHORT).show();
-            getActivity().finish();
         }
 
         long timeRemainsMillisecond = examTimeMillisecond - timePassedMillisecond;
 
 
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
 
         new CountDownTimer(timeRemainsMillisecond, 1000) {
@@ -105,12 +100,29 @@ public class QuizFragment extends BaseFragment {
                 long h = TimeUnit.MILLISECONDS.toHours(l);
                 long m = TimeUnit.MILLISECONDS.toMinutes(l) - h*60;
                 long s = TimeUnit.MILLISECONDS.toSeconds(l) - h*60*60 - m*60;
-                binding.timeCounter.setText(h+":"+m+":"+s);
+
+                String hour = String.valueOf(h);
+                String minute = String.valueOf(m);
+                String second = String.valueOf(s);
+
+                if (hour.length() == 1) hour = "0"+hour;
+                if (minute.length() == 1) minute = "0"+minute;
+                if (second.length() == 1) second = "0"+second;
+
+                binding.timeCounter.setText(hour+":"+minute+":"+second);
+
+
             }
 
             @Override
             public void onFinish() {
+                binding.timeCounter.setText("00:00:00");
 
+                if (mViewModel.quizItem.isSaveResults()){
+                    mViewModel.startSaveResults();
+                }
+
+//                getActivity().finish();
             }
         }.start();
 
@@ -118,6 +130,16 @@ public class QuizFragment extends BaseFragment {
         if (mViewModel.quizItem.getQuizSwipeDirection().equals(Constants.RIGHT)){
             binding.getRoot().setRotation(180.0f);
         }
+
+        if (mViewModel.quizItem.getQuizSwipeDirection().equals(Constants.RIGHT)){
+            binding.bottomBtnsContainer.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }else{
+            binding.bottomBtnsContainer.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
+        /**
+         * Next button
+         */
 
         binding.nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +150,10 @@ public class QuizFragment extends BaseFragment {
             }
         });
 
+        /**
+         * previous button
+         */
+
         binding.previousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +162,10 @@ public class QuizFragment extends BaseFragment {
                 changeQuizPosition.onChangeQuizPosition(targeted);            }
         });
 
+
+        /**
+         * check answer button
+         */
         binding.checkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,6 +183,12 @@ public class QuizFragment extends BaseFragment {
             }
         });
 
+
+        /**
+         * Finish button
+         */
+
+
         binding.finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +204,10 @@ public class QuizFragment extends BaseFragment {
 
                                     mViewModel.resetQuiz(mViewModel.quizItem);
                                     startResetQuiz = true;
+
+                                    if (mViewModel.quizItem.isSaveResults()){
+                                        mViewModel.startSaveResults();
+                                    }
 
                                     getActivity().finish();
 
@@ -201,6 +241,10 @@ public class QuizFragment extends BaseFragment {
 
                                     startResetQuiz = true;
 
+                                    if (mViewModel.quizItem.isSaveResults()){
+                                        mViewModel.startSaveResults();
+                                    }
+
                                     getActivity().finish();
 
                                 }
@@ -216,6 +260,11 @@ public class QuizFragment extends BaseFragment {
                                     intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
                                     intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
                                     getActivity().startActivity(intent);
+
+                                    if (mViewModel.quizItem.isSaveResults()){
+                                        mViewModel.startSaveResults();
+                                    }
+
                                     getActivity().finish();
 
                                 }

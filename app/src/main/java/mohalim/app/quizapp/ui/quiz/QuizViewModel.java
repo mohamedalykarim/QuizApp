@@ -91,4 +91,7 @@ public class QuizViewModel extends ViewModel {
 
 
     }
+
+    public void startSaveResults() {
+    }
 }
