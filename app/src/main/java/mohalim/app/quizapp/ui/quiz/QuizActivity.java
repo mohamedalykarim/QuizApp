@@ -11,28 +11,35 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.di.base.BaseActivity;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.ActivityQuizBinding;
+import mohalim.app.quizapp.ui.result.ResultActivity;
 
 
 public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQuizPosition, QuizFragment.ChangeNavItemColor {
@@ -47,7 +54,8 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
     public static final String TAG = "Quiz_app_tag";
 
     QuizPagerAdapter adapter;
-
+    private boolean quizTimeInitiated;
+    private boolean counterFinished;
 
 
     @Override
@@ -61,10 +69,8 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
         }
 
         final QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
-
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(QuizViewModel.class);
-        mViewModel.initSession(quizItem);
-
+        mViewModel.quizItem = quizItem;
 
 
         adapter = new QuizPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -133,10 +139,20 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                     mViewModel.setQuestionItemList(questionItems);
                 }
 
+                if (!quizTimeInitiated){
+                    checkTime(quizItem);
+                }
+
                 adapter.setQuestionItems(questionItems);
                 adapter.notifyDataSetChanged();
+
+
+
+
             }
         });
+
+
         
 
     }
@@ -164,5 +180,119 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                 ((TextView)binding.navViewContainer.getChildAt(i).findViewById(R.id.title)).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             }
         }
+    }
+
+    private void checkTime(final QuizItem quizItem){
+        appExecutor.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mViewModel.initSession(quizItem);
+
+                /*
+                 * Quiz time
+                 */
+                Calendar calendar = Calendar.getInstance();
+
+                long currentTimeMillisecond = calendar.getTimeInMillis();
+                long timePassedMillisecond = currentTimeMillisecond - mViewModel.currentSession.getStartTime();
+                long examTimeMillisecond = mViewModel.quizItem.getTimeInMinutes() * 60 * 1000;
+
+                if (mViewModel.quizItem.getTimeInMinutes() == 0){
+                    return;
+                }
+
+                // time finished
+                if (timePassedMillisecond > examTimeMillisecond){
+                    int i =0;
+                    for (final QuestionItem questionItem : mViewModel.questionItemList){
+                        QuestionAnswerSavedItem questionAnswerSavedItem = mViewModel.getSavedAnswer(mViewModel.quizItem.getId(), questionItem.getId());
+                        if (questionAnswerSavedItem != null){
+                            mViewModel.questionItemList.get(i).setChosenAnswer(questionAnswerSavedItem.getChosenAnswer());
+                            mViewModel.questionItemList.get(i).setChosenAnswerCorrect(questionAnswerSavedItem.isChosenAnswerCorrect());
+                        }
+                    }
+
+
+                    if (mViewModel.quizItem.isSaveResults()){
+                        mViewModel.startSaveResults();
+                    }
+
+                    if (mViewModel.quizItem.isShowResults()){
+                        Log.d(TAG, "run: reset session");
+                        showResultsAndResetSession();
+                        quizTimeInitiated = true;
+
+                    }else{
+                        mViewModel.resetQuiz(mViewModel.quizItem);
+                        finish();
+                    }
+
+                    appExecutor.mainThread().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(QuizActivity.this, "Exam time finished", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }
+                final long timeRemainsMillisecond = examTimeMillisecond - timePassedMillisecond;
+
+                appExecutor.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        new CountDownTimer(timeRemainsMillisecond, 1000) {
+                            @Override
+                            public void onTick(long l) {
+                                long h = TimeUnit.MILLISECONDS.toHours(l);
+                                long m = TimeUnit.MILLISECONDS.toMinutes(l) - h*60;
+                                long s = TimeUnit.MILLISECONDS.toSeconds(l) - h*60*60 - m*60;
+                                String hour = String.valueOf(h);
+                                String minute = String.valueOf(m);
+                                String second = String.valueOf(s);
+                                if (hour.length() == 1) hour = "0"+hour;
+                                if (minute.length() == 1) minute = "0"+minute;
+                                if (second.length() == 1) second = "0"+second;
+                                mViewModel.quizItem.setRemainTime(hour+":"+minute+":"+second);
+                            }
+                            @Override
+                            public void onFinish() {
+                                mViewModel.quizItem.setRemainTime("00:00:00");
+
+                                if (mViewModel.quizItem.isSaveResults()){
+                                    mViewModel.startSaveResults();
+                                }
+
+                                if (mViewModel.quizItem.isShowResults()){
+                                    if(!quizTimeInitiated && !counterFinished){
+                                        showResultsAndResetSession();
+                                        counterFinished = true;
+                                    }
+                                }else{
+                                    mViewModel.resetQuiz(mViewModel.quizItem);
+                                    finish();
+                                }
+
+                            }
+                        }.start();
+                    }
+                });
+
+
+            }
+        });
+    }
+
+    private void showResultsAndResetSession() {
+        Intent intent = new Intent(this, ResultActivity.class);
+        ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
+        intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
+        intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
+        intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
+        startActivity(intent);
+        if (mViewModel.quizItem.isSaveResults()){
+            mViewModel.startSaveResults();
+        }
+        finish();
     }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,51 +74,14 @@ public class QuizFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
+        mViewModel = new ViewModelProvider(getActivity(), viewModelProviderFactory).get(QuizViewModel.class);
+        binding.setViewmodel(mViewModel);
 
 
         Intent intent = getActivity().getIntent();
         if (intent == null || !intent.hasExtra(Constants.QUIZ_ITEM)){
             getActivity().finish();
         }
-
-        mViewModel = new ViewModelProvider(getActivity(), viewModelProviderFactory).get(QuizViewModel.class);
-        mViewModel.quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
-
-        /**
-         * Quiz time
-         */
-        Calendar calendar = Calendar.getInstance();
-
-        long currentTimeMillisecond = calendar.getTimeInMillis();
-        long timePassedMillisecond = currentTimeMillisecond - mViewModel.currentSession.getStartTime();
-        long examTimeMillisecond = mViewModel.quizItem.getTimeInMinutes() * 60 * 1000;
-        if (timePassedMillisecond > examTimeMillisecond){
-            Toast.makeText(getContext(), "Exam time finished", Toast.LENGTH_SHORT).show();
-        }
-        long timeRemainsMillisecond = examTimeMillisecond - timePassedMillisecond;
-        new CountDownTimer(timeRemainsMillisecond, 1000) {
-            @Override
-            public void onTick(long l) {
-                long h = TimeUnit.MILLISECONDS.toHours(l);
-                long m = TimeUnit.MILLISECONDS.toMinutes(l) - h*60;
-                long s = TimeUnit.MILLISECONDS.toSeconds(l) - h*60*60 - m*60;
-                String hour = String.valueOf(h);
-                String minute = String.valueOf(m);
-                String second = String.valueOf(s);
-                if (hour.length() == 1) hour = "0"+hour;
-                if (minute.length() == 1) minute = "0"+minute;
-                if (second.length() == 1) second = "0"+second;
-                binding.timeCounter.setText(hour+":"+minute+":"+second);
-            }
-            @Override
-            public void onFinish() {
-                binding.timeCounter.setText("00:00:00");
-                if (mViewModel.quizItem.isSaveResults()){
-                    mViewModel.startSaveResults();
-                }
-            }
-        }.start();
-
 
         /**
          * Quiz swipe direction
@@ -184,7 +148,6 @@ public class QuizFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-
                 if (!mViewModel.quizItem.isShowResults()){
 
                     new AlertDialog.Builder(getContext())
@@ -217,19 +180,7 @@ public class QuizFragment extends BaseFragment {
                             .setMessage("Do you want finish the session and go to results page ?")
                             .setPositiveButton("Finish and reset Session", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getActivity(), ResultActivity.class);
-                                    ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
-                                    intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
-                                    intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
-                                    intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
-                                    getActivity().startActivity(intent);
-                                    startResetQuiz = true;
-                                    if (mViewModel.quizItem.isSaveResults()){
-                                        mViewModel.startSaveResults();
-                                    }
-
-                                    getActivity().finish();
-
+                                    showResultsAndResetSession();
                                 }
                             })
 
@@ -291,23 +242,30 @@ public class QuizFragment extends BaseFragment {
         }
 
 
-        new CountDownTimer(3000, 1000) {
-            @Override public void onTick(long l) {
-                if (currentQuizPosition == mViewModel.questionItemList.size())return;
+        // update quiz ui
+        binding.questionTv.setText(mViewModel.questionItemList.get(currentQuizPosition).getQuestionText());
+        binding.quizName.setText(mViewModel.quizItem.getQuizName());
+        binding.questionCounterTv.setText("Question "+(currentQuizPosition+1)+" from "+mViewModel.questionItemList.size());
 
-                binding.questionTv.setText(mViewModel.questionItemList.get(currentQuizPosition).getQuestionText());
-                binding.quizName.setText(mViewModel.quizItem.getQuizName());
-                binding.questionCounterTv.setText("Question "+(currentQuizPosition+1)+" from "+mViewModel.questionItemList.size());
-
-            }
-            @Override public void onFinish() {
-                binding.questionCounterTv.setText("Question "+(currentQuizPosition+1)+" from "+mViewModel.questionItemList.size());
-            }
-        }.start();
 
         setRetainInstance(true);
 
         return binding.getRoot();
+    }
+
+    private void showResultsAndResetSession() {
+        Intent intent = new Intent(getActivity(), ResultActivity.class);
+        ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
+        intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
+        intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
+        intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
+        getActivity().startActivity(intent);
+        startResetQuiz = true;
+        if (mViewModel.quizItem.isSaveResults()){
+            mViewModel.startSaveResults();
+        }
+
+        getActivity().finish();
     }
 
     @Override

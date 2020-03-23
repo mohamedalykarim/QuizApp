@@ -6,6 +6,13 @@
     tools:context=".ui.quiz.QuizFragment">
 
 
+    <data>
+        <variable
+            name="viewmodel"
+            type="mohalim.app.quizapp.ui.quiz.QuizViewModel" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -85,7 +92,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:text=""
+                    android:text="@{viewmodel.quizItem.remainTime}"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

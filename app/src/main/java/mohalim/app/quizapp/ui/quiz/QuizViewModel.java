@@ -35,21 +35,14 @@ public class QuizViewModel extends ViewModel {
 
     @Inject
     public QuizViewModel() {
+            questionItemList = new ArrayList<>();
+
     }
 
     public void initSession(final QuizItem quizItem){
+        SessionItem session = quizRepository.getCurrentSession(quizItem.getId());
+        currentSession = session;
 
-        if (questionItemList == null){
-            questionItemList = new ArrayList<>();
-        }
-
-        appExecutor.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                SessionItem session = quizRepository.getCurrentSession(quizItem.getId());
-                currentSession = session;
-            }
-        });
 
 
     }
@@ -65,7 +58,6 @@ public class QuizViewModel extends ViewModel {
     public LiveData<List<AnswerItem>> getAnswersForQuestionFromInternalObserved(String questionId, String quizId) {
         return quizRepository.getAnswersForQuestionFromInternalObserved(questionId, quizId);
     }
-
 
     public SessionItem getSessionFromInternal(String quizId) {
         return  quizRepository.getCurrentSession(quizId);

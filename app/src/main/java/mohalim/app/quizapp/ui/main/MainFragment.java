@@ -186,6 +186,11 @@ public class MainFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void validateAccessForm() {
         if (binding.accessQuizEt.getText().toString().equals("")){
             binding.accessQuizEt.setError("Please enter quiz id");

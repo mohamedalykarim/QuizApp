@@ -30,8 +30,9 @@ public class QuizItem extends BaseObservable implements Parcelable {
     private String quizSwipeDirection;
     private String quizNavigationDirection;
     private List<UserItem> peopleCanAccess;
-    int timeInMinutes;
-    long startTimeInMilliscond;
+    private int timeInMinutes;
+    private long startTimeInMilliscond;
+    private String remainTime;
 
 
 
@@ -55,7 +56,7 @@ public class QuizItem extends BaseObservable implements Parcelable {
         in.readList(peopleCanAccess, AnswerItem.class.getClassLoader());
         timeInMinutes = in.readInt();
         startTimeInMilliscond = in.readLong();
-
+        remainTime = in.readString();
     }
 
     @Override
@@ -74,6 +75,7 @@ public class QuizItem extends BaseObservable implements Parcelable {
         dest.writeList(peopleCanAccess);
         dest.writeInt(timeInMinutes);
         dest.writeLong(startTimeInMilliscond);
+        dest.writeString(remainTime);
     }
 
     @Override
@@ -209,6 +211,18 @@ public class QuizItem extends BaseObservable implements Parcelable {
     @Exclude
     public void setStartTimeInMilliscond(long startTimeInMilliscond) {
         this.startTimeInMilliscond = startTimeInMilliscond;
+    }
+
+    @Bindable
+    @Exclude
+    public String getRemainTime() {
+        return remainTime;
+    }
+
+    @Exclude
+    public void setRemainTime(String remainTime) {
+        this.remainTime = remainTime;
+        notifyPropertyChanged(BR.remainTime);
     }
 
     public static DiffUtil.ItemCallback<QuizItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<QuizItem>() {

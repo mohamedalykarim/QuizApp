@@ -64,7 +64,6 @@ public class MainActivity extends BaseActivity implements
 
                 Intent intent = new Intent(MainActivity.this, QuizActivity.class);
                 intent.putExtra(Constants.QUIZ_ITEM, mViewModel.initedQuiz);
-                Log.d("TAG", "onChanged: "+ mViewModel.initedQuiz.getQuizName());
                 startActivity(intent);
 
                 if (dialogLoading.isAdded()){
@@ -83,6 +82,7 @@ public class MainActivity extends BaseActivity implements
         super.onResume();
 
         initNavigation(binding.drawerLayout);
+        if (dialogLoading.isAdded())dialogLoading.dismiss();
 
     }
 
