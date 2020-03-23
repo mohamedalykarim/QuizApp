@@ -53,6 +53,12 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.addQuestion(quizItem, questionItem);
         }
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_UPDATE_QUESTION)){
+            QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
+            QuestionItem questionItem = intent.getParcelableExtra(Constants.QUESTION_ITEM);
+            quizFirebaseHandler.updateQuestion(quizItem, questionItem);
+        }
+
         if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_CHOOSE_QUESTION_TO_SESSION)){
             QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
             SessionItem sessionItem = intent.getParcelableExtra(Constants.SESSION_ITEM);

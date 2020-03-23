@@ -1,6 +1,8 @@
 package mohalim.app.quizapp.ui.questions;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,13 +10,24 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import mohalim.app.quizapp.core.models.QuestionItem;
+import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.databinding.RowQuestionBinding;
 
 public class QuestionPagedAdapter extends PagedListAdapter<QuestionItem, QuestionPagedAdapter.QuestionPagedAdapterViewHolder> {
 
-    protected QuestionPagedAdapter() {
+    QuestionAdapterClickListener questionAdapterClickListener;
+
+
+
+    protected QuestionPagedAdapter(Context context) {
         super(QuestionItem.DIFF_CALLBACK);
+        try{
+            questionAdapterClickListener = (QuestionAdapterClickListener) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement QuestionAdapterClickListener class : "+ e.getMessage());
+        }
     }
+
 
     @NonNull
     @Override
@@ -24,8 +37,15 @@ public class QuestionPagedAdapter extends PagedListAdapter<QuestionItem, Questio
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuestionPagedAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull QuestionPagedAdapterViewHolder holder, final int position) {
         holder.binding.setQuestion(getItem(position));
+        holder.binding.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                questionAdapterClickListener.onQuestionAdapterClick(Constants.EDIT, getItem(position));
+            }
+        });
+
     }
 
     class QuestionPagedAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -35,5 +55,11 @@ public class QuestionPagedAdapter extends PagedListAdapter<QuestionItem, Questio
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+
+
+    public interface QuestionAdapterClickListener{
+        void onQuestionAdapterClick(String type, QuestionItem questionItem);
     }
 }

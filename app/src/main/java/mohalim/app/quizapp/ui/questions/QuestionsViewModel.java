@@ -2,6 +2,7 @@ package mohalim.app.quizapp.ui.questions;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
@@ -16,12 +17,16 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import mohalim.app.quizapp.core.datasource.QuestionDataSourceFactory;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 
+@Reusable
 public class QuestionsViewModel extends ViewModel {
+    private static final String TAG = "QuestionsViewModel";
+
     Executor executor;
     QuestionDataSourceFactory questionDataSourceFactory;
     private LiveData<PagedList<QuestionItem>> questionsLiveData;
@@ -76,5 +81,9 @@ public class QuestionsViewModel extends ViewModel {
 
     public void refresh() {
         questionDataSourceFactory.invalidate();
+    }
+
+    public void startUpdateQuestion(QuizItem quizItem, QuestionItem questionItem) {
+        this.quizRepository.startUpdateQuestion(quizItem, questionItem);
     }
 }

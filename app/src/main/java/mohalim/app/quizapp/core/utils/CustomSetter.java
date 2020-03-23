@@ -15,8 +15,9 @@ import java.util.List;
 import mohalim.app.quizapp.core.models.AnswerItem;
 
 public class CustomSetter {
-    public static Typeface type;
+    public final static String TAG = "CustomSetter";
 
+    public static Typeface type;
     public final static String DEFAULT_ARABIC_FONT = "fonts/droid.ttf";
 
     @BindingAdapter("android:fontType")
@@ -45,4 +46,5 @@ public class CustomSetter {
             textView.append("*  " +answer.getAnswerText() + "\n");
         }
     }
+
 }

@@ -220,4 +220,7 @@ public class QuizRepository {
     }
 
 
+    public void startUpdateQuestion(QuizItem quizItem, QuestionItem questionItem) {
+        this.quizFirebaseHandler.startUpdateQuestion(quizItem, questionItem);
+    }
 }

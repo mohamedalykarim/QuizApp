@@ -51,16 +51,14 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
     @Inject
     AppExecutor appExecuter;
 
-    QuizItem quizItem;
+    private QuizItem quizItem;
 
-    DialogPeopleCanAccessQuizBinding binding;
-    MainViewModel mViewModel;
+    private DialogPeopleCanAccessQuizBinding binding;
+    private MainViewModel mViewModel;
 
-    int addPersonFormErrors;
-    Executor executor;
-    private LiveData<PagedList<UserItem>> userItemsLiveData;
+    private int addPersonFormErrors;
     private PeopleCanAccessAdapter peopleCanAccessAdapter;
-
+    private OnDismissPeopleCanAccessDialog onDismissPeopleCanAccessDialog;
 
 
     public static DialogPeopleCanAccessQuiz newInstance() {
@@ -177,17 +175,6 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
 
     }
 
-    private void validateAddPersonForm() {
-        addPersonFormErrors = 0;
-
-        if (binding.userNameEt.getText().toString().equals("")){
-            binding.userNameEt.setError("Please enter correct email first");
-            addPersonFormErrors++;
-        }
-
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -199,6 +186,20 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
 
     }
 
+
+    private void validateAddPersonForm() {
+        addPersonFormErrors = 0;
+
+        if (binding.userNameEt.getText().toString().equals("")){
+            binding.userNameEt.setError("Please enter correct email first");
+            addPersonFormErrors++;
+        }
+
+
+    }
+
+
+
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
@@ -209,12 +210,20 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
         mViewModel.getQuizitemObservation().removeObservers(getViewLifecycleOwner());
         mViewModel.setQuizitemObservation(null);
 
+        onDismissPeopleCanAccessDialog.onDismissPeopleCanAccessDialog();
+
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+
+        try {
+            onDismissPeopleCanAccessDialog = (OnDismissPeopleCanAccessDialog) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement OnDismissPeopleCanAccessDialog class " + e);
+        }
     }
 
     @Override
@@ -228,5 +237,8 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
         this.quizItem = quizItem;
     }
 
+    public interface OnDismissPeopleCanAccessDialog{
+        void onDismissPeopleCanAccessDialog();
+    }
 
 }

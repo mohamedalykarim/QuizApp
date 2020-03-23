@@ -19,6 +19,7 @@ public class Constants {
     public static final String TYPE_GET_QUIZ = "type_get_quiz";
     public static final String TYPE_UPDATE_QUIZ = "type_update_quiz";
     public static final String TYPE_ADD_QUESTION = "type_add_question";
+    public static final String TYPE_START_UPDATE_QUESTION = "type_start_update_question";
     public static final String TYPE_START_CHOOSE_QUESTION_TO_SESSION = "type_start_choose_question_to_session";
     public static final String TYPE_ACCESS_QUIZ = "type_access_quiz";
     public static final String TYPE_START_GET_USER_BY_USERNAME = "start_get_user_by_username";
@@ -41,4 +42,5 @@ public class Constants {
     public static final String RESET_QUIZ = "reset_quiz";
 
     public static final String FEEDBACK_ITEM = "feedback_item";
+
 }

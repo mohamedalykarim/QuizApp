@@ -94,7 +94,7 @@ public class ResultFragment extends BaseFragment {
         });
 
         result = ((correctAnswersCount/questionCount) * 100);
-        binding.resultTv.setText(String.format("%.0f", result )+ "");
+        binding.resultTv.setText(String.format("%.0f", result )+ "%");
         if (quizItem != null){
             binding.quizTitleTv.setText(quizItem.getQuizName() + " Result");
         }

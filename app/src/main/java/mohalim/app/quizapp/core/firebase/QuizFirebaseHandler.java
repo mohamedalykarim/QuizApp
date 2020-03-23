@@ -141,7 +141,23 @@ public class QuizFirebaseHandler {
 
         questionItem.setId(quesitonDocument.getId());
         quesitonDocument.set(questionItem);
+    }
 
+    public void updateQuestion(QuizItem quizItem, QuestionItem questionItem) {
+        if (quizItem == null || questionItem == null)return;
+
+        DocumentReference quesitonDocument = db.collection("quiz").document(quizItem.getId())
+                .collection("question").document(questionItem.getId());
+
+        quesitonDocument.set(questionItem);
+    }
+
+    public void startUpdateQuestion(QuizItem quizItem, QuestionItem questionItem) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_UPDATE_QUESTION);
+        intent.putExtra(Constants.QUIZ_ITEM, quizItem);
+        intent.putExtra(Constants.QUESTION_ITEM, questionItem);
+        application.startService(intent);
 
     }
 
@@ -527,6 +543,8 @@ public class QuizFirebaseHandler {
     public void setRandomFeedBack(List<FeedBackItem> randomFeedBack) {
         this.randomFeedBack.setValue(randomFeedBack);
     }
+
+
 }
 
 

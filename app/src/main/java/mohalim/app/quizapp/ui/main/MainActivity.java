@@ -25,7 +25,8 @@ public class MainActivity extends BaseActivity implements
         AddQuizBottomSheet.AddNewQuizListener,
         UpdateQuizBottomSheet.UpdateQuizListener,
         QuizPagedAdapter.QuizPagedAdapterClick,
-        PeopleCanAccessAdapter.OnPeopleCanAccessAdapterClick {
+        PeopleCanAccessAdapter.OnPeopleCanAccessAdapterClick,
+        DialogPeopleCanAccessQuiz.OnDismissPeopleCanAccessDialog {
 
     private static final String TAG = "MainActivity";
 
@@ -92,21 +93,25 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onQuizPagedAdapterClick(String clickType, QuizItem quizItem) {
-        if (clickType.equals(Constants.START)){
-            mViewModel.initSession(quizItem);
+    public void onQuizPagedAdapterClick(String clickType, QuizItem quizItem, int position) {
+        switch (clickType) {
+            case Constants.START:
+                mViewModel.initSession(quizItem);
 
-            if (!dialogLoading.isAdded()){
-                dialogLoading.show(getSupportFragmentManager(), "LoadingDialog");
-            }
+                if (!dialogLoading.isAdded()) {
+                    dialogLoading.show(getSupportFragmentManager(), "LoadingDialog");
+                }
 
-        }else if (clickType.equals(Constants.EDIT)){
-            ((MainFragment)getSupportFragmentManager().getFragments().get(0)).onQuizPagedAdapterClick(quizItem);
-        }else if (clickType.equals(Constants.QUIZ_PEOPLE_ACCESS)){
-            dialogPeopleCanAccessQuiz.updateQuizPeopleCanAccess(quizItem);
-            if (!dialogPeopleCanAccessQuiz.isAdded()) {
-                dialogPeopleCanAccessQuiz.show(getSupportFragmentManager(), "DialogPeopleCanAccessQuiz");
-            }
+                break;
+            case Constants.EDIT:
+                ((MainFragment) getSupportFragmentManager().getFragments().get(0)).onQuizPagedAdapterClick(quizItem);
+                break;
+            case Constants.QUIZ_PEOPLE_ACCESS:
+                dialogPeopleCanAccessQuiz.updateQuizPeopleCanAccess(quizItem);
+                if (!dialogPeopleCanAccessQuiz.isAdded()) {
+                    dialogPeopleCanAccessQuiz.show(getSupportFragmentManager(), "DialogPeopleCanAccessQuiz");
+                }
+                break;
         }
 
     }
@@ -114,11 +119,15 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onUpdateQuiz() {
         ((MainFragment)getSupportFragmentManager().getFragments().get(0)).onUpdateQuiz();
-
     }
 
     @Override
     public void onPeopleCanAccessAdapterClick(QuizItem quizItem) {
         mViewModel.startUpdateQuiz(quizItem);
+    }
+
+    @Override
+    public void onDismissPeopleCanAccessDialog() {
+        mViewModel.refresh();
     }
 }

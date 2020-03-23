@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <data>
+        <variable
+            name="question"
+            type="mohalim.app.quizapp.core.models.QuestionItem" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/background" />
+
+            <Switch
+                android:id="@+id/switchAnswer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/correct"
+                android:checked="@{question.questionAnswers.size() &lt; 1 ? true : question.questionAnswers.get(0).correct}"
+                app:layout_constraintBottom_toBottomOf="@+id/answerEt1"
+                app:layout_constraintStart_toEndOf="@+id/answerEt1"
+                app:layout_constraintTop_toTopOf="@+id/answerEt1" />
+
+            <Switch
+                android:id="@+id/switchAnswer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/correct"
+                android:checked="@{question.questionAnswers.size() &lt; 2 ? true : question.questionAnswers.get(1).correct}"
+                app:layout_constraintBottom_toBottomOf="@+id/answerEt2"
+                app:layout_constraintStart_toEndOf="@+id/answerEt1"
+                app:layout_constraintTop_toTopOf="@+id/answerEt2" />
+
+            <Switch
+                android:id="@+id/switchAnswer3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/correct"
+                android:checked="@{question.questionAnswers.size() &lt; 3 ? true : question.questionAnswers.get(2).correct}"
+                app:layout_constraintBottom_toBottomOf="@+id/answerEt3"
+                app:layout_constraintStart_toEndOf="@+id/answerEt1"
+                app:layout_constraintTop_toTopOf="@+id/answerEt3" />
+
+            <Switch
+                android:id="@+id/switchAnswer4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/correct"
+                android:checked="@{question.questionAnswers.size() &lt; 4 ? true : question.questionAnswers.get(3).correct}"
+                app:layout_constraintBottom_toBottomOf="@+id/answerEt4"
+                app:layout_constraintStart_toEndOf="@+id/answerEt1"
+                app:layout_constraintTop_toTopOf="@+id/answerEt4" />
+
+            <Switch
+                android:id="@+id/switchAnswer5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/correct"
+                android:checked="@{question.questionAnswers.size() &lt; 5 ? true : question.questionAnswers.get(4).correct}"
+                app:layout_constraintBottom_toBottomOf="@+id/answerEt5"
+                app:layout_constraintStart_toEndOf="@+id/answerEt1"
+                app:layout_constraintTop_toTopOf="@+id/answerEt5" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="32dp"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/question_icon"
+                android:contentDescription="@string/background" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontType="@{@string/font}"
+                android:text="Update question"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+            <EditText
+                android:id="@+id/questionEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text="@{question.questionText}"
+                android:hint="@string/question"
+                android:inputType="textLongMessage|textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                android:autofillHints="@string/question" />
+
+            <EditText
+                android:id="@+id/answerEt1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="116dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text='@{(question.questionAnswers.size() &lt; 1 )?  "" : question.questionAnswers.get(0).answerText}'
+                android:hint="@string/first_answer"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/questionEt"
+                android:autofillHints="@string/first_answer" />
+
+            <EditText
+                android:id="@+id/answerEt2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="116dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text='@{(question.questionAnswers.size() &lt; 2 )?  "" : question.questionAnswers.get(1).answerText}'
+                android:hint="@string/second_answer"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerEt1"
+                android:autofillHints="@string/second_answer" />
+
+            <EditText
+                android:id="@+id/answerEt3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="116dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text='@{(question.questionAnswers.size() &lt; 3 )?  "" : question.questionAnswers.get(2).answerText}'
+                android:hint="@string/third_answer"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerEt2"
+                android:autofillHints="@string/third_answer" />
+
+            <EditText
+                android:id="@+id/answerEt4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="116dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text='@{(question.questionAnswers.size() &lt; 4 )?  "" : question.questionAnswers.get(3).answerText}'
+                android:hint="@string/fourth_answer"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerEt3"
+                android:autofillHints="@string/fourth_answer" />
+
+            <EditText
+                android:id="@+id/answerEt5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="116dp"
+                android:ems="10"
+                android:fontType="@{@string/font}"
+                android:text='@{(question.questionAnswers.size() &lt; 5 )?  "" : question.questionAnswers.get(4).answerText}'
+                android:hint="@string/fifth_answer"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerEt4"
+                android:autofillHints="@string/fifth_answer" />
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontType="@{@string/font}"
+                android:text="@string/update"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerEt5" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

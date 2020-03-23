@@ -77,7 +77,7 @@ public class QuestionsFragment extends BaseFragment {
         });
 
         linearLayoutManager = new LinearLayoutManager(getContext());
-        adapter = new QuestionPagedAdapter();
+        adapter = new QuestionPagedAdapter(getContext());
 
         binding.questionsRv.setLayoutManager(linearLayoutManager);
         binding.questionsRv.setHasFixedSize(true);

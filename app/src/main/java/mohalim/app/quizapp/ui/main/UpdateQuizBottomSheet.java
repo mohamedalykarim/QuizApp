@@ -96,7 +96,7 @@ public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements 
                 quizItem.setTimeInMinutes(Integer.parseInt(binding.timeInMinutesEt.getText().toString()));
                 quizItem.setShowResults(binding.showResultsSwitch.isChecked());
                 quizItem.setSaveResults(binding.saveResultSwitch.isChecked());
-
+                quizItem.setPeopleCanAccess(oldQuizItem.getPeopleCanAccess());
 
                 if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals("Right")){
                     quizItem.setQuizSwipeDirection(Constants.RIGHT);
