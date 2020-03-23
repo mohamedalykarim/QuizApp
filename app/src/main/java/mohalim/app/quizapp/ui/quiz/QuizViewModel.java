@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
@@ -85,13 +86,24 @@ public class QuizViewModel extends ViewModel {
                     quizRepository.deleteQuestionFromInternal(questionItem.getId(), quizItem.getId());
                 }
                 quizRepository.deleteSessionFromInternal(quizItem.getId());
-
+                quizRepository.deleteSavedAnswersForQuiz(quizItem.getId());
             }
         });
-
-
     }
 
     public void startSaveResults() {
+    }
+
+    public void saveAnswer(final QuestionAnswerSavedItem questionAnswerSavedItem) {
+        appExecutor.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                quizRepository.saveAnswer(questionAnswerSavedItem);
+            }
+        });
+    }
+
+    public QuestionAnswerSavedItem getSavedAnswer(String quizId, String questionId) {
+        return quizRepository.getSavedAnswer(quizId, questionId);
     }
 }

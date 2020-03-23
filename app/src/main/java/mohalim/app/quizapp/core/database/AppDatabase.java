@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 
@@ -18,6 +19,7 @@ import mohalim.app.quizapp.core.models.SessionItem;
                 SessionItem.class,
                 QuestionItem.class,
                 AnswerItem.class,
+                QuestionAnswerSavedItem.class
         },
         version = 1,
         exportSchema = false
@@ -27,6 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SessionDao sessionDao();
     public abstract AnswerDao answerDao();
     public abstract QuestionDao questionDao();
+    public abstract QuestionAnswerSavedDao questionAnswerSavedDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

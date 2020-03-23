@@ -135,6 +135,7 @@ public class QuestionItem implements Parcelable {
         return chosenAnswerCorrect;
     }
 
+
     @Exclude
     public void setChosenAnswerCorrect(boolean chosenAnswerCorrect) {
         this.chosenAnswerCorrect = chosenAnswerCorrect;

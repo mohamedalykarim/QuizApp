@@ -35,7 +35,9 @@ import javax.inject.Inject;
 
 import mohalim.app.quizapp.core.di.base.BaseFragment;
 import mohalim.app.quizapp.core.models.AnswerItem;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
+import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentQuizBinding;
@@ -46,6 +48,11 @@ public class QuizFragment extends BaseFragment {
 
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
+
+    @Inject
+    AppExecutor appExecutor;
+
+
     private QuizViewModel mViewModel;
     private FragmentQuizBinding binding;
 
@@ -84,53 +91,40 @@ public class QuizFragment extends BaseFragment {
         long currentTimeMillisecond = calendar.getTimeInMillis();
         long timePassedMillisecond = currentTimeMillisecond - mViewModel.currentSession.getStartTime();
         long examTimeMillisecond = mViewModel.quizItem.getTimeInMinutes() * 60 * 1000;
-
         if (timePassedMillisecond > examTimeMillisecond){
             Toast.makeText(getContext(), "Exam time finished", Toast.LENGTH_SHORT).show();
         }
-
         long timeRemainsMillisecond = examTimeMillisecond - timePassedMillisecond;
-
-
-
-
         new CountDownTimer(timeRemainsMillisecond, 1000) {
             @Override
             public void onTick(long l) {
                 long h = TimeUnit.MILLISECONDS.toHours(l);
                 long m = TimeUnit.MILLISECONDS.toMinutes(l) - h*60;
                 long s = TimeUnit.MILLISECONDS.toSeconds(l) - h*60*60 - m*60;
-
                 String hour = String.valueOf(h);
                 String minute = String.valueOf(m);
                 String second = String.valueOf(s);
-
                 if (hour.length() == 1) hour = "0"+hour;
                 if (minute.length() == 1) minute = "0"+minute;
                 if (second.length() == 1) second = "0"+second;
-
                 binding.timeCounter.setText(hour+":"+minute+":"+second);
-
-
             }
-
             @Override
             public void onFinish() {
                 binding.timeCounter.setText("00:00:00");
-
                 if (mViewModel.quizItem.isSaveResults()){
                     mViewModel.startSaveResults();
                 }
-
-//                getActivity().finish();
             }
         }.start();
 
 
+        /**
+         * Quiz swipe direction
+         */
         if (mViewModel.quizItem.getQuizSwipeDirection().equals(Constants.RIGHT)){
             binding.getRoot().setRotation(180.0f);
         }
-
         if (mViewModel.quizItem.getQuizSwipeDirection().equals(Constants.RIGHT)){
             binding.bottomBtnsContainer.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }else{
@@ -140,7 +134,6 @@ public class QuizFragment extends BaseFragment {
         /**
          * Next button
          */
-
         binding.nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,13 +146,13 @@ public class QuizFragment extends BaseFragment {
         /**
          * previous button
          */
-
         binding.previousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int targeted = currentQuizPosition - 1;
                 if (targeted < 0)return;
-                changeQuizPosition.onChangeQuizPosition(targeted);            }
+                changeQuizPosition.onChangeQuizPosition(targeted);
+            }
         });
 
 
@@ -187,8 +180,6 @@ public class QuizFragment extends BaseFragment {
         /**
          * Finish button
          */
-
-
         binding.finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,16 +192,12 @@ public class QuizFragment extends BaseFragment {
                             .setMessage("Are you sure! you want finish the exam?")
                             .setPositiveButton("Finish exam", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-
                                     mViewModel.resetQuiz(mViewModel.quizItem);
                                     startResetQuiz = true;
-
                                     if (mViewModel.quizItem.isSaveResults()){
                                         mViewModel.startSaveResults();
                                     }
-
                                     getActivity().finish();
-
                                 }
                             })
 
@@ -230,17 +217,13 @@ public class QuizFragment extends BaseFragment {
                             .setMessage("Do you want finish the session and go to results page ?")
                             .setPositiveButton("Finish and reset Session", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-
                                     Intent intent = new Intent(getActivity(), ResultActivity.class);
                                     ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
                                     intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
                                     intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
+                                    intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
                                     getActivity().startActivity(intent);
-
-                                    mViewModel.resetQuiz(mViewModel.quizItem);
-
                                     startResetQuiz = true;
-
                                     if (mViewModel.quizItem.isSaveResults()){
                                         mViewModel.startSaveResults();
                                     }
@@ -250,7 +233,6 @@ public class QuizFragment extends BaseFragment {
                                 }
                             })
 
-                            // A null listener allows the button to dismiss the dialog and take no further action.
                             .setNegativeButton("Finish", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -260,13 +242,10 @@ public class QuizFragment extends BaseFragment {
                                     intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
                                     intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
                                     getActivity().startActivity(intent);
-
                                     if (mViewModel.quizItem.isSaveResults()){
                                         mViewModel.startSaveResults();
                                     }
-
                                     getActivity().finish();
-
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -279,6 +258,9 @@ public class QuizFragment extends BaseFragment {
         });
 
 
+        /**
+         * Bottom buttons
+         */
 
         if (currentQuizPosition == 0){
             binding.previousBtn.setVisibility(View.GONE);
@@ -364,6 +346,14 @@ public class QuizFragment extends BaseFragment {
                                     }else {
                                         mViewModel.questionItemList.get(currentQuizPosition).setChosenAnswerCorrect(false);
                                     }
+
+                                    QuestionAnswerSavedItem questionAnswerSavedItem = new QuestionAnswerSavedItem();
+                                    questionAnswerSavedItem.setQuizId(mViewModel.quizItem.getId());
+                                    questionAnswerSavedItem.setQuestionId(mViewModel.questionItemList.get(currentQuizPosition).getId());
+                                    questionAnswerSavedItem.setChosenAnswer(mViewModel.questionItemList.get(currentQuizPosition).getChosenAnswer());
+                                    questionAnswerSavedItem.setChosenAnswerCorrect(mViewModel.questionItemList.get(currentQuizPosition).isChosenAnswerCorrect());
+
+                                    mViewModel.saveAnswer(questionAnswerSavedItem);
                                 }
                             });
 
@@ -372,10 +362,28 @@ public class QuizFragment extends BaseFragment {
                             i++;
                         }
 
-                        if (mViewModel.questionItemList.size() <= currentQuizPosition)return;
-                        int index = mViewModel.questionItemList.get(currentQuizPosition).getChosenAnswer() - 1;
-                        RadioButton radioButton = (RadioButton) binding.answersContainer.getChildAt(index);
-                        if (radioButton != null && mViewModel.questionItemList.get(currentQuizPosition).getChosenAnswer() != 0)  radioButton.setChecked(true);
+                        appExecutor.diskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                QuestionAnswerSavedItem questionAnswerSavedItem = mViewModel.getSavedAnswer(mViewModel.quizItem.getId(), mViewModel.questionItemList.get(currentQuizPosition).getId());
+                                if (questionAnswerSavedItem != null){
+                                    mViewModel.questionItemList.get(currentQuizPosition).setChosenAnswer(questionAnswerSavedItem.getChosenAnswer());
+                                    mViewModel.questionItemList.get(currentQuizPosition).setChosenAnswerCorrect(questionAnswerSavedItem.isChosenAnswerCorrect());
+
+                                    final int index = questionAnswerSavedItem.getChosenAnswer() - 1;
+
+                                    appExecutor.mainThread().execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            RadioButton radioButton = (RadioButton) binding.answersContainer.getChildAt(index);
+                                            if (radioButton != null && mViewModel.questionItemList.get(currentQuizPosition).getChosenAnswer() != 0)  radioButton.setChecked(true);
+
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
                     }
                 });
 

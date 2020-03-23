@@ -39,5 +39,12 @@ public class ResultActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        if (oldIntent.hasExtra(Constants.RESET_QUIZ)){
+            mViewModel.resetQuiz(quizItem);
+        }
+    }
 }

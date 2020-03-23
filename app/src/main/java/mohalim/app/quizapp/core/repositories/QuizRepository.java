@@ -11,11 +11,13 @@ import javax.inject.Inject;
 
 import mohalim.app.quizapp.core.database.AnswerDao;
 import mohalim.app.quizapp.core.database.AppDatabase;
+import mohalim.app.quizapp.core.database.QuestionAnswerSavedDao;
 import mohalim.app.quizapp.core.database.QuestionDao;
 import mohalim.app.quizapp.core.database.SessionDao;
 import mohalim.app.quizapp.core.firebase.QuizFirebaseHandler;
 import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.FeedBackItem;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
@@ -26,6 +28,7 @@ public class QuizRepository {
     SessionDao sessionDao;
     QuestionDao questionDao;
     AnswerDao answerDao;
+    QuestionAnswerSavedDao questionAnswerSavedDao;
 
     @Inject
     public QuizRepository(QuizFirebaseHandler quizFirebaseHandler, Application application) {
@@ -34,6 +37,7 @@ public class QuizRepository {
         sessionDao = appDatabase.sessionDao();
         questionDao = appDatabase.questionDao();
         answerDao = appDatabase.answerDao();
+        questionAnswerSavedDao = appDatabase.questionAnswerSavedDao();
     }
 
     public void startAddQuiz(QuizItem quizItem){
@@ -145,6 +149,19 @@ public class QuizRepository {
     }
 
 
+    public void saveAnswer(QuestionAnswerSavedItem questionAnswerSavedItem) {
+        questionAnswerSavedDao.insert(questionAnswerSavedItem);
+    }
+
+    public QuestionAnswerSavedItem getSavedAnswer(String quizId, String questionId) {
+        return this.questionAnswerSavedDao.getQuestionAnsweredSavedForQuestion(quizId, questionId);
+    }
+
+    public void deleteSavedAnswersForQuiz(String quizId) {
+        this.questionAnswerSavedDao.deleteQuestionAnsweredSavedForQuiz(quizId);
+    }
+
+
     /***************************************************************************/
     /**                            User Data                                  **/
     /***************************************************************************/
@@ -201,4 +218,6 @@ public class QuizRepository {
     public void setRandomFeedBack(List<FeedBackItem> randomFeedBack) {
         this.quizFirebaseHandler.setRandomFeedBack(randomFeedBack);
     }
+
+
 }

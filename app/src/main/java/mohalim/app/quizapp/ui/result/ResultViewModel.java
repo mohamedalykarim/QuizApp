@@ -29,5 +29,20 @@ public class ResultViewModel extends ViewModel {
        return quizRepository.getAnswersForQuestionFromInternal(questionId, quizId);
     }
 
+    public void resetQuiz(final QuizItem quizItem) {
+
+        appExecutor.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<QuestionItem> questionItems = quizRepository.getQuestionsFromInternal(quizItem.getId());
+                for (QuestionItem questionItem: questionItems){
+                    quizRepository.deleteAnswerFromInternal(questionItem.getId(), quizItem.getId());
+                    quizRepository.deleteQuestionFromInternal(questionItem.getId(), quizItem.getId());
+                }
+                quizRepository.deleteSessionFromInternal(quizItem.getId());
+                quizRepository.deleteSavedAnswersForQuiz(quizItem.getId());
+            }
+        });
+    }
 
 }
