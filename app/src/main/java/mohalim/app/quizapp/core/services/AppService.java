@@ -15,6 +15,7 @@ import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
+import mohalim.app.quizapp.core.models.ResultItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 import mohalim.app.quizapp.core.utils.Constants;
 
@@ -111,6 +112,15 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.getRandomFeedBack(count);
         }
 
+
+        /***************************************************************************/
+        /**                               Result                                  **/
+        /***************************************************************************/
+
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_ADD_RESULT)){
+            ResultItem resultItem = intent.getParcelableExtra(Constants.RESULT_ITEM);
+            quizFirebaseHandler.addResult(resultItem);
+        }
 
     }
 }

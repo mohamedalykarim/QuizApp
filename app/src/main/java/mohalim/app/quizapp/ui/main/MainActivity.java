@@ -19,6 +19,7 @@ import mohalim.app.quizapp.databinding.ActivityMainBinding;
 import mohalim.app.quizapp.ui.dialog.DialogLoading;
 import mohalim.app.quizapp.ui.dialog.DialogPeopleCanAccessQuiz;
 import mohalim.app.quizapp.ui.quiz.QuizActivity;
+import mohalim.app.quizapp.ui.statistics.StatisticsActivity;
 
 
 public class MainActivity extends BaseActivity implements
@@ -106,11 +107,17 @@ public class MainActivity extends BaseActivity implements
             case Constants.EDIT:
                 ((MainFragment) getSupportFragmentManager().getFragments().get(0)).onQuizPagedAdapterClick(quizItem);
                 break;
-            case Constants.QUIZ_PEOPLE_ACCESS:
+            case Constants.CLICK_TYPE_QUIZ_PEOPLE_ACCESS:
                 dialogPeopleCanAccessQuiz.updateQuizPeopleCanAccess(quizItem);
                 if (!dialogPeopleCanAccessQuiz.isAdded()) {
                     dialogPeopleCanAccessQuiz.show(getSupportFragmentManager(), "DialogPeopleCanAccessQuiz");
                 }
+                break;
+
+            case Constants.CLICK_TYPE_QUIZ_Statistics:
+                Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+                intent.putExtra(Constants.QUIZ_ITEM, quizItem);
+                startActivity(intent);
                 break;
         }
 

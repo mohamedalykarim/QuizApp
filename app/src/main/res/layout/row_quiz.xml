@@ -33,13 +33,23 @@
 
         <ImageView
             android:id="@+id/peopleCanAccessIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/people_access_icon" />
+
+        <ImageView
+            android:id="@+id/statisticsIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/peopleCanAccessIcon"
+            app:layout_constraintEnd_toStartOf="@+id/peopleCanAccessIcon"
+            app:layout_constraintTop_toTopOf="@+id/peopleCanAccessIcon"
+            app:srcCompat="@drawable/statistics_png" />
 
         <TextView
             android:id="@+id/textView6"

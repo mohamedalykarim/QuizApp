@@ -2,16 +2,27 @@ package mohalim.app.quizapp.core.utils;
 
 public class Constants {
     public static final String TYPE = "type";
-    public static final String QUIZ_ITEM = "quiz_item";
-    public static final String QUIZ_ID = "quiz_id";
-    public static final String USERNAME = "username";
     public static final String COUNT = "count";
-
-
-
     public static final String START = "start";
     public static final String EDIT = "edit";
-    public static final String QUIZ_PEOPLE_ACCESS = "quiz_people_access";
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
+
+
+
+    public static final String QUIZ_ITEM = "quiz_item";
+    public static final String RESULT_ITEM = "result_item";
+    public static final String QUESTION_ITEM = "question_item";
+    public static final String SESSION_ITEM = "session_item";
+    public static final String FEEDBACK_ITEM = "feedback_item";
+
+
+
+    public static final String QUIZ_ID = "quiz_id";
+    public static final String USERNAME = "username";
+
+    public static final String CLICK_TYPE_QUIZ_PEOPLE_ACCESS = "click_type_quiz_people_access";
+    public static final String CLICK_TYPE_QUIZ_Statistics = "click_type_quiz_statistics";
 
 
     public static final String TYPE_START_SAVE_USER_DATA = "start_save_user_data";
@@ -27,20 +38,11 @@ public class Constants {
     public static final String TYPE_START_ADD_FEEDBACK = "type_start_add_feedback";
     public static final String TYPE_START_GET_MY_FEEDBACK = "type_start_get_my_feedback";
     public static final String TYPE_START_GET_RANDOM_FEEDBACK = "type_start_get_random_feedback";
+    public static final String TYPE_START_ADD_RESULT = "type_start_add_result";
 
-
-
-
-    public static final String QUESTION_ITEM = "question_item";
-    public static final String ANSWERS_ITEMS = "answer_items";
-    public static final String SESSION_ITEM = "session_item";
 
     public static final String PREFERENCE_NAME = "mohalim.app.quizapp.prefs";
-
-    public static final String LEFT = "left";
-    public static final String RIGHT = "right";
     public static final String RESET_QUIZ = "reset_quiz";
 
-    public static final String FEEDBACK_ITEM = "feedback_item";
 
 }

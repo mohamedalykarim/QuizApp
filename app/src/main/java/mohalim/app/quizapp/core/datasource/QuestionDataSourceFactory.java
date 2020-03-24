@@ -33,6 +33,7 @@ public class QuestionDataSourceFactory extends DataSource.Factory {
     }
 
     public void invalidate(){
+        if (questionDataSource != null)
         questionDataSource.invalidate();
     }
 

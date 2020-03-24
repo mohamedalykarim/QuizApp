@@ -66,7 +66,14 @@ public class QuizPagedAdapter extends PagedListAdapter<QuizItem, QuizPagedAdapte
         holder.binding.peopleCanAccessIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                quizPagedAdapterClick.onQuizPagedAdapterClick(Constants.QUIZ_PEOPLE_ACCESS, getItem(position), position);
+                quizPagedAdapterClick.onQuizPagedAdapterClick(Constants.CLICK_TYPE_QUIZ_PEOPLE_ACCESS, getItem(position), position);
+            }
+        });
+
+        holder.binding.statisticsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quizPagedAdapterClick.onQuizPagedAdapterClick(Constants.CLICK_TYPE_QUIZ_Statistics, getItem(position), position);
             }
         });
 

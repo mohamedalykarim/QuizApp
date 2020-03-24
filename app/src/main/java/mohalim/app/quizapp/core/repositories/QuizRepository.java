@@ -20,6 +20,7 @@ import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
+import mohalim.app.quizapp.core.models.ResultItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 import mohalim.app.quizapp.core.models.UserItem;
 
@@ -222,5 +223,9 @@ public class QuizRepository {
 
     public void startUpdateQuestion(QuizItem quizItem, QuestionItem questionItem) {
         this.quizFirebaseHandler.startUpdateQuestion(quizItem, questionItem);
+    }
+
+    public void startSaveResults(ResultItem resultItem) {
+        this.quizFirebaseHandler.startSaveResults(resultItem);
     }
 }

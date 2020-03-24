@@ -39,6 +39,7 @@ public class QuizDataSourceFactory extends DataSource.Factory {
     }
 
     public void invalidate(){
+        if (quizDataSource != null)
         quizDataSource.invalidate();
     }
 }

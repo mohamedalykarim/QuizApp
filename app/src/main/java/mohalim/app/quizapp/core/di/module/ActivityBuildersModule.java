@@ -16,6 +16,8 @@ import mohalim.app.quizapp.core.di.activities.result.ResultFragmentsModule;
 import mohalim.app.quizapp.core.di.activities.result.ResultViewModelModule;
 import mohalim.app.quizapp.core.di.activities.splash.SplashFragmentModule;
 import mohalim.app.quizapp.core.di.activities.splash.SplashViewmodelModule;
+import mohalim.app.quizapp.core.di.activities.statistics.StatisticsFragmentsModule;
+import mohalim.app.quizapp.core.di.activities.statistics.StatisticsViewModelModule;
 import mohalim.app.quizapp.ui.feedback.FeedBackActivity;
 import mohalim.app.quizapp.ui.login.LoginActivity;
 import mohalim.app.quizapp.ui.main.MainActivity;
@@ -23,6 +25,7 @@ import mohalim.app.quizapp.ui.questions.QuestionsActivity;
 import mohalim.app.quizapp.ui.quiz.QuizActivity;
 import mohalim.app.quizapp.ui.result.ResultActivity;
 import mohalim.app.quizapp.ui.splash.SplashActivity;
+import mohalim.app.quizapp.ui.statistics.StatisticsActivity;
 
 @Module
 public abstract class ActivityBuildersModule {
@@ -82,5 +85,13 @@ public abstract class ActivityBuildersModule {
             }
     )
     abstract FeedBackActivity contributeFeedBackActivity();
+
+    @ContributesAndroidInjector(
+            modules = {
+                    StatisticsFragmentsModule.class,
+                    StatisticsViewModelModule.class
+            }
+    )
+    abstract StatisticsActivity contributeStatisticsActivity();
 
 }

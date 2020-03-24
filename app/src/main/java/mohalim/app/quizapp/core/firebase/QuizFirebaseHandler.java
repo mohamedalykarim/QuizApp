@@ -36,6 +36,7 @@ import mohalim.app.quizapp.core.models.AnswerItem;
 import mohalim.app.quizapp.core.models.FeedBackItem;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
+import mohalim.app.quizapp.core.models.ResultItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.services.AppService;
@@ -112,6 +113,7 @@ public class QuizFirebaseHandler {
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot == null)return;
                         if (!documentSnapshot.exists())return;
 
                         quizitemObservation.setValue(documentSnapshot.toObject(QuizItem.class));
@@ -179,6 +181,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (queryDocumentSnapshots.isEmpty())return;
                         final List<QuestionItem> questions = new ArrayList<>();
 
@@ -273,6 +276,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot == null)return;
                         if (!documentSnapshot.exists()){
 
                         }else {
@@ -309,6 +313,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot == null)return;
                         if (documentSnapshot.exists())return;
                         UserItem userItem = new UserItem();
                         userItem.setId(mAuth.getCurrentUser().getUid());
@@ -339,6 +344,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (queryDocumentSnapshots.isEmpty())return;
                         List<UserItem> users = new ArrayList<>();
 
@@ -380,6 +386,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (queryDocumentSnapshots.isEmpty())return;
                         final UserItem userItem = queryDocumentSnapshots.getDocuments().get(0).toObject(UserItem.class);
 
@@ -390,6 +397,7 @@ public class QuizFirebaseHandler {
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot == null)return;
                                         if (!documentSnapshot.exists()) return;
 
                                         QuizItem newQuiz = documentSnapshot.toObject(QuizItem.class);
@@ -459,6 +467,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (!queryDocumentSnapshots.isEmpty())return;
 
                         DocumentReference document = db.collection("feedback").document();
@@ -486,6 +495,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (queryDocumentSnapshots.isEmpty())return;
                         FeedBackItem feedBackItem = queryDocumentSnapshots.getDocuments().get(0).toObject(FeedBackItem.class);
                         myFeedBackObservation.setValue(feedBackItem);
@@ -524,6 +534,7 @@ public class QuizFirebaseHandler {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
                         if (queryDocumentSnapshots.isEmpty())return;
                         List<FeedBackItem> feedBackItems = new ArrayList<>();
 
@@ -545,6 +556,38 @@ public class QuizFirebaseHandler {
     }
 
 
+    /***************************************************************************/
+    /**                             Feedback                                  **/
+    /***************************************************************************/
+
+    public void startSaveResults(ResultItem resultItem) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_ADD_RESULT);
+        intent.putExtra(Constants.RESULT_ITEM, resultItem);
+        application.startService(intent);
+    }
+
+    public void addResult(final ResultItem resultItem) {
+        if (resultItem == null)return;
+        Log.d(TAG, "addResult: " );
+
+        final DocumentReference reultRef = db.collection("quiz")
+                .document(resultItem.getQuizId())
+                .collection("result")
+                .document(resultItem.getUserId());
+
+        reultRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot == null)return;
+                        if (documentSnapshot.exists())return;
+                        resultItem.setId(resultItem.getUserId());
+                        reultRef.set(resultItem);
+
+                    }
+                });
+    }
 }
 
 

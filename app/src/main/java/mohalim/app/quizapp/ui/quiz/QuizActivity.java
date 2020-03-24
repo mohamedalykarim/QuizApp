@@ -56,6 +56,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
     QuizPagerAdapter adapter;
     private boolean quizTimeInitiated;
     private boolean counterFinished;
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -161,6 +162,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
     protected void onDestroy() {
         super.onDestroy();
 
+        countDownTimer.cancel();
     }
 
     @Override
@@ -214,7 +216,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
 
 
                     if (mViewModel.quizItem.isSaveResults()){
-                        mViewModel.startSaveResults();
+                        mViewModel.startSaveResults(mViewModel.questionItemList);
                     }
 
                     if (mViewModel.quizItem.isShowResults()){
@@ -241,7 +243,8 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                 appExecutor.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
-                        new CountDownTimer(timeRemainsMillisecond, 1000) {
+
+                        countDownTimer = new CountDownTimer(timeRemainsMillisecond, 1000) {
                             @Override
                             public void onTick(long l) {
                                 long h = TimeUnit.MILLISECONDS.toHours(l);
@@ -260,7 +263,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                                 mViewModel.quizItem.setRemainTime("00:00:00");
 
                                 if (mViewModel.quizItem.isSaveResults()){
-                                    mViewModel.startSaveResults();
+                                    mViewModel.startSaveResults(mViewModel.questionItemList);
                                 }
 
                                 if (mViewModel.quizItem.isShowResults()){
@@ -291,7 +294,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
         intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
         startActivity(intent);
         if (mViewModel.quizItem.isSaveResults()){
-            mViewModel.startSaveResults();
+            mViewModel.startSaveResults(mViewModel.questionItemList);
         }
         finish();
     }

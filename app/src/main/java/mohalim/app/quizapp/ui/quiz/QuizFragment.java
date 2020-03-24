@@ -155,11 +155,10 @@ public class QuizFragment extends BaseFragment {
                             .setMessage("Are you sure! you want finish the exam?")
                             .setPositiveButton("Finish exam", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mViewModel.resetQuiz(mViewModel.quizItem);
-                                    startResetQuiz = true;
                                     if (mViewModel.quizItem.isSaveResults()){
-                                        mViewModel.startSaveResults();
+                                        mViewModel.startSaveResults(mViewModel.questionItemList);
                                     }
+                                    startResetQuiz = true;
                                     getActivity().finish();
                                 }
                             })
@@ -187,15 +186,14 @@ public class QuizFragment extends BaseFragment {
                             .setNegativeButton("Finish", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
                                     Intent intent = new Intent(getActivity(), ResultActivity.class);
                                     ArrayList<QuestionItem> questions = new ArrayList<>(mViewModel.questionItemList);
                                     intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
                                     intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
                                     getActivity().startActivity(intent);
-                                    if (mViewModel.quizItem.isSaveResults()){
-                                        mViewModel.startSaveResults();
-                                    }
+
+                                    mViewModel.resetAnswerSaved();
+
                                     getActivity().finish();
                                 }
                             })
@@ -262,7 +260,7 @@ public class QuizFragment extends BaseFragment {
         getActivity().startActivity(intent);
         startResetQuiz = true;
         if (mViewModel.quizItem.isSaveResults()){
-            mViewModel.startSaveResults();
+            mViewModel.startSaveResults(mViewModel.questionItemList);
         }
 
         getActivity().finish();
@@ -378,6 +376,14 @@ public class QuizFragment extends BaseFragment {
         }catch (ClassCastException e){
             throw new ClassCastException("Activity must implement ChangeNavItemColor class");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (startResetQuiz)
+            mViewModel.resetQuiz(mViewModel.quizItem);
+
     }
 
     public void setCurrentQuizPosition(int currentQuizPosition) {
