@@ -228,4 +228,16 @@ public class QuizRepository {
     public void startSaveResults(ResultItem resultItem) {
         this.quizFirebaseHandler.startSaveResults(resultItem);
     }
+
+    public void startGetQuizResults(String quizId) {
+        this.quizFirebaseHandler.startGetQuizResults(quizId);
+    }
+
+    public MutableLiveData<List<ResultItem>> getResultsObservation() {
+        return this.quizFirebaseHandler.getResultsObservation();
+    }
+
+    public void setResultsObservation(List<ResultItem> results) {
+        this.quizFirebaseHandler.setResultsObservation(results);
+    }
 }

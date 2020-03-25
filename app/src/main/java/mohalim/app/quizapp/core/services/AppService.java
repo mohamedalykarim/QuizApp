@@ -122,5 +122,10 @@ public class AppService extends DaggerIntentService {
             quizFirebaseHandler.addResult(resultItem);
         }
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_GET_QUIZ_RESULT)){
+            String quizId = intent.getStringExtra(Constants.QUIZ_ID);
+            quizFirebaseHandler.getQuizResults(quizId);
+        }
+
     }
 }

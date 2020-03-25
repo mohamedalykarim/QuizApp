@@ -100,6 +100,7 @@ public class CircleProgressBar extends View {
 
     public void setProgress(float progress) {
         this.progress = progress;
+        invalidate();
     }
 
     public void setProgressWithAnimation(float progress) {
@@ -108,6 +109,7 @@ public class CircleProgressBar extends View {
         objectAnimator.setDuration(1500);
         objectAnimator.setInterpolator(new DecelerateInterpolator());
         objectAnimator.start();
+        invalidate();
     }
 
     public void setMin(int min) {

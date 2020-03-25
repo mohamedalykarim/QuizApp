@@ -44,7 +44,7 @@ public class PeopleCanAccessAdapter extends RecyclerView.Adapter<PeopleCanAccess
                 userItems.get(position).getUserName()
         );
 
-        holder.binding.imageView15.setOnClickListener(new View.OnClickListener() {
+        holder.binding.removeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userItems.size() == 0)return;

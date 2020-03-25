@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,6 +63,7 @@ public class QuizFirebaseHandler {
     MutableLiveData<List<UserItem>> usersSearchObservation;
     MutableLiveData<FeedBackItem> myFeedBackObservation;
     MutableLiveData<List<FeedBackItem>> randomFeedBack;
+    private MutableLiveData<List<ResultItem>> resultsObservation;
 
     @Inject
     public QuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth mAuth) {
@@ -80,6 +82,7 @@ public class QuizFirebaseHandler {
         quizitemObservation = new MutableLiveData<>();
         myFeedBackObservation = new MutableLiveData<>();
         randomFeedBack = new MutableLiveData<>();
+        resultsObservation = new MutableLiveData<>();
     }
 
 
@@ -557,7 +560,7 @@ public class QuizFirebaseHandler {
 
 
     /***************************************************************************/
-    /**                             Feedback                                  **/
+    /**                              Results                                  **/
     /***************************************************************************/
 
     public void startSaveResults(ResultItem resultItem) {
@@ -587,6 +590,48 @@ public class QuizFirebaseHandler {
 
                     }
                 });
+    }
+
+    public void startGetQuizResults(String quizId) {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_GET_QUIZ_RESULT);
+        intent.putExtra(Constants.QUIZ_ID, quizId);
+        application.startService(intent);
+    }
+
+    public void getQuizResults(String quizId) {
+        if (quizId == null)return;
+        db.collection("quiz")
+                .document(quizId)
+                .collection("result")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots == null)return;
+                        if (queryDocumentSnapshots.isEmpty()){
+                            resultsObservation.setValue(new ArrayList<ResultItem>());
+
+                            return;
+                        }
+
+                        List<ResultItem> resultItems = new ArrayList<>();
+
+                        for (DocumentSnapshot resultSnapshot : queryDocumentSnapshots.getDocuments()){
+                            resultItems.add(resultSnapshot.toObject(ResultItem.class));
+                        }
+
+                        resultsObservation.setValue(resultItems);
+                    }
+                });
+    }
+
+    public MutableLiveData<List<ResultItem>> getResultsObservation() {
+        return resultsObservation;
+    }
+
+    public void setResultsObservation(List<ResultItem> resultsObservation) {
+        this.resultsObservation.setValue(resultsObservation);
     }
 }
 

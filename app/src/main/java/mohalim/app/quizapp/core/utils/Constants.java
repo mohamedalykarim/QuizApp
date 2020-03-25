@@ -45,4 +45,5 @@ public class Constants {
     public static final String RESET_QUIZ = "reset_quiz";
 
 
+    public static final String TYPE_START_GET_QUIZ_RESULT = "type_start_get_quiz_result";
 }

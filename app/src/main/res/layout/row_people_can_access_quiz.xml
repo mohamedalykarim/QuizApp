@@ -10,7 +10,7 @@
         android:background="@drawable/gredient1" >
 
         <ImageView
-            android:id="@+id/imageView15"
+            android:id="@+id/removeImg"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="4dp"
@@ -32,7 +32,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView15"
+            app:layout_constraintEnd_toStartOf="@+id/removeImg"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
