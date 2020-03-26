@@ -9,15 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,11 +29,17 @@ import javax.inject.Inject;
 import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.comparator.StudentsResultComparator;
 import mohalim.app.quizapp.core.di.base.BaseFragment;
+import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
+import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.ResultItem;
+import mohalim.app.quizapp.core.models.ResultQuestionItem;
+import mohalim.app.quizapp.core.models.StatisitcsQuestionItem;
 import mohalim.app.quizapp.core.models.StatisticsStudentsArrangeItem;
 import mohalim.app.quizapp.core.models.UserItem;
+import mohalim.app.quizapp.core.utils.CircleProgressBar;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentStatisticsBinding;
+import mohalim.app.quizapp.databinding.RowStatisticsQuestionBinding;
 import mohalim.app.quizapp.ui.result.DialogStudentResults;
 
 
@@ -174,6 +183,7 @@ public class StatisticsFragment extends BaseFragment {
             Collections.sort(studentsArrangeItems, new StudentsResultComparator());
 
 
+            binding.students.removeAllViews();
 
             for (final StatisticsStudentsArrangeItem item: studentsArrangeItems){
                 View view = getLayoutInflater().inflate(R.layout.row_people_can_access_quiz, binding.students, false);
@@ -217,7 +227,14 @@ public class StatisticsFragment extends BaseFragment {
         double totalFullGrade = 0;
         double totalZeroGrade = 0;
 
+
+
         for (ResultItem resultItem : mViewModel.results){
+
+            /**
+             * Total success - Full grade - Zero grade
+             */
+
             if (resultItem.getResultScore() >= mViewModel.quizItem.getQuizResult()){
                 totalSuccess = totalSuccess+1;
             }
@@ -229,7 +246,108 @@ public class StatisticsFragment extends BaseFragment {
             if (resultItem.getResultScore() == 100){
                 totalZeroGrade = totalZeroGrade + 1;
             }
+
         }
+
+
+
+        /**
+         * Result question analysis
+         */
+
+        // Add question analysis view
+        binding.questions.removeAllViews();
+
+        List<StatisitcsQuestionItem> statisitcsQuestionItems = new ArrayList<>();
+        for (ResultItem resultItem : mViewModel.results){
+                for (ResultQuestionItem resultQuestionItem : resultItem.getResultQuestion()){
+                    int corrctAnswers = 0;
+                    int wrongAnswers = 0;
+
+                    if (resultQuestionItem.getChosenAnswer() == 0){
+                        wrongAnswers++;
+                    }else {
+                        if (resultQuestionItem.getQuestionAnswers().get(resultQuestionItem.getChosenAnswer()-1).isCorrect()){
+                            corrctAnswers++;
+                        }else {
+                            wrongAnswers++;
+                        }
+                    }
+
+                    StatisitcsQuestionItem statisitcsQuestionItem = new StatisitcsQuestionItem();
+                    statisitcsQuestionItem.setQuestionId(resultQuestionItem.getQuestionId());
+                    statisitcsQuestionItem.setQuestionText(resultQuestionItem.getQuestionText());
+                    statisitcsQuestionItem.setCorrect(corrctAnswers);
+                    statisitcsQuestionItem.setWrong(wrongAnswers);
+                    statisitcsQuestionItems.add(statisitcsQuestionItem);
+                }
+        }
+
+        List<String> questionsIds = new ArrayList<>();
+        for (StatisitcsQuestionItem statisitcsQuestionItem : statisitcsQuestionItems){
+            if (questionsIds.indexOf(statisitcsQuestionItem.getQuestionId()) < 0){
+                questionsIds.add(statisitcsQuestionItem.getQuestionId());
+            }
+        }
+
+        binding.questions.removeAllViews();
+        for (String questionId : questionsIds){
+            int count = 0;
+            int correct = 0;
+            int wrong = 0;
+            String questionText = "";
+
+            for (StatisitcsQuestionItem statisitcsQuestionItem : statisitcsQuestionItems){
+                if (statisitcsQuestionItem.getQuestionId().equals(questionId)){
+                    count++;
+                    questionText = statisitcsQuestionItem.getQuestionText();
+                    correct = correct + statisitcsQuestionItem.getCorrect();
+                    wrong = wrong + statisitcsQuestionItem.getWrong();
+
+                }
+            }
+
+
+            View view = getLayoutInflater().inflate(R.layout.row_statistics_question, binding.questions, false);
+            TextView questionTextTv = view.findViewById(R.id.questionTextTv);
+            CircleProgressBar countCircle = view.findViewById(R.id.countCircle);
+            CircleProgressBar correctCircle = view.findViewById(R.id.correctCircle);
+            CircleProgressBar wrongCircle = view.findViewById(R.id.wrongCircle);
+
+            TextView countTv = view.findViewById(R.id.countTv);
+            TextView correctTv = view.findViewById(R.id.correctTv);
+            TextView wrongTv = view.findViewById(R.id.wrongTv);
+
+            questionTextTv.setText(questionText);
+
+            countCircle.setMax(count);
+            countCircle.setProgress(count);
+            countTv.setText(count+ "");
+
+            correctCircle.setMax(count);
+            correctCircle.setProgress(correct);
+            correctTv.setText(correct + "");
+
+
+            wrongCircle.setMax(count);
+            wrongCircle.setProgress(wrong);
+            wrongTv.setText(wrong + "");
+
+            binding.questions.addView(view);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         if (mViewModel.results.size() == 0){
@@ -284,7 +402,10 @@ public class StatisticsFragment extends BaseFragment {
             binding.zeroGradeTv.setText(totalZeroGradeInteger+"");
         }
 
+
         binding.refresher.setRefreshing(false);
+
+
 
 
     }

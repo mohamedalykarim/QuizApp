@@ -115,8 +115,8 @@ public class QuizViewModel extends ViewModel {
                 resultItem.setUsername(mAuth.getCurrentUser().getEmail().replace("@gmail.com",""));
                 resultItem.setDisplayname(mAuth.getCurrentUser().getDisplayName());
 
-                int questionCount = questionItems.size();
-                int correctAnswersCount = 0;
+                double questionCount = questionItems.size();
+                double correctAnswersCount = 0;
 
                 List<ResultQuestionItem> resultQuestionItems = new ArrayList<>();
 
@@ -137,11 +137,11 @@ public class QuizViewModel extends ViewModel {
                 }
                 resultItem.setResultQuestion(resultQuestionItems);
 
-                int result = ((correctAnswersCount/questionCount) * 100);
+                double result = ((correctAnswersCount / questionCount) * 100);
 
-                Log.d(TAG, "run: result "+ result);
+                int resultInteger = (int) Math.round(result);
 
-                resultItem.setResultScore(result);
+                resultItem.setResultScore(resultInteger);
 
                 quizRepository.startSaveResults(resultItem);
             }
