@@ -336,7 +336,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="10dp"
                                     android:layout_weight="1"
-                                    android:text="Students" />
+                                    android:text="@string/students" />
 
                                 <Button
                                     android:id="@+id/questionBtn"
@@ -489,18 +489,21 @@
                         app:tabTextColor="#ffffff">
 
                         <com.google.android.material.tabs.TabItem
+                            android:id="@+id/dashboardTab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="dashboard"
                             android:text="Dashboard" />
 
                         <com.google.android.material.tabs.TabItem
+                            android:id="@+id/studentsTab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="students"
                             android:text="Students" />
 
                         <com.google.android.material.tabs.TabItem
+                            android:id="@+id/questionsTab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="@string/questions"

@@ -16,13 +16,18 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import mohalim.app.quizapp.R;
+import mohalim.app.quizapp.core.comparator.StudentsResultComparator;
 import mohalim.app.quizapp.core.di.base.BaseFragment;
 import mohalim.app.quizapp.core.models.ResultItem;
+import mohalim.app.quizapp.core.models.StatisticsStudentsArrangeItem;
 import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentStatisticsBinding;
@@ -55,6 +60,12 @@ public class StatisticsFragment extends BaseFragment {
 
         binding.refresher.setRefreshing(true);
         mViewModel.startGetQuizResults(mViewModel.quizItem.getId());
+
+        if (Locale.getDefault().getLanguage().equals("ar")){
+            binding.nameTv.setText("احصائيات امتحان" + " " + mViewModel.quizItem.getQuizName());
+        }else {
+            binding.nameTv.setText(mViewModel.quizItem.getQuizName() + " " + "Statistics");
+        }
 
         binding.refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -94,30 +105,31 @@ public class StatisticsFragment extends BaseFragment {
             }
         });
 
+        binding.studentsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.statistics.setVisibility(View.GONE);
+                binding.students.setVisibility(View.VISIBLE);
+                binding.questions.setVisibility(View.GONE);
 
-
-
-        if (mViewModel.quizItem.getPeopleCanAccess() != null){
-            for (final UserItem userItem : mViewModel.quizItem.getPeopleCanAccess()){
-                View view = getLayoutInflater().inflate(R.layout.row_people_can_access_quiz, binding.students, false);
-                view.findViewById(R.id.removeImg).setVisibility(View.GONE);
-                TextView usernameTv = view.findViewById(R.id.userNameTv);
-                usernameTv.setText(userItem.getUserName());
-
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogStudentResults.setResultItem(null);
-                        dialogStudentResults.setStudentId(userItem.getId());
-                        if (!dialogStudentResults.isAdded()){
-                            dialogStudentResults.show(getActivity().getSupportFragmentManager(), "DialogStudentResults");
-                        }
-                    }
-                });
-
-                binding.students.addView(view);
+                binding.tabLayout.getTabAt(1).select();
             }
-        }
+        });
+
+        binding.questionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.statistics.setVisibility(View.GONE);
+                binding.students.setVisibility(View.GONE);
+                binding.questions.setVisibility(View.VISIBLE);
+
+                binding.tabLayout.getTabAt(2).select();
+            }
+        });
+
+
+
+
 
 
 
@@ -143,6 +155,63 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     private void updateUI() {
+
+        if (mViewModel.quizItem.getPeopleCanAccess() != null){
+            final List<StatisticsStudentsArrangeItem> studentsArrangeItems = new ArrayList<>();
+            for (final UserItem userItem : mViewModel.quizItem.getPeopleCanAccess()){
+                StatisticsStudentsArrangeItem item = new StatisticsStudentsArrangeItem();
+                item.setUserId(userItem.getId());
+                item.setName(userItem.getUserName());
+                for (ResultItem resultItem : mViewModel.results){
+                    if (resultItem.getUserId().equals(userItem.getId())){
+                        item.setGrade(resultItem.getResultScore());
+                        item.setFinished(true);
+                    }
+                }
+                studentsArrangeItems.add(item);
+            }
+
+            Collections.sort(studentsArrangeItems, new StudentsResultComparator());
+
+
+
+            for (final StatisticsStudentsArrangeItem item: studentsArrangeItems){
+                View view = getLayoutInflater().inflate(R.layout.row_people_can_access_quiz, binding.students, false);
+                view.findViewById(R.id.removeImg).setVisibility(View.GONE);
+                TextView usernameTv = view.findViewById(R.id.userNameTv);
+                TextView gradeTv = view.findViewById(R.id.gradeTv);
+                TextView finishTv = view.findViewById(R.id.finishTv);
+                TextView waitingTv = view.findViewById(R.id.waitingTv);
+
+                usernameTv.setText(item.getName());
+                int gradeInt = (int) item.getGrade();
+                gradeTv.setText(gradeInt + "");
+
+                if (item.isFinished()){
+                    finishTv.setVisibility(View.VISIBLE);
+                }else {
+                    waitingTv.setVisibility(View.VISIBLE);
+                }
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogStudentResults.setResultItem(null);
+                        dialogStudentResults.setStudentId(item.getUserId());
+                        if (!dialogStudentResults.isAdded()){
+                            dialogStudentResults.show(getActivity().getSupportFragmentManager(), "DialogStudentResults");
+                        }
+                    }
+                });
+
+                binding.students.addView(view);
+            }
+
+
+        }
+
+
+
 
         double totalSuccess = 0;
         double totalFullGrade = 0;

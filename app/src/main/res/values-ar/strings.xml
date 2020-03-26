@@ -39,4 +39,6 @@
     <string name="start_quiz">بدء الامتحان</string>
     <string name="edit_quiz">تعديل الامتحان</string>
     <string name="correct_answer___">الاجابة الصحيحة :</string>
+    <string name="students">الطلاب</string>
+    <string name="waiting">انتظار</string>
 </resources>

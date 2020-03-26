@@ -37,4 +37,6 @@
     <string name="start_quiz">Start quiz</string>
     <string name="edit_quiz">Edit quiz</string>
     <string name="correct_answer___">Correct answer :</string>
+    <string name="students">Students</string>
+    <string name="waiting">waiting</string>
 </resources>
