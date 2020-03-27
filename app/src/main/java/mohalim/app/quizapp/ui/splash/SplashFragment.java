@@ -52,7 +52,7 @@ public class SplashFragment extends BaseFragment {
         binding = FragmentSplashBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(SplashViewModel.class);
 
-        new CountDownTimer(1000, 1000) {
+        new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long l) {
 

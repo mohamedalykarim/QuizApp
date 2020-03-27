@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quiz App</string>
-    <string name="font">fonts/montserrat.ttf</string>
+    <string name="font">fonts/Tajawal-Regular.ttf</string>
 
     <string name="quiz_swipe_direction">Quiz swipe direction</string>
     <string name="quiz_navigation_direction">Quiz navigation direction</string>
@@ -27,7 +27,7 @@
     <string name="loading">جاري التحميل</string>
     <string name="welcome_to">مرحبا بكم فى </string>
     <string name="access">دخول</string>
-    <string name="access_quiz">الدخول الى الامتحان</string>
+    <string name="access_quiz">يمكنك الدخول لامتحان معين من خلال ادخال الرقم التعريفي لذلك الامتحان ، يمكنك ان تحصل على ذلك الرقم من خلال معلمك : </string>
     <string name="quiz_id">الرقم التعريفي للامتحان</string>
     <string name="previous">السابق</string>
     <string name="check_answer">فحص الاجابة</string>

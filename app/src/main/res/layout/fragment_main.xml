@@ -70,20 +70,21 @@
                             android:id="@+id/searchEt"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
-                            android:layout_marginStart="32dp"
+                            android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginEnd="32dp"
+                            android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
                             android:autofillHints="@string/quiz_id"
                             android:background="#fff"
+                            android:fontType="@{@string/font}"
                             android:hint="@android:string/search_go"
                             android:inputType="textPersonName"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:textColor="@color/colorPrimaryDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/bottomIcon"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/addIcon"
+                            app:layout_constraintStart_toEndOf="@+id/showNavIcon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
@@ -99,15 +100,15 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:id="@+id/bottomIcon"
+                            android:id="@+id/showNavIcon"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
+                            android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
-                            android:src="@drawable/open_icon"
+                            android:src="@drawable/home_icon"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/addIcon"
+                            app:layout_constraintStart_toStartOf="@+id/imageView13"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -145,40 +146,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <Button
                 android:id="@+id/accessQuizBtn"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:background="@color/colorAccent"
+                android:fontType="@{@string/font}"
                 android:padding="0dp"
+                android:text="@string/access"
+                android:textColor="@android:color/white"
+                android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="@+id/accessQuizEt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/accessQuizEt"
-                app:layout_constraintTop_toTopOf="@+id/accessQuizEt">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/access"
-                    android:textColor="@color/colorPrimaryDark"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="@+id/accessQuizEt" />
 
             <TextView
                 android:id="@+id/textView13"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
+                android:fontType="@{@string/font}"
                 android:text="@string/access_quiz"
-                android:textColor="#dadada"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="@+id/accessQuizEt"
+                app:layout_constraintStart_toStartOf="@+id/accessQuizEt"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -192,6 +185,7 @@
                 android:autofillHints="@string/quiz_id"
                 android:background="#fff"
                 android:hint="@string/quiz_id"
+                android:fontType="@{@string/font}"
                 android:inputType="textPersonName"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"

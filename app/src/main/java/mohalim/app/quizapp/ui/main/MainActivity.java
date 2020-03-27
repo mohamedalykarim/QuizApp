@@ -1,5 +1,6 @@
 package mohalim.app.quizapp.ui.main;
 
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +24,7 @@ import mohalim.app.quizapp.ui.statistics.StatisticsActivity;
 
 
 public class MainActivity extends BaseActivity implements
+        MainFragment.MainFragmentClick,
         AddQuizBottomSheet.AddNewQuizListener,
         UpdateQuizBottomSheet.UpdateQuizListener,
         QuizPagedAdapter.QuizPagedAdapterClick,
@@ -136,5 +138,12 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onDismissPeopleCanAccessDialog() {
         mViewModel.refresh();
+    }
+
+    @Override
+    public void onMainFragmentClick(int id) {
+        if (id == R.id.showNavIcon){
+            binding.drawerLayout.openDrawer(GravityCompat.START);
+        }
     }
 }

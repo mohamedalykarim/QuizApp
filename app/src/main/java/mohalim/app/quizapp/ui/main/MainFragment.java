@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -47,6 +48,8 @@ public class MainFragment extends BaseFragment {
 
     private QuizPagedAdapter adapter;
     private int accessErrors;
+
+    MainFragmentClick mainFragmentClick;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -102,22 +105,10 @@ public class MainFragment extends BaseFragment {
             }
         });
 
-        binding.bottomIcon.setOnClickListener(new View.OnClickListener() {
+        binding.showNavIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Slide slide = new Slide();
-
-                if (binding.accessQuizContainer.getVisibility() == View.VISIBLE){
-                    slide.setSlideEdge(Gravity.BOTTOM);
-                    TransitionManager.beginDelayedTransition(binding.accessQuizContainer, slide);
-                    binding.accessQuizContainer.setVisibility(View.INVISIBLE);
-
-                }else if (binding.accessQuizContainer.getVisibility() == View.INVISIBLE){
-                    slide.setSlideEdge(Gravity.BOTTOM);
-                    TransitionManager.beginDelayedTransition(binding.accessQuizContainer, slide);
-                    binding.accessQuizContainer.setVisibility(View.VISIBLE);
-                }
-
+               mainFragmentClick.onMainFragmentClick(v.getId());
             }
         });
 
@@ -191,6 +182,16 @@ public class MainFragment extends BaseFragment {
         super.onResume();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mainFragmentClick = (MainFragmentClick) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException("Activity must implements MainFragmentClick class "+ e.getMessage());
+        }
+    }
+
     private void validateAccessForm() {
         if (binding.accessQuizEt.getText().toString().equals("")){
             binding.accessQuizEt.setError("Please enter quiz id");
@@ -211,5 +212,9 @@ public class MainFragment extends BaseFragment {
 
     public void onUpdateQuiz() {
         mViewModel.refresh();
+    }
+
+    public interface MainFragmentClick{
+        void onMainFragmentClick(int id);
     }
 }
