@@ -47,6 +47,7 @@ public class DialogStudentResults extends DialogFragment implements HasAndroidIn
         binding = DialogStudentResultsBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(StatisticsViewModel.class);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         for (ResultItem resultItem : mViewModel.results){
             if (resultItem.getUserId().equals(studentId)){
                 this.resultItem = resultItem;

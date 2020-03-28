@@ -37,6 +37,7 @@ import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.Constants;
+import mohalim.app.quizapp.core.utils.Utils;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.ActivityQuizBinding;
 import mohalim.app.quizapp.ui.result.ResultActivity;
@@ -76,6 +77,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
 
         adapter = new QuizPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         adapter.setQuizItem(quizItem);
+        binding.quizTitleTv.setText(quizItem.getQuizName());
 
         binding.quizViewPager.setAdapter(adapter);
 
@@ -86,7 +88,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
 
         if (quizItem.getQuizNavigationDirection().equals(Constants.LEFT)){
             DrawerLayout.LayoutParams layoutParams = new DrawerLayout.LayoutParams(
-                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    (int) Utils.convertDpToPixel(130, this),
                     DrawerLayout.LayoutParams.MATCH_PARENT,
                     Gravity.LEFT
             );
@@ -95,12 +97,25 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
         }else if (quizItem.getQuizNavigationDirection().equals(Constants.RIGHT)){
 
             DrawerLayout.LayoutParams layoutParams = new DrawerLayout.LayoutParams(
-                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    (int) Utils.convertDpToPixel(130, this),
                     DrawerLayout.LayoutParams.MATCH_PARENT,
                     Gravity.RIGHT
             );
             binding.navigation.setLayoutParams(layoutParams);
         }
+
+        binding.navBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (quizItem.getQuizNavigationDirection().equals(Constants.LEFT)){
+                    binding.container.openDrawer(Gravity.LEFT);
+                }else if (quizItem.getQuizNavigationDirection().equals(Constants.RIGHT)){
+                    binding.container.openDrawer(Gravity.RIGHT);
+
+                }
+
+            }
+        });
 
 
         /**
@@ -162,6 +177,7 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
     protected void onDestroy() {
         super.onDestroy();
 
+        if (countDownTimer != null)
         countDownTimer.cancel();
     }
 
@@ -257,10 +273,12 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
                                 if (minute.length() == 1) minute = "0"+minute;
                                 if (second.length() == 1) second = "0"+second;
                                 mViewModel.quizItem.setRemainTime(hour+":"+minute+":"+second);
+                                binding.timeCounterTv.setText(hour+":"+minute+":"+second);
                             }
                             @Override
                             public void onFinish() {
                                 mViewModel.quizItem.setRemainTime("00:00:00");
+                                binding.timeCounterTv.setText("00:00:00");
 
                                 if (mViewModel.quizItem.isSaveResults()){
                                     mViewModel.startSaveResults(mViewModel.questionItemList);

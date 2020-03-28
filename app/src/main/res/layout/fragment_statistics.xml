@@ -83,6 +83,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:fontType="@{@string/font}"
                                 android:text="@{viewmodel.quizItem.quizDescription}"
                                 android:textAlignment="center"
                                 android:textStyle="bold"
@@ -111,6 +112,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="10dp"
+                                        android:fontType="@{@string/font}"
                                         android:text="NA"
                                         android:textColor="@color/colorPrimary"
                                         android:textSize="25sp"
@@ -135,6 +137,7 @@
                                         android:id="@+id/textView16"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontType="@{@string/font}"
                                         android:text="Students"
                                         android:textSize="12sp"
                                         app:layout_constraintEnd_toEndOf="@+id/studentCountCircle"
@@ -163,6 +166,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="10dp"
+                                        android:fontType="@{@string/font}"
                                         android:text="NA"
                                         android:textColor="@color/colorPrimary"
                                         android:textSize="25sp"
@@ -176,6 +180,7 @@
                                         android:id="@+id/textView18"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontType="@{@string/font}"
                                         android:text="Finished"
                                         android:textSize="12sp"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -204,6 +209,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="10dp"
+                                        android:fontType="@{@string/font}"
                                         android:text="NA"
                                         android:textColor="@color/colorPrimary"
                                         android:textSize="25sp"
@@ -217,6 +223,7 @@
                                         android:id="@+id/textView20"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontType="@{@string/font}"
                                         android:text="Remains"
                                         android:textSize="12sp"
                                         app:layout_constraintEnd_toEndOf="@+id/studentRemainsCircle"
@@ -242,6 +249,7 @@
                                 android:id="@+id/textView11"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontType="@{@string/font}"
                                 android:text="Success percentage"
                                 app:layout_constraintEnd_toEndOf="@+id/totalResultCircleBar"
                                 app:layout_constraintStart_toStartOf="@+id/totalResultCircleBar"
@@ -252,6 +260,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="30dp"
+                                android:fontType="@{@string/font}"
                                 android:text="NA"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="50sp"
@@ -267,6 +276,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:fontType="@{@string/font}"
                                 android:text="@{viewmodel.quizItem.quizName}"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textStyle="bold"
@@ -335,6 +345,8 @@
                                     android:id="@+id/studentsBtn"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:fontType="@{@string/font}"
+                                    android:textColor="@color/colorAccent"
                                     android:layout_margin="10dp"
                                     android:layout_weight="1"
                                     android:text="@string/students" />
@@ -343,6 +355,8 @@
                                     android:id="@+id/questionBtn"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:fontType="@{@string/font}"
+                                    android:textColor="@color/colorAccent"
                                     android:layout_margin="10dp"
                                     android:layout_weight="1"
                                     android:text="@string/questions" />
@@ -381,6 +395,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="10dp"
+                                        android:fontType="@{@string/font}"
                                         android:text="NA"
                                         android:textColor="@color/colorAccent"
                                         android:textSize="25sp"
@@ -394,6 +409,7 @@
                                         android:id="@+id/textView34"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontType="@{@string/font}"
                                         android:text="full grade"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -422,6 +438,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="10dp"
+                                        android:fontType="@{@string/font}"
                                         android:text="NA"
                                         android:textColor="@color/colorAccent"
                                         android:textSize="25sp"
@@ -435,6 +452,7 @@
                                         android:id="@+id/textView36"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontType="@{@string/font}"
                                         android:text="zero grade"
                                         app:layout_constraintEnd_toEndOf="@+id/zeroGradeCircleBar"
                                         app:layout_constraintStart_toStartOf="@+id/zeroGradeCircleBar"
@@ -452,8 +470,39 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
+                        android:layout_height="wrap_content"
                         app:layout_scrollFlags="enterAlways">
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontType="@{@string/font}"
+                            app:layout_constraintTop_toBottomOf="@+id/nameTv"
+                            app:tabTextColor="#ffffff">
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/dashboardTab"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="dashboard"
+                                android:text="Dashboard" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/studentsTab"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="students"
+                                android:text="Students" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/questionsTab"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="@string/questions"
+                                android:text="questions" />
+
+                        </com.google.android.material.tabs.TabLayout>
 
                         <ImageView
                             android:id="@+id/imageView13"
@@ -472,45 +521,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:fontType="@{@string/font}"
                             android:text="Quiz name statistics"
                             android:textColor="#dadada"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="@+id/imageView13"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@+id/imageView13" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:tabTextColor="#ffffff">
-
-                        <com.google.android.material.tabs.TabItem
-                            android:id="@+id/dashboardTab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:tag="dashboard"
-                            android:text="Dashboard" />
-
-                        <com.google.android.material.tabs.TabItem
-                            android:id="@+id/studentsTab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:tag="students"
-                            android:text="Students" />
-
-                        <com.google.android.material.tabs.TabItem
-                            android:id="@+id/questionsTab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:tag="@string/questions"
-                            android:text="questions" />
-
-                    </com.google.android.material.tabs.TabLayout>
 
 
                 </com.google.android.material.appbar.AppBarLayout>

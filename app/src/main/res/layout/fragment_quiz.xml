@@ -50,26 +50,14 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:padding="8dp"
                     android:textAlignment="center"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/timeCounter" />
-
-                <TextView
-                    android:id="@+id/quizName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text=""
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/questionCounterTv" />
 
                 <TextView
                     android:id="@+id/questionCounterTv"
@@ -83,21 +71,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/quizName" />
-
-                <TextView
-                    android:id="@+id/timeCounter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@{viewmodel.quizItem.remainTime}"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/questionCounterTv" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/answersContainer"
@@ -106,7 +80,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
+                    android:gravity="start"
                     android:minHeight="200dp"
+                    android:textAlignment="viewStart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/questionTv">
@@ -144,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/previous"
+                    android:textColor="@color/colorAccent"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -159,6 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/check_answer"
+                    android:textColor="@color/colorAccent"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -174,7 +152,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/next"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@color/colorAccent" />
 
                 <Button
                     android:id="@+id/finishBtn"
@@ -182,6 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/finish"
+                    android:textColor="@color/colorAccent"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

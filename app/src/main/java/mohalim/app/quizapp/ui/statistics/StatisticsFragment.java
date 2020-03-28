@@ -142,8 +142,6 @@ public class StatisticsFragment extends BaseFragment {
 
 
 
-
-
         return binding.getRoot();
     }
 

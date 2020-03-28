@@ -103,7 +103,7 @@ public class ResultFragment extends BaseFragment {
             binding.congratsTopImg.setVisibility(View.GONE);
         }
 
-        binding.quizGradeAlertTv.setText("Success grade on this quiz is " + quizItem.getQuizResult() + "%");
+        binding.quizGradeAlertTv.setText("Success grade on this quiz is" + " " + quizItem.getQuizResult() + "%");
 
         return binding.getRoot();
     }

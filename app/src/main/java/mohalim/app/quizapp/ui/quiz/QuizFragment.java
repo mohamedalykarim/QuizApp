@@ -242,7 +242,6 @@ public class QuizFragment extends BaseFragment {
 
         // update quiz ui
         binding.questionTv.setText(mViewModel.questionItemList.get(currentQuizPosition).getQuestionText());
-        binding.quizName.setText(mViewModel.quizItem.getQuizName());
         binding.questionCounterTv.setText("Question "+(currentQuizPosition+1)+" from "+mViewModel.questionItemList.size());
 
 
@@ -283,9 +282,12 @@ public class QuizFragment extends BaseFragment {
                         int i = 0;
                         for (AnswerItem answerItem: answerItems){
                             RadioButton radioButton = new RadioButton(getContext());
-                            radioButton.setBackgroundColor(Color.parseColor("#dadada"));
+                            radioButton.setBackgroundColor(Color.parseColor("#28000000"));
                             radioButton.setText(answerItem.getAnswerText());
                             radioButton.setTag(answerItem.isCorrect());
+                            radioButton.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+                            radioButton.setGravity(Gravity.START);
+
                             RadioGroup.LayoutParams params
                                     = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(0,10,0,0);

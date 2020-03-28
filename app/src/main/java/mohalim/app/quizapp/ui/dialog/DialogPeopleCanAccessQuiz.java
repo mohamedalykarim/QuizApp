@@ -78,6 +78,8 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 
+        binding.quizNameTv.append(quizItem.getQuizName());
+
         // add member to quiz
         binding.addPersonBtn.setOnClickListener(new View.OnClickListener() {
             @Override

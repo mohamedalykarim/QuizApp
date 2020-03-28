@@ -79,6 +79,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="32dp"
                                 android:layout_marginBottom="8dp"
+                                android:fontType="@{@string/font}"
                                 android:autofillHints="@string/quiz_id"
                                 android:background="#fff"
                                 android:hint="@android:string/search_go"

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Quiz App</string>
-    <string name="font">fonts/Ubuntu-Regular.ttf</string>
+    <string name="font">fonts/Abel-Regular.ttf</string>
 
     <string name="quiz_swipe_direction">Quiz swipe direction</string>
     <string name="quiz_navigation_direction">Quiz navigation direction</string>

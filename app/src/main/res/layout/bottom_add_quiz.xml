@@ -139,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:fontType="@{@string/font}"
                 android:text="Save results"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timeInMinutesEt" />
@@ -150,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:fontType="@{@string/font}"
                 android:text="Show results"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/saveResultSwitch" />
@@ -160,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:fontType="@{@string/font}"
                 android:text="@string/show_check_answer_during_quiz"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showResultsSwitch" />
@@ -191,6 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:fontType="@{@string/font}"
                 android:text="@string/quiz_swipe_direction"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/checkAnswerWorkingSwitch" />
@@ -201,6 +205,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontType="@{@string/font}"
                 android:prompt="@string/quiz_swipe_direction"
                 android:spinnerMode="dialog"
                 app:layout_constraintBottom_toBottomOf="@+id/swipeDirectionSpinnerTv"
@@ -213,6 +218,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:fontType="@{@string/font}"
                 android:text="@string/quiz_navigation_direction"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/swipeDirectionSpinnerTv" />
@@ -223,6 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:fontType="@{@string/font}"
                 android:prompt="@string/quiz_navigation_direction"
                 android:spinnerMode="dialog"
                 app:layout_constraintBottom_toBottomOf="@+id/navDirectionSpinnerTv"
