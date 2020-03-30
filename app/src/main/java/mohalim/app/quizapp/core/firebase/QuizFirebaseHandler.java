@@ -6,7 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.PagedList;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,6 +66,7 @@ public class QuizFirebaseHandler {
     MutableLiveData<FeedBackItem> myFeedBackObservation;
     MutableLiveData<List<FeedBackItem>> randomFeedBack;
     private MutableLiveData<List<ResultItem>> resultsObservation;
+    private MutableLiveData<UserItem> currentUserDetailsObservation;
 
     @Inject
     public QuizFirebaseHandler(Application application, AppExecutor appExecutor, FirebaseAuth mAuth) {
@@ -83,6 +86,7 @@ public class QuizFirebaseHandler {
         myFeedBackObservation = new MutableLiveData<>();
         randomFeedBack = new MutableLiveData<>();
         resultsObservation = new MutableLiveData<>();
+        currentUserDetailsObservation = new MutableLiveData<>();
     }
 
 
@@ -322,6 +326,7 @@ public class QuizFirebaseHandler {
                         userItem.setId(mAuth.getCurrentUser().getUid());
                         userItem.setDisplayedName(mAuth.getCurrentUser().getDisplayName());
                         userItem.setUserName(mAuth.getCurrentUser().getEmail().replace("@gmail.com", ""));
+                        userItem.setIsAdmin(false);
 
                         db.collection("user").document(mAuth.getUid()).set(userItem);
 
@@ -368,6 +373,46 @@ public class QuizFirebaseHandler {
 
     public void setUsersSearchObservation(List<UserItem> userItems) {
         this.usersSearchObservation.postValue(userItems);
+    }
+
+
+    public void startGetCurrentUserDetails() {
+        Intent intent = new Intent(application, AppService.class);
+        intent.putExtra(Constants.TYPE, Constants.TYPE_START_GET_CURRENT_USER_DETAILS);
+        application.startService(intent);
+    }
+
+    public void getCurrentUserDetails(){
+        if (mAuth.getCurrentUser() == null)return;
+        db.collection("user")
+                .document(mAuth.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot == null)return;
+                        if (documentSnapshot.exists()){
+                            currentUserDetailsObservation.setValue(documentSnapshot.toObject(UserItem.class));
+                        }else {
+                            UserItem userItem = new UserItem();
+                            userItem.setId(mAuth.getCurrentUser().getUid());
+                            userItem.setDisplayedName(mAuth.getCurrentUser().getDisplayName());
+                            userItem.setUserName(mAuth.getCurrentUser().getEmail().replace("@gmail.com", ""));
+                            userItem.setIsAdmin(false);
+
+                            db.collection("user").document(mAuth.getUid()).set(userItem);
+
+                        }
+                    }
+                });
+    }
+
+    public MutableLiveData<UserItem> getCurrentUserDetailsObservation() {
+        return currentUserDetailsObservation;
+    }
+
+    public void setCurrentUserDetailsObservation(UserItem currentUserDetails) {
+        this.currentUserDetailsObservation.setValue(currentUserDetails);
     }
 
     public void startAddUserAccessToQuiz(QuizItem quizItem, String userName) {
@@ -633,6 +678,8 @@ public class QuizFirebaseHandler {
     public void setResultsObservation(List<ResultItem> resultsObservation) {
         this.resultsObservation.setValue(resultsObservation);
     }
+
+
 }
 
 

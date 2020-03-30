@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.result;
+package mohalim.app.quizapp.ui.statistics;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,7 @@ import dagger.android.support.AndroidSupportInjection;
 import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.models.ResultItem;
 import mohalim.app.quizapp.core.models.ResultQuestionItem;
+import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.DialogStudentResultsBinding;
 import mohalim.app.quizapp.ui.statistics.StatisticsViewModel;
@@ -44,8 +46,12 @@ public class DialogStudentResults extends DialogFragment implements HasAndroidIn
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null){
+            resultItem = savedInstanceState.getParcelable(Constants.RESULT_ITEM);
+        }
+
         binding = DialogStudentResultsBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(StatisticsViewModel.class);
+        mViewModel = new ViewModelProvider((ViewModelStoreOwner) getContext(), viewModelProviderFactory).get(StatisticsViewModel.class);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         for (ResultItem resultItem : mViewModel.results){
@@ -59,6 +65,12 @@ public class DialogStudentResults extends DialogFragment implements HasAndroidIn
         updateUi();
         wrongAnswerExists = false;
         return binding.getRoot();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(Constants.RESULT_ITEM, resultItem);
+        super.onSaveInstanceState(outState);
     }
 
     private void updateUi() {

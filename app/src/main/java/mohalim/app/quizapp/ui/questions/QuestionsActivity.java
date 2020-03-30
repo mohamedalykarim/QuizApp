@@ -11,8 +11,6 @@ import mohalim.app.quizapp.core.di.base.BaseActivity;
 import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
-import mohalim.app.quizapp.ui.main.MainFragment;
-import mohalim.app.quizapp.ui.quiz.QuizFragment;
 
 
 public class QuestionsActivity extends BaseActivity implements

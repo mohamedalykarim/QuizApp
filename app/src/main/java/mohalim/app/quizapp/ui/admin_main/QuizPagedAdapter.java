@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.main;
+package mohalim.app.quizapp.ui.admin_main;
 
 import android.content.Context;
 import android.content.Intent;

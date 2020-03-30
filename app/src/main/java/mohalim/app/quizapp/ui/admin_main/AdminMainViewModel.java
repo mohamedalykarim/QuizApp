@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.main;
+package mohalim.app.quizapp.ui.admin_main;
 
 import android.app.Application;
 import android.text.Editable;
@@ -8,7 +8,6 @@ import android.widget.EditText;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -30,13 +29,15 @@ import mohalim.app.quizapp.core.repositories.QuizRepository;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 
 @Reusable
-public class MainViewModel extends ViewModel {
+public class AdminMainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
 
     private Executor executor;
     private LiveData<PagedList<QuizItem>> quizLiveData;
     public QuizItem initedQuiz;
     QuizDataSourceFactory quizDataSourceFactory;
+
+    UserItem currentUser;
 
     @Inject
     QuizRepository quizRepository;
@@ -48,13 +49,13 @@ public class MainViewModel extends ViewModel {
     Application application;
 
     @Inject
-    public MainViewModel() {
+    public AdminMainViewModel() {
 
     }
 
 
 
-    void init(EditText searchET){
+    void initForAdmin(EditText searchET){
         executor = Executors.newFixedThreadPool(5);
 
         quizDataSourceFactory = new QuizDataSourceFactory(quizRepository);
@@ -86,8 +87,40 @@ public class MainViewModel extends ViewModel {
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    void initForUser(EditText searchET){
+        executor = Executors.newFixedThreadPool(5);
+
+        quizDataSourceFactory = new QuizDataSourceFactory(quizRepository);
+        PagedList.Config config = (new PagedList.Config.Builder())
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(5)
+                .setPageSize(3)
+                .build();
+
+        quizLiveData= new LivePagedListBuilder(quizDataSourceFactory, config).build();
+
+        searchET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int [] counts = {0,2,5,8,11,15};
+                if (ArrayUtils.contains(counts, count)){
+                    quizDataSourceFactory.upDateQuizSearch(s.toString());
+                }
+            }
 
 
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
 
@@ -185,4 +218,26 @@ public class MainViewModel extends ViewModel {
     public void setQuizitemObservation(QuizItem quizItem) {
         this.quizRepository.setQuizitemObservation(quizItem);
     }
+
+    public void startGetCurrentUserDetails() {
+        this.quizRepository.startGetGetCurrentUserDetails();
+    }
+
+    public MutableLiveData<UserItem> getCurrentUserDetailsObservation() {
+        return quizRepository.getCurrentUserDetailsObservation();
+    }
+
+    public void setCurrentUserDetailsObservation(UserItem currentUserDetails) {
+        this.quizRepository.setCurrentUserDetailsObservation(currentUserDetails);
+    }
+
+    public UserItem getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(UserItem currentUser) {
+        this.currentUser = currentUser;
+    }
+
+
 }

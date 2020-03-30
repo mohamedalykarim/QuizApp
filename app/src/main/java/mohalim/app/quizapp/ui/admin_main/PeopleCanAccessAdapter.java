@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.main;
+package mohalim.app.quizapp.ui.admin_main;
 
 import android.view.LayoutInflater;
 import android.view.View;

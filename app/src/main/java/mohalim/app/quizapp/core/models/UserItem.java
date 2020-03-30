@@ -15,6 +15,8 @@ public class UserItem implements Parcelable {
     private String displayedName;
     @SerializedName("userName")
     private String userName;
+    @SerializedName("isAdmin")
+    private boolean isAdmin;
 
     public UserItem() {
     }
@@ -23,6 +25,20 @@ public class UserItem implements Parcelable {
         id = in.readString();
         displayedName = in.readString();
         userName = in.readString();
+        isAdmin = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(displayedName);
+        dest.writeString(userName);
+        dest.writeByte((byte) (isAdmin ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<UserItem> CREATOR = new Creator<UserItem>() {
@@ -61,17 +77,11 @@ public class UserItem implements Parcelable {
         this.userName = userName;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(displayedName);
-        dest.writeString(userName);
+    public void setIsAdmin(boolean admin) {
+        isAdmin = admin;
     }
-
-
 }

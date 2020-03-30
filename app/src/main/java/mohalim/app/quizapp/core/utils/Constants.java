@@ -9,12 +9,13 @@ public class Constants {
     public static final String RIGHT = "right";
 
 
-
+    public static final String USER_ITEM = "userItem";
     public static final String QUIZ_ITEM = "quiz_item";
     public static final String RESULT_ITEM = "result_item";
     public static final String QUESTION_ITEM = "question_item";
     public static final String SESSION_ITEM = "session_item";
     public static final String FEEDBACK_ITEM = "feedback_item";
+
 
 
 
@@ -39,6 +40,7 @@ public class Constants {
     public static final String TYPE_START_GET_MY_FEEDBACK = "type_start_get_my_feedback";
     public static final String TYPE_START_GET_RANDOM_FEEDBACK = "type_start_get_random_feedback";
     public static final String TYPE_START_ADD_RESULT = "type_start_add_result";
+    public static final String TYPE_START_GET_CURRENT_USER_DETAILS = "type_start_get_current_user_details";
 
 
     public static final String PREFERENCE_NAME = "mohalim.app.quizapp.prefs";
@@ -46,4 +48,5 @@ public class Constants {
 
 
     public static final String TYPE_START_GET_QUIZ_RESULT = "type_start_get_quiz_result";
+
 }

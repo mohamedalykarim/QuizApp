@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.main;
+package mohalim.app.quizapp.ui.admin_main;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -29,7 +29,6 @@ import mohalim.app.quizapp.core.repositories.QuizRepository;
 import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.InputFilterMinMax;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
-import mohalim.app.quizapp.databinding.BottomAddQuizBinding;
 import mohalim.app.quizapp.databinding.BottomUpdateQuizBinding;
 
 public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements HasAndroidInjector {
@@ -47,14 +46,14 @@ public class UpdateQuizBottomSheet extends BottomSheetDialogFragment implements 
     UpdateQuizListener updateQuizListener;
 
     int formErrors = 0;
-    private MainViewModel mViewModel;
+    private AdminMainViewModel mViewModel;
     QuizItem oldQuizItem;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomUpdateQuizBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(AdminMainViewModel.class);
         binding.quizResultGradeEt.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
         binding.timeInMinutesEt.setFilters(new InputFilter[]{new InputFilterMinMax("0", "300")});
 

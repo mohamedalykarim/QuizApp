@@ -1,4 +1,4 @@
-package mohalim.app.quizapp.ui.main;
+package mohalim.app.quizapp.ui.admin_main;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,36 +13,28 @@ import androidx.annotation.Nullable;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.transition.Slide;
-import androidx.transition.TransitionManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
-import com.google.android.material.bottomappbar.BottomAppBar;
 
 import javax.inject.Inject;
 
 import mohalim.app.quizapp.core.di.base.BaseFragment;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
-import mohalim.app.quizapp.databinding.FragmentMainBinding;
+import mohalim.app.quizapp.databinding.FragmentAdminMainBinding;
 
 
-public class MainFragment extends BaseFragment {
+public class AdminMainFragment extends BaseFragment {
     private static final String TAG = "MainFragment";
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
 
-    private MainViewModel mViewModel;
-    FragmentMainBinding binding;
+    private AdminMainViewModel mViewModel;
+    FragmentAdminMainBinding binding;
     AddQuizBottomSheet addQuizBottomSheet;
     UpdateQuizBottomSheet updateQuizBottomSheet;
 
@@ -51,17 +43,22 @@ public class MainFragment extends BaseFragment {
 
     MainFragmentClick mainFragmentClick;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static AdminMainFragment newInstance() {
+        return new AdminMainFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
-        mViewModel.init(binding.searchEt);
+        binding = FragmentAdminMainBinding.inflate(inflater, container, false);
+        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(AdminMainViewModel.class);
+
+        if (mViewModel.getCurrentUser().getIsAdmin()){
+            mViewModel.initForAdmin(binding.searchEt);
+        }else {
+            mViewModel.initForUser(binding.searchEt);
+        }
 
         addQuizBottomSheet = new AddQuizBottomSheet();
         updateQuizBottomSheet = new UpdateQuizBottomSheet();
@@ -73,8 +70,6 @@ public class MainFragment extends BaseFragment {
                 binding.refresher.setRefreshing(false);
             }
         });
-
-
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

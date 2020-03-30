@@ -183,6 +183,17 @@ public class QuizRepository {
         this.quizFirebaseHandler.setUsersSearchObservation(userItems);
     }
 
+    public void startGetGetCurrentUserDetails() {
+        this.quizFirebaseHandler.startGetCurrentUserDetails();
+    }
+
+    public MutableLiveData<UserItem> getCurrentUserDetailsObservation() {
+        return quizFirebaseHandler.getCurrentUserDetailsObservation();
+    }
+
+    public void setCurrentUserDetailsObservation(UserItem currentUserDetails) {
+        this.quizFirebaseHandler.setCurrentUserDetailsObservation(currentUserDetails);
+    }
 
 
 
@@ -240,4 +251,6 @@ public class QuizRepository {
     public void setResultsObservation(List<ResultItem> results) {
         this.quizFirebaseHandler.setResultsObservation(results);
     }
+
+
 }

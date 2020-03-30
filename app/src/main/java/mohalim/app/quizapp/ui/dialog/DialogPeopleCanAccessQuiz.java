@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,12 @@ import android.widget.ScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
@@ -37,8 +33,8 @@ import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.DialogPeopleCanAccessQuizBinding;
-import mohalim.app.quizapp.ui.main.MainViewModel;
-import mohalim.app.quizapp.ui.main.PeopleCanAccessAdapter;
+import mohalim.app.quizapp.ui.admin_main.AdminMainViewModel;
+import mohalim.app.quizapp.ui.admin_main.PeopleCanAccessAdapter;
 
 public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndroidInjector {
     private static final String TAG = "DialogPeopleCanAccessQuiz";
@@ -54,7 +50,7 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
     private QuizItem quizItem;
 
     private DialogPeopleCanAccessQuizBinding binding;
-    private MainViewModel mViewModel;
+    private AdminMainViewModel mViewModel;
 
     private int addPersonFormErrors;
     private PeopleCanAccessAdapter peopleCanAccessAdapter;
@@ -74,7 +70,7 @@ public class DialogPeopleCanAccessQuiz extends DialogFragment implements HasAndr
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogPeopleCanAccessQuizBinding.inflate(inflater,container, false);
-        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(MainViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(AdminMainViewModel.class);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 

@@ -1,17 +1,17 @@
-package mohalim.app.quizapp.core.di.activities.main;
+package mohalim.app.quizapp.core.di.activities.admin_main;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import mohalim.app.quizapp.ui.admin_main.AdminMainFragment;
 import mohalim.app.quizapp.ui.dialog.DialogLoading;
 import mohalim.app.quizapp.ui.dialog.DialogPeopleCanAccessQuiz;
-import mohalim.app.quizapp.ui.main.AddQuizBottomSheet;
-import mohalim.app.quizapp.ui.main.MainFragment;
-import mohalim.app.quizapp.ui.main.UpdateQuizBottomSheet;
+import mohalim.app.quizapp.ui.admin_main.AddQuizBottomSheet;
+import mohalim.app.quizapp.ui.admin_main.UpdateQuizBottomSheet;
 
 @Module
-public abstract class MainFragmentsModule {
+public abstract class AdminMainFragmentsModule {
     @ContributesAndroidInjector
-    abstract MainFragment contributeMainFragment();
+    abstract AdminMainFragment contributeMainFragment();
 
     @ContributesAndroidInjector
     abstract AddQuizBottomSheet contributeAddQuizBottomSheet();

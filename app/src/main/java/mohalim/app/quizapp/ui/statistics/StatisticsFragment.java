@@ -9,18 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,8 +26,6 @@ import javax.inject.Inject;
 import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.comparator.StudentsResultComparator;
 import mohalim.app.quizapp.core.di.base.BaseFragment;
-import mohalim.app.quizapp.core.models.QuestionAnswerSavedItem;
-import mohalim.app.quizapp.core.models.QuestionItem;
 import mohalim.app.quizapp.core.models.ResultItem;
 import mohalim.app.quizapp.core.models.ResultQuestionItem;
 import mohalim.app.quizapp.core.models.StatisitcsQuestionItem;
@@ -39,8 +34,6 @@ import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.utils.CircleProgressBar;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentStatisticsBinding;
-import mohalim.app.quizapp.databinding.RowStatisticsQuestionBinding;
-import mohalim.app.quizapp.ui.result.DialogStudentResults;
 
 
 public class StatisticsFragment extends BaseFragment {

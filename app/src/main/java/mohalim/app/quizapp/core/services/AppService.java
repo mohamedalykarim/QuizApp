@@ -84,6 +84,10 @@ public class AppService extends DaggerIntentService {
         /**                            User Data                                  **/
         /***************************************************************************/
 
+        if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_GET_CURRENT_USER_DETAILS)){
+            quizFirebaseHandler.getCurrentUserDetails();
+        }
+
         if (intent.getStringExtra(Constants.TYPE).equals(Constants.TYPE_START_SAVE_USER_DATA)){
             quizFirebaseHandler.saveUserData();
         }

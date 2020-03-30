@@ -14,15 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -38,7 +35,7 @@ import mohalim.app.quizapp.core.di.base.BaseFragment;
 import mohalim.app.quizapp.core.utils.AppExecutor;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentLoginBinding;
-import mohalim.app.quizapp.ui.main.MainActivity;
+import mohalim.app.quizapp.ui.admin_main.AdminMainActivity;
 
 
 public class LoginFragment extends BaseFragment {
@@ -99,7 +96,7 @@ public class LoginFragment extends BaseFragment {
         super.onResume();
 
         if (mAuth.getCurrentUser() != null){
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+            Intent intent = new Intent(getActivity(), AdminMainActivity.class);
             getActivity().startActivity(intent);
             getActivity().finish();
         }
@@ -137,9 +134,9 @@ public class LoginFragment extends BaseFragment {
                             Log.d("TAG", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            Intent intent = new Intent(getActivity(), AdminMainActivity.class);
                             getActivity().startActivity(intent);
-                            Toast.makeText(getContext(), "Welcome back " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                             mViewModel.startSaveUserData();
                             getActivity().finish();
 
