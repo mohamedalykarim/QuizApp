@@ -18,7 +18,7 @@ public class SplashViewModel extends ViewModel {
 
 
     public void startGetCurrentUser() {
-        this.quizRepository.startGetGetCurrentUserDetails();
+        this.quizRepository.startGetCurrentUserDetails();
     }
 
     public MutableLiveData<UserItem> getCurrentUserDetailsObservation() {

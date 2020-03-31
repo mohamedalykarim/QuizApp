@@ -1,32 +1,30 @@
 package mohalim.app.quizapp.core.datasource;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.paging.PageKeyedDataSource;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 import mohalim.app.quizapp.core.models.QuizItem;
+import mohalim.app.quizapp.core.models.UserItem;
 
-public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizItem> {
+public class UserQuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizItem> {
 
     private String quizSearch = "";
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private UserItem userItem;
 
 
-    public QuizDataSource() {
+    public UserQuizDataSource() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
     }
@@ -35,7 +33,7 @@ public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizIt
     public void loadInitial(@NonNull LoadInitialParams<DocumentSnapshot> params, @NonNull final LoadInitialCallback<DocumentSnapshot, QuizItem> callback) {
 
         db.collection("quiz")
-                .whereEqualTo("owner", mAuth.getUid())
+                .whereArrayContains("peopleCanAccess", userItem)
                 .orderBy("quizName")
                 .startAt(quizSearch.trim())
                 .endAt(quizSearch.trim()+ "\uf8ff")
@@ -69,8 +67,9 @@ public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizIt
     @Override
     public void loadAfter(@NonNull final LoadParams<DocumentSnapshot> params, @NonNull final LoadCallback<DocumentSnapshot, QuizItem> callback) {
 
+
         db.collection("quiz")
-                .whereEqualTo("owner", mAuth.getUid())
+                .whereArrayContains("peopleCanAccess", userItem)
                 .orderBy("quizName")
                 .startAt(quizSearch.trim())
                 .endAt(quizSearch.trim()+ "\uf8ff")
@@ -95,7 +94,11 @@ public class QuizDataSource extends PageKeyedDataSource<DocumentSnapshot, QuizIt
 
     }
 
-    public void uodateQuizName(String quizSearch) {
+    public void updateQuizName(String quizSearch) {
         this.quizSearch = quizSearch;
+    }
+
+    public void setUserItem(UserItem userItem) {
+        this.userItem = userItem;
     }
 }

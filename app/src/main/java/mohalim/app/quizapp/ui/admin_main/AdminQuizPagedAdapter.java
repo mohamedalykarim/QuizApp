@@ -15,10 +15,10 @@ import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.databinding.RowQuizBinding;
 import mohalim.app.quizapp.ui.questions.QuestionsActivity;
 
-public class QuizPagedAdapter extends PagedListAdapter<QuizItem, QuizPagedAdapter.MainViewHolder> {
+public class AdminQuizPagedAdapter extends PagedListAdapter<QuizItem, AdminQuizPagedAdapter.MainViewHolder> {
     QuizPagedAdapterClick quizPagedAdapterClick;
 
-    public QuizPagedAdapter(Context context) {
+    public AdminQuizPagedAdapter(Context context) {
         super(QuizItem.DIFF_CALLBACK);
         try {
             quizPagedAdapterClick = (QuizPagedAdapterClick) context;

@@ -183,7 +183,7 @@ public class QuizRepository {
         this.quizFirebaseHandler.setUsersSearchObservation(userItems);
     }
 
-    public void startGetGetCurrentUserDetails() {
+    public void startGetCurrentUserDetails() {
         this.quizFirebaseHandler.startGetCurrentUserDetails();
     }
 

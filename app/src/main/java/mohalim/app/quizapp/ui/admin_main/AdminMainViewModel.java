@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import dagger.Reusable;
-import mohalim.app.quizapp.core.datasource.QuizDataSourceFactory;
+import mohalim.app.quizapp.core.datasource.AdminQuizDataSourceFactory;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.models.SessionItem;
 import mohalim.app.quizapp.core.models.UserItem;
@@ -35,7 +35,7 @@ public class AdminMainViewModel extends ViewModel {
     private Executor executor;
     private LiveData<PagedList<QuizItem>> quizLiveData;
     public QuizItem initedQuiz;
-    QuizDataSourceFactory quizDataSourceFactory;
+    AdminQuizDataSourceFactory adminQuizDataSourceFactory;
 
     UserItem currentUser;
 
@@ -58,14 +58,14 @@ public class AdminMainViewModel extends ViewModel {
     void initForAdmin(EditText searchET){
         executor = Executors.newFixedThreadPool(5);
 
-        quizDataSourceFactory = new QuizDataSourceFactory(quizRepository);
+        adminQuizDataSourceFactory = new AdminQuizDataSourceFactory(quizRepository);
         PagedList.Config config = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(false)
                 .setInitialLoadSizeHint(5)
                 .setPageSize(3)
                 .build();
 
-        quizLiveData= new LivePagedListBuilder(quizDataSourceFactory, config).build();
+        quizLiveData= new LivePagedListBuilder(adminQuizDataSourceFactory, config).build();
 
         searchET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,7 +77,7 @@ public class AdminMainViewModel extends ViewModel {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int [] counts = {0,2,5,8,11,15};
                 if (ArrayUtils.contains(counts, count)){
-                    quizDataSourceFactory.upDateQuizSearch(s.toString());
+                    adminQuizDataSourceFactory.upDateQuizSearch(s.toString());
                 }
             }
 
@@ -89,39 +89,6 @@ public class AdminMainViewModel extends ViewModel {
         });
     }
 
-    void initForUser(EditText searchET){
-        executor = Executors.newFixedThreadPool(5);
-
-        quizDataSourceFactory = new QuizDataSourceFactory(quizRepository);
-        PagedList.Config config = (new PagedList.Config.Builder())
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(5)
-                .setPageSize(3)
-                .build();
-
-        quizLiveData= new LivePagedListBuilder(quizDataSourceFactory, config).build();
-
-        searchET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int [] counts = {0,2,5,8,11,15};
-                if (ArrayUtils.contains(counts, count)){
-                    quizDataSourceFactory.upDateQuizSearch(s.toString());
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
 
 
     public void initSession(final QuizItem quizItem){
@@ -172,7 +139,7 @@ public class AdminMainViewModel extends ViewModel {
     }
 
     public void refresh() {
-        quizDataSourceFactory.invalidate();
+        adminQuizDataSourceFactory.invalidate();
     }
 
     public void startUpdateQuiz(QuizItem quizItem) {
@@ -220,7 +187,7 @@ public class AdminMainViewModel extends ViewModel {
     }
 
     public void startGetCurrentUserDetails() {
-        this.quizRepository.startGetGetCurrentUserDetails();
+        this.quizRepository.startGetCurrentUserDetails();
     }
 
     public MutableLiveData<UserItem> getCurrentUserDetailsObservation() {

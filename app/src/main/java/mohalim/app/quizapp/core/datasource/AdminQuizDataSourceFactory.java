@@ -6,13 +6,13 @@ import androidx.paging.DataSource;
 
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 
-public class QuizDataSourceFactory extends DataSource.Factory {
+public class AdminQuizDataSourceFactory extends DataSource.Factory {
     private final QuizRepository quizRepository;
-    private MutableLiveData<QuizDataSource> quizDataSourceMutableLiveData;
-    QuizDataSource quizDataSource;
+    private MutableLiveData<AdminQuizDataSource> quizDataSourceMutableLiveData;
+    AdminQuizDataSource adminQuizDataSource;
     private String quizSearch = "";
 
-    public QuizDataSourceFactory(QuizRepository quizRepository) {
+    public AdminQuizDataSourceFactory(QuizRepository quizRepository) {
         this.quizDataSourceMutableLiveData = new MutableLiveData<>();
         this.quizRepository = quizRepository;
     }
@@ -20,14 +20,14 @@ public class QuizDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        quizDataSource = new QuizDataSource();
-        quizDataSource.uodateQuizName(quizSearch);
-        quizDataSourceMutableLiveData.postValue(quizDataSource);
-        return quizDataSource;
+        adminQuizDataSource = new AdminQuizDataSource();
+        adminQuizDataSource.uodateQuizName(quizSearch);
+        quizDataSourceMutableLiveData.postValue(adminQuizDataSource);
+        return adminQuizDataSource;
     }
 
 
-    public MutableLiveData<QuizDataSource> getQuizDataSourceMutableLiveData() {
+    public MutableLiveData<AdminQuizDataSource> getQuizDataSourceMutableLiveData() {
         return quizDataSourceMutableLiveData;
     }
 
@@ -39,7 +39,7 @@ public class QuizDataSourceFactory extends DataSource.Factory {
     }
 
     public void invalidate(){
-        if (quizDataSource != null)
-        quizDataSource.invalidate();
+        if (adminQuizDataSource != null)
+        adminQuizDataSource.invalidate();
     }
 }

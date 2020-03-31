@@ -29,7 +29,7 @@ import mohalim.app.quizapp.databinding.FragmentAdminMainBinding;
 
 
 public class AdminMainFragment extends BaseFragment {
-    private static final String TAG = "MainFragment";
+    private static final String TAG = "AdminMainFragment";
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
 
@@ -38,7 +38,7 @@ public class AdminMainFragment extends BaseFragment {
     AddQuizBottomSheet addQuizBottomSheet;
     UpdateQuizBottomSheet updateQuizBottomSheet;
 
-    private QuizPagedAdapter adapter;
+    private AdminQuizPagedAdapter adapter;
     private int accessErrors;
 
     MainFragmentClick mainFragmentClick;
@@ -56,8 +56,6 @@ public class AdminMainFragment extends BaseFragment {
 
         if (mViewModel.getCurrentUser().getIsAdmin()){
             mViewModel.initForAdmin(binding.searchEt);
-        }else {
-            mViewModel.initForUser(binding.searchEt);
         }
 
         addQuizBottomSheet = new AddQuizBottomSheet();
@@ -73,7 +71,7 @@ public class AdminMainFragment extends BaseFragment {
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        adapter = new QuizPagedAdapter(getActivity());
+        adapter = new AdminQuizPagedAdapter(getActivity());
 
         binding.mainRV.setLayoutManager(linearLayoutManager);
         binding.mainRV.setAdapter(adapter);
@@ -87,6 +85,8 @@ public class AdminMainFragment extends BaseFragment {
                 adapter.submitList(quizItems);
             }
         });
+
+
 
 
         binding.addIcon.setOnClickListener(new View.OnClickListener() {
@@ -117,24 +117,6 @@ public class AdminMainFragment extends BaseFragment {
 
             }
         });
-
-        binding.searchEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
 
 
         return binding.getRoot();

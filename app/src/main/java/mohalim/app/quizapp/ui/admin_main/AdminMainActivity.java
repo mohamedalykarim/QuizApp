@@ -2,7 +2,6 @@ package mohalim.app.quizapp.ui.admin_main;
 
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,7 +28,7 @@ public class AdminMainActivity extends BaseActivity implements
         AdminMainFragment.MainFragmentClick,
         AddQuizBottomSheet.AddNewQuizListener,
         UpdateQuizBottomSheet.UpdateQuizListener,
-        QuizPagedAdapter.QuizPagedAdapterClick,
+        AdminQuizPagedAdapter.QuizPagedAdapterClick,
         PeopleCanAccessAdapter.OnPeopleCanAccessAdapterClick,
         DialogPeopleCanAccessQuiz.OnDismissPeopleCanAccessDialog {
 

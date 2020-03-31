@@ -72,6 +72,8 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
 
         final QuizItem quizItem = intent.getParcelableExtra(Constants.QUIZ_ITEM);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(QuizViewModel.class);
+        mViewModel.initSession(quizItem);
+
         mViewModel.quizItem = quizItem;
 
 
@@ -126,6 +128,11 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
             @Override
             public void onChanged(List<QuestionItem> questionItems) {
                 if (questionItems == null)return;
+                if (questionItems.size() == 0){
+                    Toast.makeText(QuizActivity.this, "Try again, or contact your instructor", Toast.LENGTH_SHORT).show();
+                    mViewModel.resetQuiz(quizItem);
+                    finish();
+                }
 
                 getSupportFragmentManager().getFragments().clear();
 
@@ -153,6 +160,11 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
 
                 if (mViewModel.questionItemList.size() == 0){
                     mViewModel.setQuestionItemList(questionItems);
+                }
+
+                if (mViewModel.currentSession == null){
+                    finish();
+                    return;
                 }
 
                 if (!quizTimeInitiated){
@@ -204,8 +216,6 @@ public class QuizActivity extends BaseActivity implements QuizFragment.ChangeQui
         appExecutor.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mViewModel.initSession(quizItem);
-
                 /*
                  * Quiz time
                  */

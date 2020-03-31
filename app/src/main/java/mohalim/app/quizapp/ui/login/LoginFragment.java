@@ -1,7 +1,12 @@
 package mohalim.app.quizapp.ui.login;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -32,10 +37,13 @@ import javax.inject.Inject;
 
 import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.di.base.BaseFragment;
+import mohalim.app.quizapp.core.models.UserItem;
 import mohalim.app.quizapp.core.utils.AppExecutor;
+import mohalim.app.quizapp.core.utils.Constants;
 import mohalim.app.quizapp.core.utils.ViewModelProviderFactory;
 import mohalim.app.quizapp.databinding.FragmentLoginBinding;
 import mohalim.app.quizapp.ui.admin_main.AdminMainActivity;
+import mohalim.app.quizapp.ui.user_main.UserMainActivity;
 
 
 public class LoginFragment extends BaseFragment {
@@ -87,8 +95,32 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
+        mViewModel.getCurrentUserDetailsObservation().observe((LifecycleOwner) getContext(), new Observer<UserItem>() {
+            @Override
+            public void onChanged(UserItem userItem) {
+                if (userItem == null)return;
+                if (userItem.getIsAdmin()){
+                    startUserActivity(AdminMainActivity.class, userItem);
+                }else {
+                    startUserActivity(UserMainActivity.class, userItem);
+                }
+
+                mViewModel.setCurrentUserDetailsObservation(null);
+                mViewModel.getCurrentUserDetailsObservation().removeObserver(this);
+            }
+        });
+
 
         return binding.getRoot();
+    }
+
+    private void startUserActivity(Class<?> activity, UserItem userItem) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(Constants.USER_ITEM, userItem);
+        getActivity().startActivity(intent);
+        Toast.makeText(getContext(), "Welcome " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+        mViewModel.startSaveUserData();
+        getActivity().finish();
     }
 
     @Override
@@ -134,11 +166,9 @@ public class LoginFragment extends BaseFragment {
                             Log.d("TAG", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Intent intent = new Intent(getActivity(), AdminMainActivity.class);
-                            getActivity().startActivity(intent);
-                            Toast.makeText(getContext(), "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                            mViewModel.startSaveUserData();
-                            getActivity().finish();
+                            mViewModel.startGetCurrentUserData();
+
+
 
                         } else {
                             // If sign in fails, display a message to the user.

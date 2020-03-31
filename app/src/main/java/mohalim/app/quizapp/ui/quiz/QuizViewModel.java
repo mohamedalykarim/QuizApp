@@ -48,11 +48,13 @@ public class QuizViewModel extends ViewModel {
     }
 
     public void initSession(final QuizItem quizItem){
-        SessionItem session = quizRepository.getCurrentSession(quizItem.getId());
-        currentSession = session;
-
-
-
+        appExecutor.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                SessionItem session = quizRepository.getCurrentSession(quizItem.getId());
+                currentSession = session;
+            }
+        });
     }
 
     public void setQuestionItemList(List<QuestionItem> questionItemList) {
