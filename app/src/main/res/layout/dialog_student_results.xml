@@ -79,7 +79,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:progress="100"
                             app:progressBarThickness="8dp"
-                            app:progressbarColor="@color/colorAccent" />
+                            app:progressbarColor="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/correctAnswersTv"
@@ -88,7 +88,7 @@
                             android:layout_marginBottom="15dp"
                             android:fontType="@{@string/font}"
                             android:text="NA"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="25sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="@+id/fullGradeCircleBar"
@@ -122,7 +122,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:progress="100"
                             app:progressBarThickness="8dp"
-                            app:progressbarColor="@color/colorAccent" />
+                            app:progressbarColor="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/wrongAnswersTv"
@@ -131,7 +131,7 @@
                             android:layout_marginBottom="15dp"
                             android:fontType="@{@string/font}"
                             android:text="NA"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="25sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="@+id/zeroGradeCircleBar"

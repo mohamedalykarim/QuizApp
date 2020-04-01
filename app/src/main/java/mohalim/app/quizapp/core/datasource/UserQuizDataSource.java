@@ -43,7 +43,10 @@ public class UserQuizDataSource extends PageKeyedDataSource<DocumentSnapshot, Qu
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        if (queryDocumentSnapshots.isEmpty()) return;
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            callback.onResult(new ArrayList<QuizItem>(), null, null);
+                            return;
+                        };
                         List<QuizItem> quizItems = new ArrayList<>();
 
                         for (DocumentSnapshot child :queryDocumentSnapshots.getDocuments()){

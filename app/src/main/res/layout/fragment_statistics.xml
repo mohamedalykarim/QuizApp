@@ -388,7 +388,7 @@
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:progress="100"
                                         app:progressBarThickness="8dp"
-                                        app:progressbarColor="@color/colorAccent" />
+                                        app:progressbarColor="@color/colorPrimaryDark" />
 
                                     <TextView
                                         android:id="@+id/fullGradeTv"
@@ -397,7 +397,7 @@
                                         android:layout_marginBottom="10dp"
                                         android:fontType="@{@string/font}"
                                         android:text="NA"
-                                        android:textColor="@color/colorAccent"
+                                        android:textColor="@color/colorPrimaryDark"
                                         android:textSize="25sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBottom_toBottomOf="@+id/fullGradeCircleBar"
@@ -431,7 +431,7 @@
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:progress="100"
                                         app:progressBarThickness="8dp"
-                                        app:progressbarColor="@color/colorAccent" />
+                                        app:progressbarColor="@color/colorPrimaryDark" />
 
                                     <TextView
                                         android:id="@+id/zeroGradeTv"
@@ -440,7 +440,7 @@
                                         android:layout_marginBottom="10dp"
                                         android:fontType="@{@string/font}"
                                         android:text="NA"
-                                        android:textColor="@color/colorAccent"
+                                        android:textColor="@color/colorPrimaryDark"
                                         android:textSize="25sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBottom_toBottomOf="@+id/zeroGradeCircleBar"
@@ -461,6 +461,17 @@
                             </LinearLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:id="@+id/oldResultsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                        </LinearLayout>
+
+
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
@@ -479,6 +490,7 @@
                             android:layout_height="wrap_content"
                             android:fontType="@{@string/font}"
                             app:layout_constraintTop_toBottomOf="@+id/nameTv"
+                            app:tabMode="scrollable"
                             app:tabTextColor="#ffffff">
 
                             <com.google.android.material.tabs.TabItem
@@ -501,6 +513,13 @@
                                 android:layout_height="wrap_content"
                                 android:tag="@string/questions"
                                 android:text="questions" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/resultsTab"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="@string/questions"
+                                android:text="Results" />
 
                         </com.google.android.material.tabs.TabLayout>
 

@@ -189,7 +189,10 @@ public class QuizFirebaseHandler {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (queryDocumentSnapshots == null)return;
-                        if (queryDocumentSnapshots.isEmpty())return;
+                        if (queryDocumentSnapshots.isEmpty()){
+                            quizInitiatingNow.postValue(false);
+                            return;
+                        };
                         final List<QuestionItem> questions = new ArrayList<>();
 
                         for (QueryDocumentSnapshot question : queryDocumentSnapshots){

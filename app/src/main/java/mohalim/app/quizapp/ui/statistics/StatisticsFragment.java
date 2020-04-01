@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import mohalim.app.quizapp.R;
+import mohalim.app.quizapp.core.comparator.ResultsComparator;
 import mohalim.app.quizapp.core.comparator.StudentsResultComparator;
 import mohalim.app.quizapp.core.di.base.BaseFragment;
 import mohalim.app.quizapp.core.models.ResultItem;
@@ -83,15 +84,23 @@ public class StatisticsFragment extends BaseFragment {
                     binding.statistics.setVisibility(View.VISIBLE);
                     binding.students.setVisibility(View.GONE);
                     binding.questions.setVisibility(View.GONE);
+                    binding.oldResultsContainer.setVisibility(View.GONE);
                 }else if (tab.getPosition() == 1){
                     binding.statistics.setVisibility(View.GONE);
                     binding.students.setVisibility(View.VISIBLE);
                     binding.questions.setVisibility(View.GONE);
+                    binding.oldResultsContainer.setVisibility(View.GONE);
 
                 }else if (tab.getPosition() == 2){
                     binding.statistics.setVisibility(View.GONE);
                     binding.students.setVisibility(View.GONE);
                     binding.questions.setVisibility(View.VISIBLE);
+                    binding.oldResultsContainer.setVisibility(View.GONE);
+                }else if (tab.getPosition() == 3){
+                    binding.statistics.setVisibility(View.GONE);
+                    binding.students.setVisibility(View.GONE);
+                    binding.questions.setVisibility(View.GONE);
+                    binding.oldResultsContainer.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -155,6 +164,38 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     private void updateUI() {
+
+        /**
+         * results tab
+         */
+        binding.oldResultsContainer.removeAllViews();
+        Collections.sort(mViewModel.results, new ResultsComparator());
+        for (final ResultItem resultItem: mViewModel.results){
+            View view = getLayoutInflater().inflate(R.layout.row_people_can_access_quiz, binding.students, false);
+            view.findViewById(R.id.removeImg).setVisibility(View.GONE);
+            TextView usernameTv = view.findViewById(R.id.userNameTv);
+            TextView gradeTv = view.findViewById(R.id.gradeTv);
+            TextView finishTv = view.findViewById(R.id.finishTv);
+            TextView waitingTv = view.findViewById(R.id.waitingTv);
+
+            usernameTv.setText(resultItem.getUsername());
+            int gradeInt = (int) resultItem.getResultScore();
+            gradeTv.setText(gradeInt + "");
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogStudentResults.setResultItem(null);
+                    dialogStudentResults.setStudentId(resultItem.getUserId());
+                    if (!dialogStudentResults.isAdded()){
+                        dialogStudentResults.show(getActivity().getSupportFragmentManager(), "DialogStudentResults");
+                    }
+                }
+            });
+
+            binding.oldResultsContainer.addView(view);
+        }
+
 
         if (mViewModel.quizItem.getPeopleCanAccess() != null){
             final List<StatisticsStudentsArrangeItem> studentsArrangeItems = new ArrayList<>();
@@ -234,10 +275,20 @@ public class StatisticsFragment extends BaseFragment {
                 totalFullGrade = totalFullGrade+1;
             }
 
-            if (resultItem.getResultScore() == 100){
+            if (resultItem.getResultScore() == 0){
                 totalZeroGrade = totalZeroGrade + 1;
             }
+        }
 
+
+
+        if (mViewModel.results.size() == 0){
+        }else {
+            int totalFullGradeInteger = Integer.parseInt(String.format("%.0f",totalFullGrade));
+            int totalZeroGradeInteger = Integer.parseInt(String.format("%.0f",totalZeroGrade));
+
+            binding.fullGradeTv.setText(totalFullGradeInteger+"");
+            binding.zeroGradeTv.setText(totalZeroGradeInteger+"");
         }
 
 
@@ -329,16 +380,9 @@ public class StatisticsFragment extends BaseFragment {
         }
 
 
-
-
-
-
-
-
-
-
-
-
+        /**
+         * Dashboard
+         */
 
 
         if (mViewModel.results.size() == 0){
@@ -353,7 +397,7 @@ public class StatisticsFragment extends BaseFragment {
         }
 
 
-        if (mViewModel.quizItem.getPeopleCanAccess() == null || mViewModel.quizItem.getPeopleCanAccess().size() == 0){
+        if (mViewModel.quizItem.getPeopleCanAccess() == null || mViewModel.quizItem.getPeopleCanAccess().size() == 0 ){
 
             binding.studentCountCircle.setMax(100);
             binding.studentFinishedCircle.setMax(100);
@@ -369,6 +413,7 @@ public class StatisticsFragment extends BaseFragment {
 
 
         }else {
+
             binding.studentCountCircle.setMax(mViewModel.quizItem.getPeopleCanAccess().size());
             binding.studentFinishedCircle.setMax(mViewModel.quizItem.getPeopleCanAccess().size());
             binding.studentRemainsCircle.setMax(mViewModel.quizItem.getPeopleCanAccess().size());
@@ -379,20 +424,20 @@ public class StatisticsFragment extends BaseFragment {
 
             binding.studentsCountTv.setText("" + mViewModel.quizItem.getPeopleCanAccess().size());
             binding.studentsFinishedTv.setText("" + mViewModel.results.size());
-            binding.studentsRemainTv.setText("" +  (mViewModel.quizItem.getPeopleCanAccess().size() - mViewModel.results.size()));
+
+            int userfinished = 0;
+            for (ResultItem resultItem : mViewModel.results){
+                for (UserItem userItem: mViewModel.quizItem.getPeopleCanAccess()){
+                    if (resultItem.getUserId().equals(userItem.getId())){
+                        userfinished++;
+                    }
+                }
+            }
+
+            binding.studentsRemainTv.setText("" +  (mViewModel.quizItem.getPeopleCanAccess().size() - userfinished));
+
 
         }
-
-
-        if (mViewModel.results.size() == 0){
-        }else {
-            int totalFullGradeInteger = Integer.parseInt(String.format("%.0f",totalFullGrade));
-            int totalZeroGradeInteger = Integer.parseInt(String.format("%.0f",totalZeroGrade));
-
-            binding.fullGradeTv.setText(totalFullGradeInteger+"");
-            binding.zeroGradeTv.setText(totalZeroGradeInteger+"");
-        }
-
 
         binding.refresher.setRefreshing(false);
 

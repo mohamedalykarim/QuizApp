@@ -53,6 +53,7 @@ public class AdminMainActivity extends BaseActivity implements
         Intent oldIntent = getIntent();
         if (oldIntent.hasExtra(Constants.USER_ITEM)){
             mViewModel.setCurrentUser((UserItem) oldIntent.getParcelableExtra(Constants.USER_ITEM));
+            intentUserItem = oldIntent.getParcelableExtra(Constants.USER_ITEM);
         }
 
         if (savedInstanceState == null) {
@@ -114,7 +115,7 @@ public class AdminMainActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
-        initNavigation(binding.drawerLayout);
+        initNavigation(binding.drawerLayout, AdminMainActivity.class);
         if (dialogLoading.isAdded())dialogLoading.dismiss();
 
     }

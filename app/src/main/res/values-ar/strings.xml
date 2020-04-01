@@ -27,7 +27,7 @@
     <string name="loading">جاري التحميل</string>
     <string name="welcome_to">مرحبا بكم فى </string>
     <string name="access">دخول</string>
-    <string name="access_quiz">يمكنك الدخول لامتحان معين من خلال ادخال الرقم التعريفي لذلك الامتحان ، يمكنك ان تحصل على ذلك الرقم من خلال معلمك : </string>
+    <string name="access_quiz">يمكنك الدخول لامتحان معين من خلال ادخال الرقم التعريفي لذلك الامتحان ، يمكنك ان تحصل على ذلك الرقم من خلال المعلم مالك الامتحان : </string>
     <string name="quiz_id">الرقم التعريفي للامتحان</string>
     <string name="previous">السابق</string>
     <string name="check_answer">فحص الاجابة</string>

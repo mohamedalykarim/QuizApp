@@ -14,6 +14,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -42,6 +43,8 @@ public class AdminMainFragment extends BaseFragment {
     private int accessErrors;
 
     MainFragmentClick mainFragmentClick;
+    private CountDownTimer countDownTimer;
+    private int quizSize;
 
     public static AdminMainFragment newInstance() {
         return new AdminMainFragment();
@@ -54,6 +57,9 @@ public class AdminMainFragment extends BaseFragment {
         binding = FragmentAdminMainBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(AdminMainViewModel.class);
 
+        binding.refresher.setRefreshing(true);
+
+
         if (mViewModel.getCurrentUser().getIsAdmin()){
             mViewModel.initForAdmin(binding.searchEt);
         }
@@ -65,7 +71,8 @@ public class AdminMainFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 mViewModel.refresh();
-                binding.refresher.setRefreshing(false);
+                binding.refresher.setRefreshing(true);
+                countDownTimer.start();
             }
         });
 
@@ -83,6 +90,25 @@ public class AdminMainFragment extends BaseFragment {
             public void onChanged(PagedList<QuizItem> quizItems) {
                 if (quizItems == null) return;
                 adapter.submitList(quizItems);
+
+                quizItems.addWeakCallback(null, new PagedList.Callback() {
+                    @Override
+                    public void onChanged(int position, int count) {
+
+                    }
+
+                    @Override
+                    public void onInserted(int position, int count) {
+                        binding.refresher.setRefreshing(false);
+                        binding.noContentContainer.setVisibility(View.GONE);
+                        quizSize = count;
+                    }
+
+                    @Override
+                    public void onRemoved(int position, int count) {
+
+                    }
+                });
             }
         });
 
@@ -117,6 +143,23 @@ public class AdminMainFragment extends BaseFragment {
 
             }
         });
+
+        countDownTimer = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (quizSize == 0){
+                    binding.noContentContainer.setVisibility(View.VISIBLE);
+                    binding.refresher.setRefreshing(false);
+
+                }
+            }
+        };
+        countDownTimer.start();
 
 
         return binding.getRoot();
@@ -167,6 +210,13 @@ public class AdminMainFragment extends BaseFragment {
         }catch (ClassCastException e){
             throw new ClassCastException("Activity must implements MainFragmentClick class "+ e.getMessage());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        countDownTimer.cancel();
     }
 
     private void validateAccessForm() {

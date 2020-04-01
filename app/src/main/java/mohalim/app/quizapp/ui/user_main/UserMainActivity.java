@@ -45,7 +45,9 @@ implements UserMainFragment.UserMainFragmetnClickListener,
         Intent oldIntent = getIntent();
         if (oldIntent.hasExtra(Constants.USER_ITEM)){
             mViewModel.setCurrentUser((UserItem) oldIntent.getParcelableExtra(Constants.USER_ITEM));
+            intentUserItem = oldIntent.getParcelableExtra(Constants.USER_ITEM);
         }
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -81,7 +83,9 @@ implements UserMainFragment.UserMainFragmetnClickListener,
     @Override
     protected void onResume() {
         super.onResume();
-        initNavigation(binding.drawerLayout);
+        initNavigation(binding.drawerLayout, UserMainActivity.class);
+        if (dialogLoading.isAdded())dialogLoading.dismiss();
+
     }
 
     @Override

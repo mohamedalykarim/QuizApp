@@ -14,9 +14,11 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -39,6 +41,8 @@ public class UserMainFragment extends BaseFragment {
     UserMainFragmetnClickListener userMainFragmetnClickListener;
     private UserQuizPagedAdapter adapter;
     private int accessErrors;
+    private int quizSize;
+    private CountDownTimer countDownTimer;
 
 
     public static UserMainFragment newInstance() {
@@ -52,15 +56,17 @@ public class UserMainFragment extends BaseFragment {
         binding = FragmentUserMainBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this, viewmodelProviderFactory).get(UserMainViewModel.class);
 
-        if (!mViewModel.getCurrentUser().getIsAdmin()){
-            mViewModel.initForUser(binding.searchEt);
-        }
+        mViewModel.initForUser(binding.searchEt);
+
+        binding.refresher.setRefreshing(true);
+
 
         binding.refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mViewModel.refresh();
-                binding.refresher.setRefreshing(false);
+                binding.refresher.setRefreshing(true);
+                countDownTimer.start();
             }
         });
 
@@ -74,8 +80,32 @@ public class UserMainFragment extends BaseFragment {
         mViewModel.getQuizLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<QuizItem>>() {
             @Override
             public void onChanged(PagedList<QuizItem> quizItems) {
-                if (quizItems == null) return;
+                if (quizItems == null){
+                    binding.noContentContainer.setVisibility(View.VISIBLE);
+                    return;
+                }
+                quizItems.addWeakCallback(null, new PagedList.Callback() {
+                    @Override
+                    public void onChanged(int position, int count) {
+
+                    }
+
+                    @Override
+                    public void onInserted(int position, int count) {
+                        quizSize = count;
+                        binding.noContentContainer.setVisibility(View.GONE);
+                        binding.refresher.setRefreshing(false);
+
+                    }
+
+                    @Override
+                    public void onRemoved(int position, int count) {
+
+                    }
+                });
+
                 adapter.submitList(quizItems);
+
             }
         });
 
@@ -86,12 +116,34 @@ public class UserMainFragment extends BaseFragment {
             }
         });
 
+        countDownTimer = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (quizSize == 0){
+                    binding.noContentContainer.setVisibility(View.VISIBLE);
+                    binding.refresher.setRefreshing(false);
+
+                }
+            }
+        };
+        countDownTimer.start();
+
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -102,6 +154,12 @@ public class UserMainFragment extends BaseFragment {
         }catch (ClassCastException e){
             throw new ClassCastException("Activity must implements UserMainFragmetnClickListener class "+ e.getMessage());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        countDownTimer.cancel();
     }
 
     public interface  UserMainFragmetnClickListener{

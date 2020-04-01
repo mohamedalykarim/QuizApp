@@ -174,16 +174,16 @@ public class QuizFragment extends BaseFragment {
                             .show();
 
                 }else {
-                    new AlertDialog.Builder(getContext())
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext())
                             .setTitle("Results!")
-                            .setMessage("Do you want finish the session and go to results page ?")
-                            .setPositiveButton("Finish and reset Session", new DialogInterface.OnClickListener() {
+                            .setMessage("Do you want to finish the quiz and go to results?")
+                            .setPositiveButton("Finish Quiz", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     showResultsAndResetSession();
                                 }
                             })
 
-                            .setNegativeButton("Finish", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Finish quiz And repeat same question", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Intent intent = new Intent(getActivity(), ResultActivity.class);
@@ -191,14 +191,13 @@ public class QuizFragment extends BaseFragment {
                                     intent.putParcelableArrayListExtra(Constants.QUESTION_ITEM, questions);
                                     intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
                                     getActivity().startActivity(intent);
-
                                     mViewModel.resetAnswerSaved();
-
                                     getActivity().finish();
                                 }
                             })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                            .setIcon(android.R.drawable.ic_dialog_alert);
+
+                    alert.show();
                 }
 
 
@@ -257,7 +256,7 @@ public class QuizFragment extends BaseFragment {
         intent.putExtra(Constants.QUIZ_ITEM, mViewModel.quizItem);
         intent.putExtra(Constants.RESET_QUIZ, Constants.RESET_QUIZ);
         getActivity().startActivity(intent);
-        startResetQuiz = true;
+        startResetQuiz = false;
         if (mViewModel.quizItem.isSaveResults()){
             mViewModel.startSaveResults(mViewModel.questionItemList);
         }

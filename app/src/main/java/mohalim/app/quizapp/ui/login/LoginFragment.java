@@ -100,7 +100,7 @@ public class LoginFragment extends BaseFragment {
             public void onChanged(UserItem userItem) {
                 if (userItem == null)return;
                 if (userItem.getIsAdmin()){
-                    startUserActivity(AdminMainActivity.class, userItem);
+                    startUserActivity(UserMainActivity.class, userItem);
                 }else {
                     startUserActivity(UserMainActivity.class, userItem);
                 }

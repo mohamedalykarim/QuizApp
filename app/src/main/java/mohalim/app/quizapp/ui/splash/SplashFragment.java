@@ -87,7 +87,7 @@ public class SplashFragment extends BaseFragment {
                     mViewModel.setCurrentUserDetailsObservation(null);
                     mViewModel.getCurrentUserDetailsObservation().removeObservers((LifecycleOwner) getContext());
 
-                    Intent intent = new Intent(getActivity(), AdminMainActivity.class);
+                    Intent intent = new Intent(getActivity(), UserMainActivity.class);
                     intent.putExtra(Constants.USER_ITEM, userItem);
                     getActivity().startActivity(intent);
                     getActivity().finish();

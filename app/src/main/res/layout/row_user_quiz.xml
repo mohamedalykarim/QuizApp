@@ -69,7 +69,7 @@
                     android:layout_marginTop="2dp"
                     android:fontType="@{@string/font}"
                     android:text="@string/start_quiz"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -84,7 +84,7 @@
             android:layout_marginTop="8dp"
             android:fontType="@{@string/font}"
             android:text="Quiz Name ,"
-            android:textColor="#333333"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/verticalLine2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -126,7 +126,7 @@
             android:fontType="@{@string/font}"
             android:text="@{quizItem.quizName}"
             android:textAlignment="viewStart"
-            android:textColor="#333333"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView17"
