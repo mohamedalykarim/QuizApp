@@ -181,6 +181,7 @@ public class QuizFirebaseHandler {
 
     public void chooseQuestionToSession(final QuizItem quizItem, SessionItem sessionItem) {
         quizInitiatingNow.postValue(true);
+
         db.collection("quiz")
                 .document(quizItem.getId())
                 .collection("question")
