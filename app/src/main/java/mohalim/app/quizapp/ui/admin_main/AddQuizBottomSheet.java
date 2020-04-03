@@ -21,6 +21,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
+import mohalim.app.quizapp.R;
 import mohalim.app.quizapp.core.models.QuizItem;
 import mohalim.app.quizapp.core.repositories.QuizRepository;
 import mohalim.app.quizapp.core.utils.Constants;
@@ -57,7 +58,7 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
         binding.timeInMinutesEt.setFilters(new InputFilter[]{new InputFilterMinMax("0", "300")});
 
 
-        String[] spinnerItems = new String[]{"Left", "Right"};
+        String[] spinnerItems = new String[]{getString(R.string.left), getString(R.string.right)};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems);
         binding.swipeDirectionSpinner.setAdapter(spinnerAdapter);
         binding.navDirectionSpinner.setAdapter(spinnerAdapter);
@@ -82,13 +83,13 @@ public class AddQuizBottomSheet extends BottomSheetDialogFragment implements Has
                 quizItem.setShowResults(binding.showResultsSwitch.isChecked());
                 quizItem.setSaveResults(binding.saveResultSwitch.isChecked());
 
-                if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals("Right")){
+                if (binding.swipeDirectionSpinner.getSelectedItem().toString().equals(getString(R.string.right))){
                     quizItem.setQuizSwipeDirection(Constants.RIGHT);
                 }else{
                     quizItem.setQuizSwipeDirection(Constants.LEFT);
                 }
 
-                if (binding.navDirectionSpinner.getSelectedItem().toString().equals("Right")){
+                if (binding.navDirectionSpinner.getSelectedItem().toString().equals(getString(R.string.right))){
                     quizItem.setQuizNavigationDirection(Constants.RIGHT);
                 }else {
                     quizItem.setQuizNavigationDirection(Constants.LEFT);

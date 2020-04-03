@@ -57,9 +57,9 @@ public class BaseActivity extends DaggerAppCompatActivity {
                     View view = null;
 
                     if (cls.equals(UserMainActivity.class)){
-                        view = addNavItem(menuContainer, "Instructor", R.drawable.constructor_icon);
+                        view = addNavItem(menuContainer, getString(R.string.instructor), R.drawable.constructor_icon);
                     }else if (cls.equals(AdminMainActivity.class)){
-                        view = addNavItem(menuContainer, "Student", R.drawable. people_access_icon);
+                        view = addNavItem(menuContainer, getString(R.string.student), R.drawable. people_access_icon);
                     }
 
                     view.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
                     menuContainer.addView(view);
 
                 }else if (i == 1){
-                    View view = addNavItem(menuContainer, "Feedback", R.drawable.feedback_icon);
+                    View view = addNavItem(menuContainer, getString(R.string.my_feedback), R.drawable.feedback_icon);
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -110,7 +110,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
 
                 }else if (i == 2){
 
-                    View view = addNavItem(menuContainer, "Logout", R.drawable.logout_icon);
+                    View view = addNavItem(menuContainer, getString(R.string.Logout), R.drawable.logout_icon);
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

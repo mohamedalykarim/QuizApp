@@ -127,8 +127,8 @@ public class UserMainFragment extends BaseFragment {
                 if (quizSize == 0){
                     binding.noContentContainer.setVisibility(View.VISIBLE);
                     binding.refresher.setRefreshing(false);
-
                 }
+                quizSize = 0;
             }
         };
         countDownTimer.start();

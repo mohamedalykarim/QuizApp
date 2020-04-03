@@ -118,10 +118,15 @@ public class AdminMainFragment extends BaseFragment {
         binding.addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (addQuizBottomSheet.isAdded()){
-                    addQuizBottomSheet.dismiss();
-                }
+                if (addQuizBottomSheet.isAdded())return;
+                addQuizBottomSheet.show(getActivity().getSupportFragmentManager(), "AddQuizBottom");
+            }
+        });
 
+        binding.addNewQuizBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (addQuizBottomSheet.isAdded())return;
                 addQuizBottomSheet.show(getActivity().getSupportFragmentManager(), "AddQuizBottom");
             }
         });
@@ -155,8 +160,8 @@ public class AdminMainFragment extends BaseFragment {
                 if (quizSize == 0){
                     binding.noContentContainer.setVisibility(View.VISIBLE);
                     binding.refresher.setRefreshing(false);
-
                 }
+                quizSize =0;
             }
         };
         countDownTimer.start();

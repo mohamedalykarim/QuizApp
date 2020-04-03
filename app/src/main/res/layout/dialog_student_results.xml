@@ -48,7 +48,7 @@
                         android:background="@color/colorPrimary"
                         android:padding="8dp"
                         android:fontType="@{@string/font}"
-                        android:text="Wrong Answers"
+                        android:text="@string/wrong_answers"
                         android:textAlignment="center"
                         android:textColor="@color/colorAccent" />
 
@@ -62,7 +62,8 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view8">
+                    app:layout_constraintTop_toBottomOf="@+id/view8"
+                    android:baselineAligned="false">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -87,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="15dp"
                             android:fontType="@{@string/font}"
-                            android:text="NA"
+                            android:text="@string/na"
                             android:textColor="@color/colorPrimary"
                             android:textSize="25sp"
                             android:textStyle="bold"
@@ -101,7 +102,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontType="@{@string/font}"
-                            android:text="Correct answers"
+                            android:text="@string/correct_answers"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/correctAnswersTv" />
@@ -130,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="15dp"
                             android:fontType="@{@string/font}"
-                            android:text="NA"
+                            android:text="@string/na"
                             android:textColor="@color/colorPrimary"
                             android:textSize="25sp"
                             android:textStyle="bold"
@@ -144,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontType="@{@string/font}"
-                            android:text="wrong answers"
+                            android:text="@string/wrong_answers"
                             app:layout_constraintEnd_toEndOf="@+id/zeroGradeCircleBar"
                             app:layout_constraintStart_toStartOf="@+id/zeroGradeCircleBar"
                             app:layout_constraintTop_toBottomOf="@+id/wrongAnswersTv" />
@@ -216,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontType="@{@string/font}"
-                    android:text="Result"
+                    android:text="@string/result"
                     app:layout_constraintEnd_toEndOf="@+id/totalResultCircleBar2"
                     app:layout_constraintStart_toStartOf="@+id/totalResultCircleBar2"
                     app:layout_constraintTop_toBottomOf="@+id/resultTv" />
@@ -227,7 +228,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:fontType="@{@string/font}"
-                    android:text="NA"
+                    android:text="@string/na"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="50sp"
                     android:textStyle="bold"

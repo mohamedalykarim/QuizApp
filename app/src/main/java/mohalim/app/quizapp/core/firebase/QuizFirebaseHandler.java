@@ -330,7 +330,7 @@ public class QuizFirebaseHandler {
                         userItem.setId(mAuth.getCurrentUser().getUid());
                         userItem.setDisplayedName(mAuth.getCurrentUser().getDisplayName());
                         userItem.setUserName(mAuth.getCurrentUser().getEmail().replace("@gmail.com", ""));
-                        userItem.setIsAdmin(false);
+                        userItem.setIsAdmin(true);
 
                         db.collection("user").document(mAuth.getUid()).set(userItem);
 

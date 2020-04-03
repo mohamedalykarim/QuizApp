@@ -136,7 +136,7 @@
                 android:ems="10"
                 android:text='@{oldQuizItem.timeInMinutes + ""}'
                 android:fontType="@{@string/font}"
-                android:hint="Quiz time (reach to 300 minutes)"
+                android:hint="@string/quiz_time_reach_to_300_minutes"
                 android:inputType="number"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +152,7 @@
                 android:layout_marginTop="8dp"
                 android:fontType="@{@string/font}"
                 android:checked='@{oldQuizItem.saveResults}'
-                android:text="Save results"
+                android:text="@string/save_results"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timeInMinutesEt" />
 
@@ -164,7 +164,7 @@
                 android:layout_marginTop="8dp"
                 android:fontType="@{@string/font}"
                 android:checked='@{oldQuizItem.showResults}'
-                android:text="Show results"
+                android:text="@string/show_results"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/saveResultSwitch" />
 
